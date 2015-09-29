@@ -30,6 +30,7 @@
 
 #define BUFFER_SIZE 100
 #define PICKED_WORDS_QUEUE_SIZE 10
+#define TOTAL_WORDS_A_DAY_MAX 30
 
 @interface CommonDefine : NSObject
 

@@ -120,9 +120,29 @@
         _studyAgainList = [[NSMutableArray alloc] init];
         _reviewWordList = [[NSMutableArray alloc] init];
         
-        [_nwordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getNewWordsList]];
-        [_studyAgainList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getStudyAgainList]];
+        //have to get review then learn again before get new word
         [_reviewWordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getReviewList]];
+        NSInteger countOfReview = [[CommonSqlite sharedCommonSqlite] getCountOfInreview];   //dont use [_reviewWordList count] because it could be changed while learning
+        
+        NSInteger limit = TOTAL_WORDS_A_DAY_MAX - countOfReview;
+        if (limit > 0) {
+            [_studyAgainList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getStudyAgainListWithLimit:limit]];
+        }
+        
+        NSInteger countOfNew = TOTAL_WORDS_A_DAY_MAX;
+        countOfNew = countOfNew - countOfReview - [_studyAgainList count];
+       
+        if (countOfNew >= 0) {
+            if (countOfNew > [[Common sharedCommon] getDailyTarget]) {
+                countOfNew = [[Common sharedCommon] getDailyTarget];
+            }
+        } else {
+            countOfNew = 0;
+        }
+        
+        [[CommonSqlite sharedCommonSqlite] pickUpRandom10WordsToStudyingQueue:countOfNew withForceFlag:NO];
+        
+        [_nwordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getNewWordsList]];
         
         //check if the list is not empty to switch screen mode
         if ([_studyAgainList count] > 0) {
@@ -294,13 +314,16 @@
     } else if (_studyScreenMode == Mode_Review) {
         if (_wordObj) {
             [_reviewWordList removeObject:_wordObj];
+            
+            //update inreview key
+            [[CommonSqlite sharedCommonSqlite] updateInreviewWordList:_reviewWordList];
         }
         
     } else if (_studyScreenMode == Mode_New_Word) {
         if (_wordObj) {
             [_nwordList removeObject:_wordObj];
             
-            //update pickedword field
+            //update pickedword key
             [[CommonSqlite sharedCommonSqlite] updatePickedWordList:_nwordList];
         }
         

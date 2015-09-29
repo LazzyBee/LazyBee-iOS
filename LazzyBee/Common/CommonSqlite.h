@@ -21,7 +21,7 @@
 - (void)updateWord:(WordObject *)wordObj;
 
 - (NSArray *)getNewWordsList;
-- (NSArray *)getStudyAgainList;
+- (NSArray *)getStudyAgainListWithLimit:(NSInteger)limit;
 - (NSArray *)getReviewList;
 
 - (NSArray *)getSearchHintList:(NSString *)searchText;
@@ -31,8 +31,11 @@
 - (void)pickUpRandom10WordsToStudyingQueue:(NSInteger)amount withForceFlag:(BOOL)force;
 - (void)addAWordToStydyingQueue:(WordObject *)wordObj;
 - (void)updatePickedWordList:(NSArray *)wordsArr;
+- (void)updateInreviewWordList:(NSArray *)wordsArr;
 - (NSInteger)getCountOfPickedWord;
 - (NSInteger)getCountOfBuffer;
+- (NSInteger)getCountOfInreview;
+- (NSInteger)getCountOfStudyAgain;
 - (void)resetDateOfPickedWordList;
 @end
 

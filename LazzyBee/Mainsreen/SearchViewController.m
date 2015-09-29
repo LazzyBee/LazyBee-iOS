@@ -118,7 +118,6 @@
 
             [searchHintViewController.view setFrame:searchResultView.frame];
             [self.view insertSubview:searchHintViewController.view belowSubview:searchBarContainer];
-            NSLog(@"count :: %lu", [self.view.subviews count]);
         }
     }
 }

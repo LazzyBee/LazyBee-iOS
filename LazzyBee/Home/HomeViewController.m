@@ -9,13 +9,15 @@
 #import "HomeViewController.h"
 #import "StudyWordViewController.h"
 #import "StudiedListViewController.h"
+#import "SearchViewController.h"
 #import "CommonDefine.h"
 #import "CommonSqlite.h"
 #import "Common.h"
+#import "AppDelegate.h"
 
 @interface HomeViewController ()<GADInterstitialDelegate>
 {
-    
+    SearchViewController *searchView;
 }
 
 /// The interstitial ad.
@@ -40,9 +42,9 @@
     
     [self setTitle:@"Lazzy Bee"];
 
-//    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(showSearchBar)];
-//    
-//    self.navigationItem.rightBarButtonItem = searchButton;
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(showSearchBar)];
+    
+    self.navigationItem.rightBarButtonItem = searchButton;
     
     [viewInformation setBackgroundColor:COMMON_COLOR];
     
@@ -57,6 +59,16 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(noWordToStudyToday)
                                                  name:@"noWordToStudyToday"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(searchBarSearchButtonClicked:)
+                                                 name:@"searchBarSearchButtonClicked"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didSelectRowFromSearch:)
+                                                 name:@"didSelectRowFromSearch"
                                                object:nil];
     
     //admob
@@ -83,7 +95,20 @@
 */
 
 - (void)showSearchBar {
+    searchView = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:nil];
     
+    searchView.view.alpha = 0;
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    CGRect rect = appDelegate.window.frame;
+    [searchView.view setFrame:rect];
+    
+    [appDelegate.window addSubview:searchView.view];
+    
+    [UIView animateWithDuration:0.3 animations:^(void) {
+        searchView.view.alpha = 1;
+    }];
 }
 
 #pragma mark buttons handle
@@ -93,7 +118,7 @@
         [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE];
     }
     
-    [[CommonSqlite sharedCommonSqlite] pickUpRandom10WordsToStudyingQueue:[[Common sharedCommon] getDailyTarget] withForceFlag:NO];
+//    [[CommonSqlite sharedCommonSqlite] pickUpRandom10WordsToStudyingQueue:[[Common sharedCommon] getDailyTarget] withForceFlag:NO];
     
     StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
     
@@ -109,9 +134,11 @@
 
 - (IBAction)btnMoreWordClick:(id)sender {
     NSInteger count = [[CommonSqlite sharedCommonSqlite] getCountOfPickedWord];
+    count = count + [[CommonSqlite sharedCommonSqlite] getCountOfInreview];
+    count = count + [[CommonSqlite sharedCommonSqlite] getCountOfStudyAgain];
     
     if (count > 0) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"You need to complete your current target before add more words." delegate:(id)self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Learn now", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"You need to complete your current target before adding more words." delegate:(id)self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Learn now", nil];
         alert.tag = 1;
         
         [alert show];
@@ -191,5 +218,31 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 
 - (void)interstitialDidDismissScreen:(GADInterstitial *)interstitial {
     NSLog(@"interstitialDidDismissScreen");
+}
+
+#pragma mark handle notification
+- (void)didSelectRowFromSearch:(NSNotification *)notification {
+    
+    if ([self.navigationController.topViewController isEqual:self]) {
+        WordObject *wordObj = (WordObject *)notification.object;
+        
+        StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
+        studyViewController.isReviewScreen = YES;
+        studyViewController.wordObj = wordObj;
+        
+        [self.navigationController pushViewController:studyViewController animated:YES];
+    }
+}
+
+
+- (void)searchBarSearchButtonClicked:(NSNotification *)notification {
+    NSString *text = (NSString *)notification.object;
+    if ([self.navigationController.topViewController isEqual:self]) {
+        StudiedListViewController *searchResultViewController = [[StudiedListViewController alloc] initWithNibName:@"StudiedListViewController" bundle:nil];
+        searchResultViewController.screenType = List_SearchResult;
+        searchResultViewController.searchText = text;
+        
+        [self.navigationController pushViewController:searchResultViewController animated:YES];
+    }
 }
 @end

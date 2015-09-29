@@ -66,8 +66,9 @@ static CommonSqlite* sharedCommonSqlite = nil;
     return resArr;
 }
 
-- (NSArray *)getStudyAgainList {
-    NSString *strQuery = @"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor FROM \"vocabulary\" where queue = 1 ORDER BY level";
+- (NSArray *)getStudyAgainListWithLimit:(NSInteger)limit {
+    NSString *strQuery = @"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor FROM \"vocabulary\" where queue = 1 ORDER BY level LIMIT %d";
+    strQuery = [NSString stringWithFormat:strQuery, limit];
     
     NSArray *resArr = [self getWordByQueryString:strQuery];
     
@@ -75,9 +76,15 @@ static CommonSqlite* sharedCommonSqlite = nil;
 }
 
 - (NSArray *)getReviewList {
-    NSString *strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor FROM \"vocabulary\" where queue = 2 AND due <= %f ORDER BY level", [self getEndOfDayInSec]];
+    NSArray *resArr = [self getReviewListFromSystem];
     
-    NSArray *resArr = [self getWordByQueryString:strQuery];
+    //if it is yesterday, get new review list from vocabulary
+    if (resArr == nil || [resArr count] == 0) {
+        resArr = [self getReviewListFromVocabulary];
+        
+        //save list to db (only word-id)
+        [self createInreivewListForADay:resArr];
+    }
     
     return resArr;
 }
@@ -230,7 +237,181 @@ static CommonSqlite* sharedCommonSqlite = nil;
     return datetime;
 }
 
+- (NSArray *)getReviewListFromVocabulary {
+    NSString *strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor FROM \"vocabulary\" where queue = 2 AND due <= %f ORDER BY level LIMIT %d", [self getEndOfDayInSec], TOTAL_WORDS_A_DAY_MAX];
+    
+    NSArray *resArr = [self getWordByQueryString:strQuery];
+    
+    return resArr;
+}
+
+- (NSInteger)getCountOfStudyAgain {
+    NSString *dbPath = [self getDatabasePath];
+    NSURL *storeURL = [NSURL URLWithString:dbPath];
+    
+    const char *dbFilePathUTF8 = [[storeURL path] UTF8String];
+    sqlite3 *db;
+    int dbrc; //database return code
+    dbrc = sqlite3_open(dbFilePathUTF8, &db);
+    
+    if (dbrc) {
+        return 0;
+    }
+    sqlite3_stmt *dbps;
+
+    NSString *strQuery = @"SELECT COUNT(*) FROM \"vocabulary\" where queue = 1";
+    const char *charQuery = [strQuery UTF8String];
+    NSInteger count = 0;
+    
+    sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+    
+    if(SQLITE_DONE != sqlite3_step(dbps)) {
+        if (sqlite3_column_int(dbps, 0)) {
+            count = sqlite3_column_int(dbps, 0);
+        }
+    }
+    
+    sqlite3_finalize(dbps);
+    sqlite3_close(db);
+    
+    return count;
+}
+
 #pragma mark system table
+- (NSArray *)getReviewListFromSystem {
+    NSMutableArray *resArr = [[NSMutableArray alloc] init];
+    
+    NSString *dbPath = [self getDatabasePath];
+    NSURL *storeURL = [NSURL URLWithString:dbPath];
+    
+    const char *dbFilePathUTF8 = [[storeURL path] UTF8String];
+    sqlite3 *db;
+    int dbrc; //database return code
+    dbrc = sqlite3_open(dbFilePathUTF8, &db);
+    
+    if (dbrc) {
+        return nil;
+    }
+    sqlite3_stmt *dbps;
+    
+    //check date before add new words to pickedword
+    NSString *strQuery = @"SELECT value from \"system\" WHERE key = 'inreview'";
+    
+    const char *charQuery = [strQuery UTF8String];
+    
+    sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+    NSString *strJson = @"";
+    
+    while(sqlite3_step(dbps) == SQLITE_ROW) {
+        if (sqlite3_column_text(dbps, 0)) {
+            strJson = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 0)];
+        }
+    }
+    
+    sqlite3_finalize(dbps);
+    
+    //insert inreview key if it doesnt not exist
+    if ([strJson isEqualToString:@""]) {
+        strQuery = @"INSERT INTO \"system\" (key, value) VALUES ('inreview', '')";
+        charQuery = [strQuery UTF8String];
+        
+        sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+        
+        if(SQLITE_DONE != sqlite3_step(dbps)) {
+            NSLog(@"Error while inserting: %s", sqlite3_errmsg(db));
+        }
+        
+        sqlite3_finalize(dbps);
+    }
+    
+    //parse the result to get date
+    NSMutableArray *idListArr = [[NSMutableArray alloc] init];
+    NSString *strIDList = @"";
+    NSTimeInterval oldDate = 0;
+    NSData *data = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    if (data) {
+        NSDictionary *dictIDList = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        oldDate = [[dictIDList valueForKey:@"date"] doubleValue];
+        
+        [idListArr addObjectsFromArray:[dictIDList valueForKey:@"card"]];
+        
+        if (idListArr) {
+            strIDList = [[Common sharedCommon] stringByRemovingSpaceAndNewLineSymbol:[idListArr description]];
+        }
+    }
+    
+    //compare current date
+    NSTimeInterval curDate = [[Common sharedCommon] getBeginOfDayInSec];   //just get time at the begin of day
+    
+    if (oldDate == curDate) {     //get if it is new. If review list is old, get review list from vocabulary table
+        //get word object  from vocabulary with id from system
+        strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor from \"vocabulary\" WHERE id IN %@", strIDList];
+        charQuery = [strQuery UTF8String];
+        
+        sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+        
+        while(sqlite3_step(dbps) == SQLITE_ROW) {
+            WordObject *wordObj = [[WordObject alloc] init];
+            
+            if (sqlite3_column_text(dbps, 0)) {
+                wordObj.wordid = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 0)];
+            }
+            
+            if (sqlite3_column_text(dbps, 1)) {
+                wordObj.question = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 1)];
+            }
+            
+            if (sqlite3_column_text(dbps, 2)) {
+                wordObj.answers = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 2)];
+            }
+            
+            if (sqlite3_column_text(dbps, 3)) {
+                wordObj.subcats = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 3)];
+            }
+            
+            if (sqlite3_column_text(dbps, 4)) {
+                wordObj.status = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 4)];
+            }
+            
+            if (sqlite3_column_text(dbps, 5)) {
+                wordObj.package = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 5)];
+            }
+            
+            if (sqlite3_column_text(dbps, 6)) {
+                wordObj.level = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 6)];
+            }
+            
+            if (sqlite3_column_text(dbps, 7)) {
+                wordObj.queue = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 7)];
+            }
+            
+            if (sqlite3_column_text(dbps, 8)) {
+                wordObj.due = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 8)];
+            }
+            
+            if (sqlite3_column_text(dbps, 9)) {
+                wordObj.revCount = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 9)];
+            }
+            
+            if (sqlite3_column_text(dbps, 10)) {
+                wordObj.lastInterval = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 10)];
+            }
+            
+            if (sqlite3_column_text(dbps, 11)) {
+                wordObj.eFactor = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 11)];
+            }
+            
+            [resArr addObject:wordObj];
+        }
+        
+        sqlite3_finalize(dbps);
+    }
+    
+    sqlite3_close(db);
+    
+    return resArr;
+}
+
 //pick up "amount" news word-ids from vocabulary, then add to buffer
 - (void)prepareWordsToStudyingQueue:(NSInteger)amount {
     //get current words list from system table
@@ -450,7 +631,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
         NSMutableDictionary *preventDuplicateDict = [[NSMutableDictionary alloc] init]; //to prevent duplicate words
         NSString *strIndex = @"";
         
-        while ([pickedIDArr count] < [[Common sharedCommon] getDailyTarget]) {
+        while ([pickedIDArr count] < amount) {
             randomIndex = arc4random() % [idListArr count];
             strIndex = [NSString stringWithFormat:@"%ld", randomIndex];
             
@@ -461,7 +642,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
             }
             
             count ++;
-            if (count == 30) {  //30 is enough large
+            if (count == 50) {  //50 is enough large
                 break;
             }
         }
@@ -620,8 +801,8 @@ static CommonSqlite* sharedCommonSqlite = nil;
     sqlite3_close(db);
 }
 
-//update pickedword by wordArr
-- (void)updatePickedWordList:(NSArray *)wordsArr {
+//key: buffer, pickedword, inreview
+- (void)updateSystemTableForKey:(NSString *)key withArray:(NSArray *)wordsArr {
     NSMutableArray *idListArr = [[NSMutableArray alloc] init];
     
     for (WordObject *wordObj in wordsArr) {
@@ -646,7 +827,8 @@ static CommonSqlite* sharedCommonSqlite = nil;
     NSString *strJson = @"";
     
     //get old date, just update word-id list, keep old date
-    strQuery = @"SELECT value from \"system\" WHERE key = 'pickedword'";
+    strQuery = @"SELECT value from \"system\" WHERE key = '%@'";
+    strQuery = [NSString stringWithFormat:strQuery, key];
     
     const char *charQuery = [strQuery UTF8String];
     
@@ -662,11 +844,16 @@ static CommonSqlite* sharedCommonSqlite = nil;
     
     //parse the result to get old date
     NSString *strOldDate = @"";
+    NSNumber *countNumber = nil;
     NSData *data = [strJson dataUsingEncoding:NSUTF8StringEncoding];
     
     if (data) {
         NSDictionary *dictIDList = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         strOldDate = [dictIDList valueForKey:@"date"];
+        
+        if ([key isEqualToString:@"inreview"]) {
+            countNumber = [dictIDList valueForKey:@"count"];
+        }
     }
     
     //create json to add to db
@@ -674,6 +861,10 @@ static CommonSqlite* sharedCommonSqlite = nil;
     
     [dictNewWords setObject:strOldDate forKey:@"date"];
     [dictNewWords setObject:idListArr forKey:@"card"];
+    
+    if ([key isEqualToString:@"inreview"]) {
+        [dictNewWords setObject:countNumber forKey:@"count"];   //keep this value even if removing a word from "card"
+    }
     
     //convert to json string
     NSError *error;
@@ -688,9 +879,80 @@ static CommonSqlite* sharedCommonSqlite = nil;
     }
     
     //update new buffer to db
-    strQuery = [NSString stringWithFormat:@"UPDATE \"system\" SET value = \'%@\' where key = 'pickedword'", strJson];
+    strQuery = [NSString stringWithFormat:@"UPDATE \"system\" SET value = \'%@\' where key = '%@'", strJson, key];
     
     charQuery = [strQuery UTF8String];
+    
+    sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+    
+    if(SQLITE_DONE != sqlite3_step(dbps)) {
+        NSLog(@"Error while updating. %s", sqlite3_errmsg(db));
+    }
+    
+    sqlite3_finalize(dbps);
+    sqlite3_close(db);
+}
+
+//update pickedword by wordArr
+- (void)updatePickedWordList:(NSArray *)wordsArr {
+    [self updateSystemTableForKey:@"pickedword" withArray:wordsArr];
+}
+
+//update inreview by wordArr
+- (void)updateInreviewWordList:(NSArray *)wordsArr {
+    [self updateSystemTableForKey:@"inreview" withArray:wordsArr];
+}
+
+- (void)createInreivewListForADay:(NSArray *)wordsArr {
+    NSMutableArray *idListArr = [[NSMutableArray alloc] init];
+    
+    for (WordObject *wordObj in wordsArr) {
+        [idListArr addObject:wordObj.wordid];
+    }
+    
+    //open db
+    NSString *dbPath = [self getDatabasePath];
+    NSURL *storeURL = [NSURL URLWithString:dbPath];
+    
+    const char *dbFilePathUTF8 = [[storeURL path] UTF8String];
+    sqlite3 *db;
+    int dbrc; //database return code
+    dbrc = sqlite3_open(dbFilePathUTF8, &db);
+    
+    if (dbrc) {
+        return;
+    }
+    sqlite3_stmt *dbps;
+    
+    NSString *strQuery = @"";
+    NSString *strJson = @"";
+
+    NSTimeInterval curDate = [[Common sharedCommon] getBeginOfDayInSec];   //just get time at the begin of day
+    
+    //create json to add to db
+    NSMutableDictionary *dictNewWords = [[NSMutableDictionary alloc] init];
+    NSString *strDate = [NSString stringWithFormat:@"%f",curDate];
+    
+    [dictNewWords setObject:strDate forKey:@"date"];
+    [dictNewWords setObject:idListArr forKey:@"card"];
+    [dictNewWords setObject:[[NSNumber alloc] initWithInteger:[wordsArr count]] forKey:@"count"];   //keep this value even if removing a word from "card"
+    
+    //convert to json string
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictNewWords
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:&error];
+    
+    if (!jsonData) {
+        NSLog(@"Got an error: %@", error);
+    } else {
+        strJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    
+    //update new pickedword to db
+    strQuery = [NSString stringWithFormat:@"UPDATE \"system\" SET value = \'%@\' where key = 'inreview'", strJson];
+    
+    const char *charQuery = [strQuery UTF8String];
     
     sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
     
@@ -748,7 +1010,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
     }
     
     //get word object  from vocabulary
-    strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level from \"vocabulary\" WHERE id IN %@", strIDList];
+    strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor from \"vocabulary\" WHERE id IN %@", strIDList];
     charQuery = [strQuery UTF8String];
     
     sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
@@ -814,8 +1076,8 @@ static CommonSqlite* sharedCommonSqlite = nil;
     return resArr;
 }
 
-- (NSInteger)getCountOfPickedWord {
-    //get word id from pickedword
+- (NSInteger)getCountOfWordByKey:(NSString *)key {
+    //get word id from key in system
     NSString *dbPath = [self getDatabasePath];
     NSURL *storeURL = [NSURL URLWithString:dbPath];
     
@@ -829,7 +1091,8 @@ static CommonSqlite* sharedCommonSqlite = nil;
     }
     sqlite3_stmt *dbps;
     
-    NSString *strQuery = @"SELECT value from \"system\" WHERE key = 'pickedword'";
+    NSString *strQuery = @"SELECT value from \"system\" WHERE key = '%@'";
+    strQuery = [NSString stringWithFormat:strQuery, key];
     
     const char *charQuery = [strQuery UTF8String];
     
@@ -843,61 +1106,49 @@ static CommonSqlite* sharedCommonSqlite = nil;
     }
     
     //parse the result to get word-id list
+     NSInteger res = 0;
+    NSNumber *countNumber = nil;
     NSMutableArray *idListArr = [[NSMutableArray alloc] init];
     NSData *data = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dictIDList = nil;
     
     if (data) {
-        NSDictionary *dictIDList = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        [idListArr addObjectsFromArray:[dictIDList valueForKey:@"card"]];
+        dictIDList = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    }
+    
+    if ([key isEqualToString:@"inreview"]) {
+        if (dictIDList) {
+            countNumber = [dictIDList valueForKey:@"count"];
+            res = [countNumber integerValue];
+        }
+    } else {
+    
+        if (dictIDList) {
+            [idListArr addObjectsFromArray:[dictIDList valueForKey:@"card"]];
+            res = [idListArr count];
+        }
     }
     
     sqlite3_finalize(dbps);
     sqlite3_close(db);
     
-    return [idListArr count];
+    
+    return res;
+}
+
+- (NSInteger)getCountOfPickedWord {
+    //get word id from pickedword
+    return [self getCountOfWordByKey:@"pickedword"];
 }
 
 - (NSInteger)getCountOfBuffer {
     //get word id from buffer
-    NSString *dbPath = [self getDatabasePath];
-    NSURL *storeURL = [NSURL URLWithString:dbPath];
-    
-    const char *dbFilePathUTF8 = [[storeURL path] UTF8String];
-    sqlite3 *db;
-    int dbrc; //database return code
-    dbrc = sqlite3_open(dbFilePathUTF8, &db);
-    
-    if (dbrc) {
-        return 0;
-    }
-    sqlite3_stmt *dbps;
-    
-    NSString *strQuery = @"SELECT value from \"system\" WHERE key = 'buffer'";
-    
-    const char *charQuery = [strQuery UTF8String];
-    
-    sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
-    NSString *strJson = @"";
-    
-    while(sqlite3_step(dbps) == SQLITE_ROW) {
-        if (sqlite3_column_text(dbps, 0)) {
-            strJson = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 0)];
-        }
-    }
-    
-    //parse the result to get word-id list
-    NSMutableArray *idListArr = [[NSMutableArray alloc] init];
-    NSData *data = [strJson dataUsingEncoding:NSUTF8StringEncoding];
-    
-    if (data) {
-        NSDictionary *dictIDList = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        [idListArr addObjectsFromArray:[dictIDList valueForKey:@"card"]];
-    }
-    
-    sqlite3_finalize(dbps);
-    sqlite3_close(db);
-    
-    return [idListArr count];
+    return [self getCountOfWordByKey:@"buffer"];
+}
+
+- (NSInteger)getCountOfInreview {
+    //get word id from buffer
+    return [self getCountOfWordByKey:@"inreview"];
 }
 
 - (NSString *)getDatabasePath {

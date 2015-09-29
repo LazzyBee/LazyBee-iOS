@@ -10,6 +10,7 @@
 #import "HomeViewController.h"
 #import "RearViewController.h"
 #import "JASidePanelController.h"
+#import "CommonSqlite.h"
 #import "CommonDefine.h"
 #import "Common.h"
 
@@ -175,7 +176,9 @@
         notificationFlag = [reminderNumberObj boolValue];
     }
     
-    if (notificationFlag) {
+    NSInteger count = [[CommonSqlite sharedCommonSqlite] getCountOfPickedWord];    
+    
+    if (notificationFlag && count > 0) {
         UILocalNotification *locNotification = [[UILocalNotification alloc] init];
         
         NSString *beginOfDay = [[Common sharedCommon] getCurrentDatetimeWithFormat:@"dd/MM/yyyy"];
