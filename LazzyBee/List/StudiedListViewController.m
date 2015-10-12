@@ -16,6 +16,7 @@
 @interface StudiedListViewController ()
 {
     NSMutableDictionary *levelsDictionary;
+    NSMutableArray *wordList;
     NSArray *keyArr;
 }
 @end
@@ -25,13 +26,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [TagManagerHelper pushOpenScreenEvent:@"iLeantScreen"];
-    
-    [self setTitle:@"Learnt List"];
+    if (_screenType == List_Incomming) {
+        [TagManagerHelper pushOpenScreenEvent:@"iIncommingScreen"];
+        
+        [self setTitle:@"Incomming List"];
+        
+    } else if (_screenType == List_StudiedList) {
+        [TagManagerHelper pushOpenScreenEvent:@"iLeantScreen"];
+        
+        [self setTitle:@"Learnt List"];
+        
+    } else if (_screenType == List_SearchHint) {
+        [TagManagerHelper pushOpenScreenEvent:@"iSearchHintScreen"];
+        
+    } else if (_screenType == List_SearchResult) {
+        [TagManagerHelper pushOpenScreenEvent:@"iSearchResultScreen"];
+        
+        [self setTitle:@"Search Result"];
+    }
     
     levelsDictionary = [[NSMutableDictionary alloc] init];
+    wordList = [[NSMutableArray alloc] init];
     
     [self tableReload];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshList)
+                                                 name:@"refreshList"
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,7 +74,15 @@
 #pragma mark data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return [[levelsDictionary allKeys] count];
+    if (_screenType == List_StudiedList ||
+        _screenType == List_SearchHint ||
+        _screenType == List_SearchResult) {
+        return [[levelsDictionary allKeys] count];
+        
+    } else {
+        
+        return 1;
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -60,27 +90,46 @@
     
     NSString *headerTitle = [NSString stringWithFormat:@"Level %@: %ld word(s)", key, [[levelsDictionary objectForKey:key] count]];
     
-    return headerTitle;
+    if (_screenType == List_StudiedList ||
+        _screenType == List_SearchHint ||
+        _screenType == List_SearchResult) {
+        return headerTitle;
+    } else {
+        return nil;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    
-    header.textLabel.textColor = [UIColor whiteColor];
-    header.textLabel.font = [UIFont boldSystemFontOfSize:15];
-    CGRect headerFrame = header.frame;
-    header.textLabel.frame = headerFrame;
-    header.textLabel.textAlignment = NSTextAlignmentLeft;
-    
-    header.backgroundView.backgroundColor = [UIColor darkGrayColor];
+    if (_screenType == List_StudiedList ||
+       _screenType == List_SearchHint ||
+       _screenType == List_SearchResult) {
+        
+        UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+        
+        header.textLabel.textColor = [UIColor whiteColor];
+        header.textLabel.font = [UIFont boldSystemFontOfSize:15];
+        CGRect headerFrame = header.frame;
+        header.textLabel.frame = headerFrame;
+        header.textLabel.textAlignment = NSTextAlignmentLeft;
+        
+        header.backgroundView.backgroundColor = [UIColor darkGrayColor];
+        
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     // If you're serving data from an array, return the length of the array:
-    NSString *key = [keyArr objectAtIndex:section];
-    
-    return [[levelsDictionary objectForKey:key] count];
+    if (_screenType == List_StudiedList ||
+        _screenType == List_SearchHint ||
+        _screenType == List_SearchResult) {
+        NSString *key = [keyArr objectAtIndex:section];
+        
+        return [[levelsDictionary objectForKey:key] count];
+        
+    } else {
+        return [wordList count];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -98,10 +147,19 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 
-    NSString *key = [keyArr objectAtIndex:indexPath.section];
+    WordObject *wordObj = nil;
     
-    NSArray *arrWords = [levelsDictionary objectForKey:key];
-    WordObject *wordObj = [arrWords objectAtIndex:indexPath.row];
+    if (_screenType == List_StudiedList ||
+        _screenType == List_SearchHint ||
+        _screenType == List_SearchResult) {
+        NSString *key = [keyArr objectAtIndex:indexPath.section];
+        
+        NSArray *arrWords = [levelsDictionary objectForKey:key];
+        wordObj = [arrWords objectAtIndex:indexPath.row];
+        
+    } else {
+        wordObj = [wordList objectAtIndex:indexPath.row];
+    }
     
     //parse the answer to dictionary object
     NSData *data = [wordObj.answers dataUsingEncoding:NSUTF8StringEncoding];
@@ -133,9 +191,19 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSString *key = [keyArr objectAtIndex:indexPath.section];
-    NSArray *arrWords = [levelsDictionary objectForKey:key];
-    WordObject *wordObj = [arrWords objectAtIndex:indexPath.row];
+    WordObject *wordObj = nil;
+    
+    if (_screenType == List_StudiedList ||
+        _screenType == List_SearchHint ||
+        _screenType == List_SearchResult) {
+        NSString *key = [keyArr objectAtIndex:indexPath.section];
+        
+        NSArray *arrWords = [levelsDictionary objectForKey:key];
+        wordObj = [arrWords objectAtIndex:indexPath.row];
+        
+    } else {
+        wordObj = [wordList objectAtIndex:indexPath.row];
+    }
     
     if (_screenType == List_SearchHint) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectRowFromSearch" object:wordObj];
@@ -151,37 +219,48 @@
 }
 
 - (void)tableReload {
-    NSArray *wordList = nil;
-    
+    [wordList removeAllObjects];
     [levelsDictionary removeAllObjects];
     
-    if (_screenType == List_StudiedList) {
-        wordList = [[CommonSqlite sharedCommonSqlite] getStudiedList];
+    if (_screenType == List_Incomming) {
+        [wordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getIncommingList]];
+        
+    } else if (_screenType == List_StudiedList) {
+        [wordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getStudiedList]];
         
     } else if (_screenType == List_SearchHint) {
-        wordList = [[CommonSqlite sharedCommonSqlite] getSearchHintList:_searchText];
+        [wordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getSearchHintList:_searchText]];
         
     } else if (_screenType == List_SearchResult) {
-        wordList = [[CommonSqlite sharedCommonSqlite] getSearchResultList:_searchText];
+        [wordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getSearchResultList:_searchText]];
     }
     
-    //group by level
-    for (WordObject *wordObj in wordList) {
-        NSMutableArray *arr = [levelsDictionary objectForKey:wordObj.level];
-        
-        if (arr == nil) {
-            arr = [[NSMutableArray alloc] init];
+    if (_screenType != List_Incomming) {
+        //group by level
+        for (WordObject *wordObj in wordList) {
+            NSMutableArray *arr = [levelsDictionary objectForKey:wordObj.level];
+            
+            if (arr == nil) {
+                arr = [[NSMutableArray alloc] init];
+            }
+            [arr addObject:wordObj];
+            
+            [levelsDictionary setObject:arr forKey:wordObj.level];
         }
-        [arr addObject:wordObj];
         
-        [levelsDictionary setObject:arr forKey:wordObj.level];
+        keyArr = [levelsDictionary allKeys];
+        keyArr = [keyArr sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     }
-    
-    keyArr = [levelsDictionary allKeys];
-    keyArr = [keyArr sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     
     lbHeaderInfo.text = [NSString stringWithFormat:@"Total: %lu", (unsigned long)[wordList count]];
+        
     
     [wordsTableView reloadData];
+}
+
+- (void)refreshList {
+    if (_screenType == List_Incomming) {
+        [self tableReload];
+    }
 }
 @end

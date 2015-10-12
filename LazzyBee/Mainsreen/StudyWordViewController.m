@@ -536,6 +536,12 @@
             NSLog(@"Add to learn");
             [[CommonSqlite sharedCommonSqlite] addAWordToStydyingQueue:_wordObj];
             
+            //remove from buffer
+            [[CommonSqlite sharedCommonSqlite] removeWordFromBuffer:_wordObj];
+            
+            //update incomming list
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshList" object:nil];
+            
             //update queue value to 0 to consider this word as a new word in DB
             _wordObj.queue = [NSString stringWithFormat:@"%d", QUEUE_NEW_WORD];
             [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];

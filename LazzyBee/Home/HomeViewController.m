@@ -130,7 +130,7 @@
 
 - (IBAction)btnStudiedListClick:(id)sender {
     StudiedListViewController *studiedListViewController = [[StudiedListViewController alloc] initWithNibName:@"StudiedListViewController" bundle:nil];
-    studiedListViewController.screenType = List_StudiedList;
+    studiedListViewController.screenType = List_Incomming;
     
     [self.navigationController pushViewController:studiedListViewController animated:YES];
 }

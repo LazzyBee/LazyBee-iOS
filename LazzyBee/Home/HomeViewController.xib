@@ -41,7 +41,7 @@
                     <rect key="frame" x="8" y="266" width="150" height="38"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <state key="normal" title="Learnt List" backgroundImage="btnbg.png"/>
+                    <state key="normal" title="Incomming List" backgroundImage="btnbg.png"/>
                     <connections>
                         <action selector="btnStudiedListClick:" destination="-1" eventType="touchUpInside" id="kFI-dv-jRg"/>
                     </connections>
