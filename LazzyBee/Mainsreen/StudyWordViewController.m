@@ -301,7 +301,6 @@
     
     [webViewWord loadHTMLString:htmlString baseURL:baseURL];
     
-    
     NSNumber *autoPlayFlag = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_AUTOPLAY];
     
     if ([autoPlayFlag boolValue]) {
@@ -309,6 +308,7 @@
         float speed = [speedNumberObj floatValue];
         [[Common sharedCommon] textToSpeech:wordObj.question withRate:speed];
     }
+    _isAnswerScreen = NO;
 }
 
 - (void)displayAnswer:(WordObject *)wordObj {
@@ -323,6 +323,8 @@
     }
     
     [webViewWord loadHTMLString:htmlString baseURL:baseURL];
+    
+    _isAnswerScreen = YES;
 }
 
 //only need to check sender in case click on Again button
@@ -521,7 +523,18 @@
     [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLDataServiceApiVoca *object, NSError *error) {
         if (object != NULL){
             NSLog(object.JSONString);
-            //TODO: Update word now
+            //TODO: Update word: q, a, level, package, (and ee, ev)
+            _wordObj.question   = object.q;
+            _wordObj.answers    = object.a;
+            _wordObj.level      = object.level;
+            _wordObj.package    = object.packages;
+            
+            [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];
+            
+            if (_isAnswerScreen == YES) {
+                [self displayAnswer:_wordObj];
+            }
+
         }
     }];
 }
