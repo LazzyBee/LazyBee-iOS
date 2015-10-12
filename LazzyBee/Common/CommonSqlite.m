@@ -12,6 +12,7 @@
 #import "CommonDefine.h"
 #import "Common.h"
 #import "Algorithm.h"
+#import "WordObject.h"
 
 // Singleton
 static CommonSqlite* sharedCommonSqlite = nil;
@@ -62,7 +63,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
 }
 
 - (NSArray *)getStudiedList {
-    NSString *strQuery = @"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where queue >= 1 ORDER BY level";
+    NSString *strQuery = @"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where queue = 1 OR queue = 2 ORDER BY level";
     
     NSString *dbPath = [self getDatabasePath];
     NSArray *resArr = [self getWordByQueryString:strQuery fromDatabase:dbPath];
@@ -269,7 +270,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
 }
 
 - (NSArray *)getReviewListFromVocabulary {
-    NSString *strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where queue = 2 AND due <= %f ORDER BY level LIMIT %d", [self getEndOfDayInSec], TOTAL_WORDS_A_DAY_MAX];
+    NSString *strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where queue = %d AND due <= %f ORDER BY level LIMIT %d", QUEUE_REVIEW, [self getEndOfDayInSec], TOTAL_WORDS_A_DAY_MAX];
     
     NSString *dbPath = [self getDatabasePath];
     NSArray *resArr = [self getWordByQueryString:strQuery fromDatabase:dbPath];
@@ -707,7 +708,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
         }
     }*/
     NSString *lowestLevel = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_LOWEST_LEVEL];
-    strQuery = [NSString stringWithFormat:@"SELECT id from \"vocabulary\" WHERE queue = 0 AND level >= %@ ORDER BY level LIMIT %ld", lowestLevel, (long)amount];
+    strQuery = [NSString stringWithFormat:@"SELECT id from \"vocabulary\" WHERE queue = %d AND level >= %@ ORDER BY level LIMIT %ld", QUEUE_UNKNOWN, lowestLevel, (long)amount];
     charQuery = [strQuery UTF8String];
     
     sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
@@ -837,23 +838,24 @@ static CommonSqlite* sharedCommonSqlite = nil;
         NSMutableArray *pickedIDArr = [[NSMutableArray alloc] init];
         int count = 0; //to prevent infinite loop
         
-        NSMutableDictionary *preventDuplicateDict = [[NSMutableDictionary alloc] init]; //to prevent duplicate words
-        NSString *strIndex = @"";
+//        NSMutableDictionary *preventDuplicateDict = [[NSMutableDictionary alloc] init]; //to prevent duplicate words
+//        NSString *strIndex = @"";
         
-        while ([pickedIDArr count] < amount) {
-            randomIndex = arc4random() % [idListArr count];
-            strIndex = [NSString stringWithFormat:@"%ld", randomIndex];
-            
-            if (![preventDuplicateDict objectForKey:strIndex]) {
-                [preventDuplicateDict setObject:strIndex forKey:strIndex];
-                
-                [pickedIDArr addObject:[idListArr objectAtIndex:randomIndex]];
-            }
+        while ([pickedIDArr count] < amount && count < [idListArr count]) {
+//            randomIndex = arc4random() % [idListArr count];
+//            strIndex = [NSString stringWithFormat:@"%d", count];
+//            
+//            if (![preventDuplicateDict objectForKey:strIndex]) {
+//                [preventDuplicateDict setObject:strIndex forKey:strIndex];
+//                
+//                [pickedIDArr addObject:[idListArr objectAtIndex:randomIndex]];
+//            }
+            [pickedIDArr addObject:[idListArr objectAtIndex:count]];
             
             count ++;
-            if (count == 50) {  //50 is enough large
-                break;
-            }
+//            if (count == 99) {  //99 is enough large
+//                break;
+//            }
         }
         
         //create json to add to db
