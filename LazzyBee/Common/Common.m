@@ -750,6 +750,9 @@
 
 - (void)textToSpeech:(NSString *)text withRate:(float)rate {
     AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc]init];
+    
+    [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:text];
 
     [utterance setRate:rate];

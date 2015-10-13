@@ -12,6 +12,7 @@
 #import "Common.h"
 #import "StudyWordViewController.h"
 #import "TagManagerHelper.h"
+#import "SVProgressHUD.h"
 
 @interface StudiedListViewController ()
 {
@@ -86,13 +87,18 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSString *key = [keyArr objectAtIndex:section];
-    
-    NSString *headerTitle = [NSString stringWithFormat:@"Level %@: %ld word(s)", key, [[levelsDictionary objectForKey:key] count]];
     
     if (_screenType == List_StudiedList ||
         _screenType == List_SearchHint ||
         _screenType == List_SearchResult) {
+        NSString *headerTitle = @"";
+        
+        if (section < [keyArr count]) {
+            NSString *key = [keyArr objectAtIndex:section];
+            
+            headerTitle = [NSString stringWithFormat:@"Level %@: %ld word(s)", key, [[levelsDictionary objectForKey:key] count]];
+        }
+        
         return headerTitle;
     } else {
         return nil;
@@ -123,9 +129,14 @@
     if (_screenType == List_StudiedList ||
         _screenType == List_SearchHint ||
         _screenType == List_SearchResult) {
-        NSString *key = [keyArr objectAtIndex:section];
         
-        return [[levelsDictionary objectForKey:key] count];
+        if (section < [keyArr count]) {
+            NSString *key = [keyArr objectAtIndex:section];
+            
+            return [[levelsDictionary objectForKey:key] count];
+        } else {
+            return 0;
+        }
         
     } else {
         return [wordList count];
@@ -231,8 +242,16 @@
     } else if (_screenType == List_SearchHint) {
         [wordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getSearchHintList:_searchText]];
         
+        if ([wordList count] == 0) {
+            [self.view removeFromSuperview];
+        }
+        
     } else if (_screenType == List_SearchResult) {
         [wordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getSearchResultList:_searchText]];
+        
+        if ([wordList count] == 0) {
+            [self searchOnServer];
+        }
     }
     
     if (_screenType != List_Incomming) {
@@ -262,5 +281,61 @@
     if (_screenType == List_Incomming) {
         [self tableReload];
     }
+}
+
+- (void)searchOnServer {
+    static GTLServiceDataServiceApi *service = nil;
+    if (!service) {
+        service = [[GTLServiceDataServiceApi alloc] init];
+        service.retryEnabled = YES;
+        //[GTMHTTPFetcher setLoggingEnabled:YES];
+    }
+    
+    [SVProgressHUD showWithStatus:nil];
+    GTLQueryDataServiceApi *query = [GTLQueryDataServiceApi queryForGetVocaByQWithQ:_searchText];
+    //TODO: Add waiting progress here
+    [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLDataServiceApiVoca *object, NSError *error) {
+        if (object != nil){
+            NSLog(object.JSONString);
+            //TODO: Update word: q, a, level, package, (and ee, ev)
+            WordObject *wordObj = [[WordObject alloc] init];
+            wordObj.question   = object.q;
+            wordObj.answers    = object.a;
+            wordObj.level      = object.level;
+            wordObj.package    = object.packages;
+            wordObj.gid        = [NSString stringWithFormat:@"%@", object.gid];
+            wordObj.langEN     = object.lEn;
+            wordObj.langVN     = object.lVn;
+            wordObj.package    = object.packages;
+            wordObj.eFactor    = @"2500";
+            wordObj.queue      = @"0";
+            wordObj.isFromServer = YES;
+
+            [wordList addObject:wordObj];
+            
+            //group by level
+            for (WordObject *wordObj in wordList) {
+                NSMutableArray *arr = [levelsDictionary objectForKey:wordObj.level];
+                
+                if (arr == nil) {
+                    arr = [[NSMutableArray alloc] init];
+                }
+                [arr addObject:wordObj];
+                
+                [levelsDictionary setObject:arr forKey:wordObj.level];
+                
+                keyArr = [levelsDictionary allKeys];
+                keyArr = [keyArr sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+            }
+            
+            lbHeaderInfo.text = [NSString stringWithFormat:@"Total: %lu", (unsigned long)[wordList count]];
+            [wordsTableView reloadData];
+            
+            [SVProgressHUD dismiss];
+            
+        } else {
+            [SVProgressHUD dismiss];
+        }
+    }];
 }
 @end

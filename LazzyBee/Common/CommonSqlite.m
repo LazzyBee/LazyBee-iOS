@@ -261,6 +261,40 @@ static CommonSqlite* sharedCommonSqlite = nil;
 
 }
 
+- (void)insertWordToDatabase:(WordObject *)wordObj {
+    NSString *dbPath = [self getDatabasePath];
+    NSURL *storeURL = [NSURL URLWithString:dbPath];
+    
+    const char *dbFilePathUTF8 = [[storeURL path] UTF8String];
+    sqlite3 *db;
+    int dbrc; //database return code
+    dbrc = sqlite3_open(dbFilePathUTF8, &db);
+    
+    if (dbrc) {
+        return;
+    }
+    sqlite3_stmt *dbps;
+
+    NSString *formattedAnswer = [wordObj.answers stringByReplacingOccurrencesOfString:@"\'" withString:@"\'\'"];
+    NSString *formattedVN = [wordObj.langVN stringByReplacingOccurrencesOfString:@"\'" withString:@"\'\'"];
+    NSString *formattedEN = [wordObj.langEN stringByReplacingOccurrencesOfString:@"\'" withString:@"\'\'"];
+    
+    NSString *strQuery = @"INSERT INTO 'vocabulary' (question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid) VALUES ('%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@')";
+    strQuery = [NSString stringWithFormat:strQuery, wordObj.question, formattedAnswer, wordObj.subcats, wordObj.status, wordObj.package, wordObj.level, wordObj.queue, wordObj.due, wordObj.revCount, wordObj.lastInterval, wordObj.eFactor, formattedVN, formattedEN, wordObj.gid];
+
+    const char *charQuery = [strQuery UTF8String];
+    
+    sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+    
+    if(SQLITE_DONE != sqlite3_step(dbps)) {
+        NSLog(@"Error while inserting. %s", sqlite3_errmsg(db));
+    }
+    
+    sqlite3_finalize(dbps);
+    sqlite3_close(db);
+    
+}
+
 - (NSTimeInterval)getEndOfDayInSec {
     NSTimeInterval datetime = [[Common sharedCommon] getBeginOfDayInSec];
     
@@ -270,7 +304,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
 }
 
 - (NSArray *)getReviewListFromVocabulary {
-    NSString *strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where queue = %d AND due <= %f ORDER BY level LIMIT %d", QUEUE_REVIEW, [self getEndOfDayInSec], TOTAL_WORDS_A_DAY_MAX];
+    NSString *strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where queue = %d AND due <= %f ORDER BY level LIMIT %ld", QUEUE_REVIEW, [self getEndOfDayInSec], (long)TOTAL_WORDS_A_DAY_MAX];
     
     NSString *dbPath = [self getDatabasePath];
     NSArray *resArr = [self getWordByQueryString:strQuery fromDatabase:dbPath];
@@ -834,7 +868,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
 
         }
         
-        NSUInteger randomIndex = 0;
+//        NSUInteger randomIndex = 0;
         NSMutableArray *pickedIDArr = [[NSMutableArray alloc] init];
         int count = 0; //to prevent infinite loop
         

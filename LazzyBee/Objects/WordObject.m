@@ -43,6 +43,7 @@
         self.eFactor = @"";
         self.langEN = @"";
         self.langVN = @"";
+        self.isFromServer = NO;
     }
     return self;
 }

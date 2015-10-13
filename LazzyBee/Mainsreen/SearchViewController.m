@@ -114,12 +114,17 @@
                 searchHintViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth |                                             UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
                 
                 [searchHintViewController.view setFrame:searchResultView.frame];
-                [self.view insertSubview:searchHintViewController.view belowSubview:searchBarContainer];
             }
+            
+            [self.view insertSubview:searchHintViewController.view belowSubview:searchBarContainer];
+
             
             searchHintViewController.searchText = searchText;
             
             [searchHintViewController tableReload];
+            
+        } else {
+            [searchHintViewController.view removeFromSuperview];
         }
     }
 }

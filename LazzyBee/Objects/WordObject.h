@@ -39,6 +39,8 @@
 @property (nonatomic, strong) NSString *eFactor;
 @property (nonatomic, strong) NSString *langVN;
 @property (nonatomic, strong) NSString *langEN;
+
+@property (nonatomic, assign) BOOL isFromServer;
 @end
 
 #endif
