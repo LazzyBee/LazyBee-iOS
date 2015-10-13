@@ -13,7 +13,7 @@
 // Description:
 //   This is an API
 // Classes:
-//   GTLDataServiceApiVoca (0 custom class methods, 8 custom properties)
+//   GTLDataServiceApiVoca (0 custom class methods, 9 custom properties)
 
 #if GTL_BUILT_AS_FRAMEWORK
   #import "GTL/GTLObject.h"
@@ -33,6 +33,7 @@
 @property (nonatomic, copy) NSString *lEn;
 @property (nonatomic, copy) NSString *lVn;
 @property (nonatomic, copy) NSString *level;
+@property (nonatomic, copy) NSString *note;
 @property (nonatomic, copy) NSString *packages;
 @property (nonatomic, copy) NSString *q;
 @end

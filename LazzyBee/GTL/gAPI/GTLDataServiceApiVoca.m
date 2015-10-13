@@ -13,7 +13,7 @@
 // Description:
 //   This is an API
 // Classes:
-//   GTLDataServiceApiVoca (0 custom class methods, 8 custom properties)
+//   GTLDataServiceApiVoca (0 custom class methods, 9 custom properties)
 
 #import "GTLDataServiceApiVoca.h"
 
@@ -23,7 +23,7 @@
 //
 
 @implementation GTLDataServiceApiVoca
-@dynamic a, check, gid, lEn, lVn, level, packages, q;
+@dynamic a, check, gid, lEn, lVn, level, note, packages, q;
 
 + (NSDictionary *)propertyToJSONKeyMap {
   NSDictionary *map = @{
