@@ -13,7 +13,7 @@
 // Description:
 //   This is an API
 // Classes:
-//   GTLQueryDataServiceApi (4 custom class methods, 3 custom properties)
+//   GTLQueryDataServiceApi (5 custom class methods, 3 custom properties)
 
 #import "GTLQueryDataServiceApi.h"
 
@@ -63,6 +63,17 @@
     return nil;
   }
   NSString *methodName = @"dataServiceApi.saveVoca";
+  GTLQueryDataServiceApi *query = [self queryWithMethodName:methodName];
+  query.bodyObject = object;
+  return query;
+}
+
++ (instancetype)queryForUpdateAWithObject:(GTLDataServiceApiVoca *)object {
+  if (object == nil) {
+    GTL_DEBUG_ASSERT(object != nil, @"%@ got a nil object", NSStringFromSelector(_cmd));
+    return nil;
+  }
+  NSString *methodName = @"dataServiceApi.updateA";
   GTLQueryDataServiceApi *query = [self queryWithMethodName:methodName];
   query.bodyObject = object;
   return query;

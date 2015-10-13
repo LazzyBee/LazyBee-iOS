@@ -13,7 +13,7 @@
 // Description:
 //   This is an API
 // Classes:
-//   GTLQueryDataServiceApi (4 custom class methods, 3 custom properties)
+//   GTLQueryDataServiceApi (5 custom class methods, 3 custom properties)
 
 #if GTL_BUILT_AS_FRAMEWORK
   #import "GTL/GTLQuery.h"
@@ -64,5 +64,10 @@
 //  Authorization scope(s):
 //   kGTLAuthScopeDataServiceApiUserinfoEmail
 + (instancetype)queryForSaveVocaWithObject:(GTLDataServiceApiVoca *)object;
+
+// Method: dataServiceApi.updateA
+//  Authorization scope(s):
+//   kGTLAuthScopeDataServiceApiUserinfoEmail
++ (instancetype)queryForUpdateAWithObject:(GTLDataServiceApiVoca *)object;
 
 @end

@@ -39,6 +39,7 @@ typedef enum {
 
 @property (nonatomic, assign) STUDY_SCREEN_MODE studyScreenMode;
 @property (nonatomic, assign) BOOL isReviewScreen;  //transfered from studiedlist
+@property (nonatomic, assign) BOOL isAnswerScreen;  //displaying all data of word
 @property (nonatomic, strong) WordObject *wordObj;  //current word
 
 @property (nonatomic, strong) NSMutableArray *nwordList;
