@@ -7,9 +7,13 @@
 //
 
 #import "SpeedTableViewCell.h"
+#import <AVFoundation/AVFoundation.h>
 #import "Common.h"
 
 @implementation SpeedTableViewCell
+{
+    AVSpeechSynthesizer *synthesizer;
+}
 
 - (void)awakeFromNib {
     // Initialization code
@@ -34,8 +38,19 @@
 }
 
 - (IBAction)valueChangeEnd:(id)sender {
-    [[Common sharedCommon] textToSpeech:@"This is to adjust speaking speed. Thank you for using lazy bee application." withRate:[speedSlider value]];
+    [self textToSpeech:@"This is to adjust speaking speed. Thank you for using lazy bee application." withRate:[speedSlider value]];
 }
 
-
+- (void)textToSpeech:(NSString *)text withRate:(float)rate {
+    if (!synthesizer) {
+        synthesizer = [[AVSpeechSynthesizer alloc]init];
+    }
+    
+    [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    
+    AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:text];
+    
+    [utterance setRate:rate];
+    [synthesizer speakUtterance:utterance];
+}
 @end

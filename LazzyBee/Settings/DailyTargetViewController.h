@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DailyTargetViewController : UIViewController
+typedef enum {
+    NewWordTargetType = 0,
+    TotalTargetType
+} TARGET_TYPE;
 
+@interface DailyTargetViewController : UIViewController
+{
+    
+}
+
+@property (nonatomic, assign) TARGET_TYPE targetType;
 @end

@@ -31,10 +31,23 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
-    NSNumber *targetNumberObj = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_DAILY_TARGET];
-    
-    if (targetNumberObj) {
-        selectedIndexPath = [NSIndexPath indexPathForRow:([targetNumberObj integerValue]/5 - 1) inSection:0];
+    if (_targetType == NewWordTargetType) {
+        [self setTitle:@"New Words"];
+        
+        NSNumber *targetNumberObj = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_DAILY_TARGET];
+        
+        if (targetNumberObj) {
+            selectedIndexPath = [NSIndexPath indexPathForRow:([targetNumberObj integerValue]/5 - 1) inSection:0];
+        }
+        
+    } else {
+        [self setTitle:@"Total Words"];
+        
+        NSNumber *targetNumberObj = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_DAILY_TOTAL_TARGET];
+        
+        if (targetNumberObj) {
+            selectedIndexPath = [NSIndexPath indexPathForRow:(([targetNumberObj integerValue] - 20)/10) inSection:0];
+        }
     }
     
     UIBarButtonItem *btnCancel = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:(id)self  action:@selector(cancelButtonClick)];
@@ -64,9 +77,17 @@
 }
 
 - (void)doneButtonClick {
-    NSInteger target = (selectedIndexPath.row + 1) * 5;
-    NSNumber *targetNumberObj = [NSNumber numberWithInteger:target];
-    [[Common sharedCommon] saveDataToUserDefaultStandard:targetNumberObj withKey:KEY_DAILY_TARGET];
+    
+    if (_targetType == NewWordTargetType) {
+        NSInteger target = (selectedIndexPath.row + 1) * 5;
+        NSNumber *targetNumberObj = [NSNumber numberWithInteger:target];
+        [[Common sharedCommon] saveDataToUserDefaultStandard:targetNumberObj withKey:KEY_DAILY_TARGET];
+        
+    } else {
+        NSInteger target = 20 + selectedIndexPath.row * 10;
+        NSNumber *targetNumberObj = [NSNumber numberWithInteger:target];
+        [[Common sharedCommon] saveDataToUserDefaultStandard:targetNumberObj withKey:KEY_DAILY_TOTAL_TARGET];
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updateSettingsScreen" object:nil];
     
@@ -110,17 +131,33 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
-    if (indexPath.row == 0) {
-        cell.textLabel.text = [NSString stringWithFormat:@"5 words - Easy"];
+    if (_targetType == NewWordTargetType) {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = [NSString stringWithFormat:@"5 words - Easy"];
+            
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = [NSString stringWithFormat:@"10 words - Normal"];
+            
+        } else if (indexPath.row == 2) {
+            cell.textLabel.text = [NSString stringWithFormat:@"15 words - Hard"];
+            
+        } else if (indexPath.row == 3) {
+            cell.textLabel.text = [NSString stringWithFormat:@"20 words - Impossible"];
+        }
         
-    } else if (indexPath.row == 1) {
-        cell.textLabel.text = [NSString stringWithFormat:@"10 words - Normal"];
-        
-    } else if (indexPath.row == 2) {
-        cell.textLabel.text = [NSString stringWithFormat:@"15 words - Hard"];
-        
-    } else if (indexPath.row == 3) {
-        cell.textLabel.text = [NSString stringWithFormat:@"20 words - Impossible"];
+    } else {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = [NSString stringWithFormat:@"20 words - Easy"];
+            
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = [NSString stringWithFormat:@"30 words - Normal"];
+            
+        } else if (indexPath.row == 2) {
+            cell.textLabel.text = [NSString stringWithFormat:@"40 words - Hard"];
+            
+        } else if (indexPath.row == 3) {
+            cell.textLabel.text = [NSString stringWithFormat:@"50 words - Impossible"];
+        }
     }
     
     return cell;

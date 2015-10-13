@@ -10,6 +10,7 @@
 
 typedef enum {
     List_Unknown = 0,
+    List_Incomming,
     List_StudiedList,
     List_SearchHint,
     List_SearchResult,

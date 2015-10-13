@@ -110,6 +110,9 @@
     if (section == SettingsTableViewSectionSpeech) {
         return @"Speaking Speed";
         
+    } else if (section == SettingsTableViewSectionDailyTarget) {
+        return @"Target";
+        
     } else if (section == SettingsTableViewSectionNotification) {
         return @"Reminder";
     }
@@ -163,7 +166,7 @@
         
         case SettingsTableViewSectionDailyTarget:
             switch (indexPath.row) {
-                case DailyTarget:
+                case DailyNewWordTarget:
                     {
                         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:normalCellIdentifier];
                         if (cell == nil) {
@@ -179,12 +182,35 @@
                         
                         if (targetNumberObj) {
                             cell.textLabel.textAlignment = NSTextAlignmentCenter;
-                            cell.textLabel.text = [NSString stringWithFormat:@"Daily target: %ld words", [targetNumberObj integerValue]];
+                            cell.textLabel.text = [NSString stringWithFormat:@"Daily new words target: %ld words", [targetNumberObj integerValue]];
                         }
                         
                         return cell;
                     }
                     break;
+                    
+                case DailyTotalWordsTarget:
+                    {
+                        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:normalCellIdentifier];
+                        if (cell == nil) {
+                            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:normalCellIdentifier];
+                            cell.accessoryType = UITableViewCellAccessoryNone;
+                        }
+                        
+                        cell.textLabel.textColor = [UIColor blackColor];
+                        cell.textLabel.font = [UIFont systemFontOfSize:16];
+                        cell.accessoryType = UITableViewCellAccessoryNone;
+                        
+                        NSNumber *targetNumberObj = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_DAILY_TOTAL_TARGET];
+                        
+                        if (targetNumberObj) {
+                            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+                            cell.textLabel.text = [NSString stringWithFormat:@"Daily total words target: %ld words", [targetNumberObj integerValue]];
+                        }
+                        
+                        return cell;
+                    }
+                        break;
                     
                 case LowestLevel:
                     {
@@ -370,9 +396,25 @@
             
         case SettingsTableViewSectionDailyTarget:
             switch (indexPath.row) {
-                case DailyTarget:
+                case DailyNewWordTarget:
                     {
                         DailyTargetViewController *dailyTargetView = [[DailyTargetViewController alloc] initWithNibName:@"DailyTargetViewController" bundle:nil];
+                        dailyTargetView.targetType = NewWordTargetType;
+                        
+                        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:dailyTargetView];
+                        
+                        [nav setModalPresentationStyle:UIModalPresentationFormSheet];
+                        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+                        
+                        [self.navigationController presentViewController:nav animated:YES completion:nil];
+                    }
+                    break;
+                    
+                case DailyTotalWordsTarget:
+                    {
+                        DailyTargetViewController *dailyTargetView = [[DailyTargetViewController alloc] initWithNibName:@"DailyTargetViewController" bundle:nil];
+                        dailyTargetView.targetType = TotalTargetType;
+                        
                         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:dailyTargetView];
                         
                         [nav setModalPresentationStyle:UIModalPresentationFormSheet];

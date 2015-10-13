@@ -31,8 +31,7 @@
 #define DATABASENAME_NEW @"new_english.db"
 
 #define BUFFER_SIZE 100
-#define PICKED_WORDS_QUEUE_SIZE 10
-#define TOTAL_WORDS_A_DAY_MAX 30
+#define TOTAL_WORDS_A_DAY_MAX [[[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_DAILY_TOTAL_TARGET] integerValue]
 
 //user default keys
 #define KEY_SPEAKING_SPEED @"SpeakingSpeed"
@@ -41,6 +40,7 @@
 #define KEY_REMINDER_ONOFF @"ReminderOnOff"
 #define KEY_AUTOPLAY @"AutoPlay"
 #define KEY_DAILY_TARGET @"DailyTarget"
+#define KEY_DAILY_TOTAL_TARGET @"DailyTotalTarget"
 #define KEY_DB_VERSION @"DatabaseVersion"
 
 

@@ -12,6 +12,7 @@
 #import "CommonDefine.h"
 #import "Common.h"
 #import "Algorithm.h"
+#import "WordObject.h"
 
 // Singleton
 static CommonSqlite* sharedCommonSqlite = nil;
@@ -62,7 +63,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
 }
 
 - (NSArray *)getStudiedList {
-    NSString *strQuery = @"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where queue >= 1 ORDER BY level";
+    NSString *strQuery = @"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where queue = 1 OR queue = 2 ORDER BY level";
     
     NSString *dbPath = [self getDatabasePath];
     NSArray *resArr = [self getWordByQueryString:strQuery fromDatabase:dbPath];
@@ -71,7 +72,13 @@ static CommonSqlite* sharedCommonSqlite = nil;
 }
 
 - (NSArray *)getNewWordsList {
-    NSArray *resArr = [self fetchPickedWordFromVocabulary];
+    NSArray *resArr = [self fetchWordsFromVocabularyForKey:@"pickedword"];
+    
+    return resArr;
+}
+
+- (NSArray *)getIncommingList {
+    NSArray *resArr = [self fetchWordsFromVocabularyForKey:@"buffer"];
     
     return resArr;
 }
@@ -254,6 +261,40 @@ static CommonSqlite* sharedCommonSqlite = nil;
 
 }
 
+- (void)insertWordToDatabase:(WordObject *)wordObj {
+    NSString *dbPath = [self getDatabasePath];
+    NSURL *storeURL = [NSURL URLWithString:dbPath];
+    
+    const char *dbFilePathUTF8 = [[storeURL path] UTF8String];
+    sqlite3 *db;
+    int dbrc; //database return code
+    dbrc = sqlite3_open(dbFilePathUTF8, &db);
+    
+    if (dbrc) {
+        return;
+    }
+    sqlite3_stmt *dbps;
+
+    NSString *formattedAnswer = [wordObj.answers stringByReplacingOccurrencesOfString:@"\'" withString:@"\'\'"];
+    NSString *formattedVN = [wordObj.langVN stringByReplacingOccurrencesOfString:@"\'" withString:@"\'\'"];
+    NSString *formattedEN = [wordObj.langEN stringByReplacingOccurrencesOfString:@"\'" withString:@"\'\'"];
+    
+    NSString *strQuery = @"INSERT INTO 'vocabulary' (question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid) VALUES ('%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@')";
+    strQuery = [NSString stringWithFormat:strQuery, wordObj.question, formattedAnswer, wordObj.subcats, wordObj.status, wordObj.package, wordObj.level, wordObj.queue, wordObj.due, wordObj.revCount, wordObj.lastInterval, wordObj.eFactor, formattedVN, formattedEN, wordObj.gid];
+
+    const char *charQuery = [strQuery UTF8String];
+    
+    sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+    
+    if(SQLITE_DONE != sqlite3_step(dbps)) {
+        NSLog(@"Error while inserting. %s", sqlite3_errmsg(db));
+    }
+    
+    sqlite3_finalize(dbps);
+    sqlite3_close(db);
+    
+}
+
 - (NSTimeInterval)getEndOfDayInSec {
     NSTimeInterval datetime = [[Common sharedCommon] getBeginOfDayInSec];
     
@@ -263,7 +304,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
 }
 
 - (NSArray *)getReviewListFromVocabulary {
-    NSString *strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where queue = 2 AND due <= %f ORDER BY level LIMIT %d", [self getEndOfDayInSec], TOTAL_WORDS_A_DAY_MAX];
+    NSString *strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where queue = %d AND due <= %f ORDER BY level LIMIT %ld", QUEUE_REVIEW, [self getEndOfDayInSec], (long)TOTAL_WORDS_A_DAY_MAX];
     
     NSString *dbPath = [self getDatabasePath];
     NSArray *resArr = [self getWordByQueryString:strQuery fromDatabase:dbPath];
@@ -701,7 +742,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
         }
     }*/
     NSString *lowestLevel = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_LOWEST_LEVEL];
-    strQuery = [NSString stringWithFormat:@"SELECT id from \"vocabulary\" WHERE queue = 0 AND level >= %@ ORDER BY level LIMIT %ld", lowestLevel, (long)amount];
+    strQuery = [NSString stringWithFormat:@"SELECT id from \"vocabulary\" WHERE queue = %d AND level >= %@ ORDER BY level LIMIT %ld", QUEUE_UNKNOWN, lowestLevel, (long)amount];
     charQuery = [strQuery UTF8String];
     
     sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
@@ -827,27 +868,28 @@ static CommonSqlite* sharedCommonSqlite = nil;
 
         }
         
-        NSUInteger randomIndex = 0;
+//        NSUInteger randomIndex = 0;
         NSMutableArray *pickedIDArr = [[NSMutableArray alloc] init];
         int count = 0; //to prevent infinite loop
         
-        NSMutableDictionary *preventDuplicateDict = [[NSMutableDictionary alloc] init]; //to prevent duplicate words
-        NSString *strIndex = @"";
+//        NSMutableDictionary *preventDuplicateDict = [[NSMutableDictionary alloc] init]; //to prevent duplicate words
+//        NSString *strIndex = @"";
         
-        while ([pickedIDArr count] < amount) {
-            randomIndex = arc4random() % [idListArr count];
-            strIndex = [NSString stringWithFormat:@"%ld", randomIndex];
-            
-            if (![preventDuplicateDict objectForKey:strIndex]) {
-                [preventDuplicateDict setObject:strIndex forKey:strIndex];
-                
-                [pickedIDArr addObject:[idListArr objectAtIndex:randomIndex]];
-            }
+        while ([pickedIDArr count] < amount && count < [idListArr count]) {
+//            randomIndex = arc4random() % [idListArr count];
+//            strIndex = [NSString stringWithFormat:@"%d", count];
+//            
+//            if (![preventDuplicateDict objectForKey:strIndex]) {
+//                [preventDuplicateDict setObject:strIndex forKey:strIndex];
+//                
+//                [pickedIDArr addObject:[idListArr objectAtIndex:randomIndex]];
+//            }
+            [pickedIDArr addObject:[idListArr objectAtIndex:count]];
             
             count ++;
-            if (count == 50) {  //50 is enough large
-                break;
-            }
+//            if (count == 99) {  //99 is enough large
+//                break;
+//            }
         }
         
         //create json to add to db
@@ -1167,8 +1209,8 @@ static CommonSqlite* sharedCommonSqlite = nil;
     sqlite3_close(db);
 }
 
-//fetch word objects from vocabulary by word-id that contained in pickedword
-- (NSArray *)fetchPickedWordFromVocabulary {
+//fetch word objects from vocabulary by word-id that contained in pickedword or buffer
+- (NSArray *)fetchWordsFromVocabularyForKey:(NSString *)key {
     //get word id from pickedword
     NSString *dbPath = [self getDatabasePath];
     NSURL *storeURL = [NSURL URLWithString:dbPath];
@@ -1183,7 +1225,8 @@ static CommonSqlite* sharedCommonSqlite = nil;
     }
     sqlite3_stmt *dbps;
     
-    NSString *strQuery = @"SELECT value from \"system\" WHERE key = 'pickedword'";
+    NSString *strQuery = @"SELECT value from \"system\" WHERE key = '%@'";
+    strQuery = [NSString stringWithFormat:strQuery, key];
     
     const char *charQuery = [strQuery UTF8String];
     
@@ -1460,4 +1503,83 @@ static CommonSqlite* sharedCommonSqlite = nil;
     
     sqlite3_close(db);
 }
+
+- (void)removeWordFromBuffer:(WordObject *)wordObj {
+    NSString *dbPath = [self getDatabasePath];
+    NSURL *storeURL = [NSURL URLWithString:dbPath];
+    
+    const char *dbFilePathUTF8 = [[storeURL path] UTF8String];
+    sqlite3 *db;
+    int dbrc; //database return code
+    dbrc = sqlite3_open(dbFilePathUTF8, &db);
+    
+    if (dbrc) {
+        return;
+    }
+    sqlite3_stmt *dbps;
+    
+    //check date before add new words to pickedword
+    NSString *strQuery = @"SELECT value from \"system\" WHERE key = 'buffer'";
+    const char *charQuery = [strQuery UTF8String];
+    
+    sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+    NSString *strJson = @"";
+    
+    while(sqlite3_step(dbps) == SQLITE_ROW) {
+        if (sqlite3_column_text(dbps, 0)) {
+            strJson = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 0)];
+            //{"count":37,"card":["67","5","27","29","39","46","58","4","21","43","81","139","165","175","180","262","269","277","279","334","359","387","2","7","8","10","11","13","14","19","31","35","38","42","44","47","49"]}
+            
+        }
+    }
+    
+    sqlite3_finalize(dbps);
+    
+    //parse the result to get word-id list
+    NSMutableArray *idListArr = [[NSMutableArray alloc] init];
+    NSData *data = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    if (data) {
+        NSDictionary *dictIDList = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        [idListArr addObjectsFromArray:[dictIDList valueForKey:@"card"]];
+        
+    }
+    
+    for (NSString *wordid in idListArr) {
+        if ([wordid isEqualToString:wordObj.wordid]) {
+            [idListArr removeObject:wordid];
+            break;
+        }
+    }
+    
+    NSMutableDictionary *dictReAdd = [[NSMutableDictionary alloc] init];
+    [dictReAdd setObject:[[NSNumber alloc] initWithInteger:[idListArr count]] forKey:@"count"];
+    [dictReAdd setObject:idListArr forKey:@"card"];
+    
+    //convert to json string
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictReAdd
+                                               options:NSJSONWritingPrettyPrinted
+                                                 error:&error];
+    
+    if (!jsonData) {
+        NSLog(@"Got an error: %@", error);
+    } else {
+        strJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    
+    //update new buffer to db
+    strQuery = [NSString stringWithFormat:@"UPDATE \"system\" SET value = \'%@\' where key = 'buffer'", strJson];
+    
+    charQuery = [strQuery UTF8String];
+    
+    sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+    
+    if(SQLITE_DONE != sqlite3_step(dbps)) {
+        NSLog(@"Error while updating. %s", sqlite3_errmsg(db));
+    }
+    
+    sqlite3_finalize(dbps);
+    sqlite3_close(db);
+}
+
 @end

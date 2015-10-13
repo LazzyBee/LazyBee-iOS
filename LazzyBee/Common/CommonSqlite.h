@@ -19,10 +19,12 @@
 - (WordObject *)getWordInformation:(NSString *)word;
 - (NSArray *)getStudiedList;
 - (void)updateWord:(WordObject *)wordObj;
+- (void)insertWordToDatabase:(WordObject *)wordObj;
 
 - (NSArray *)getNewWordsList;
 - (NSArray *)getStudyAgainListWithLimit:(NSInteger)limit;
 - (NSArray *)getReviewList;
+- (NSArray *)getIncommingList;
 
 - (NSArray *)getSearchHintList:(NSString *)searchText;
 - (NSArray *)getSearchResultList:(NSString *)searchText;
@@ -40,6 +42,7 @@
 - (void)updateDatabaseWithPath:(NSString *)bdPath;
 - (NSArray *)getAllWords;
 - (void)addMoreFieldToTable;
+- (void)removeWordFromBuffer:(WordObject *)wordObj;
 @end
 
 #endif

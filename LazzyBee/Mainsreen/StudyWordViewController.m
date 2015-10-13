@@ -17,6 +17,7 @@
 #import "Algorithm.h"
 #import "Common.h"
 #import "TagManagerHelper.h"
+#import "SVProgressHUD.h"
 
 #define AS_TAG_SEARCH 1
 #define AS_TAG_LEARN 2
@@ -27,8 +28,8 @@
 #define AS_LEARN_BTN_IGNORE_WORD   0
 #define AS_LEARN_BTN_LEARNT_WORD  1
 #define AS_LEARN_BTN_UPDATE_WORD   2
-#define AS_LEARN_BTN_REPORT_WORD   3
-#define AS_LEARN_BTN_CANCEL        4
+//#define AS_LEARN_BTN_REPORT_WORD   3
+#define AS_LEARN_BTN_CANCEL        3
 
 @interface StudyWordViewController ()
 {
@@ -255,7 +256,9 @@
         
     } else {
 
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", @"Report", nil];
+//        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", @"Report", nil];
+
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", nil];
         
         actionSheet.tag = AS_TAG_LEARN;
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -518,6 +521,7 @@
         //[GTMHTTPFetcher setLoggingEnabled:YES];
     }
 
+    [SVProgressHUD showWithStatus:nil];
     GTLQueryDataServiceApi *query = [GTLQueryDataServiceApi queryForGetVocaByQWithQ:self.wordObj.question];
     //TODO: Add waiting progress here
     [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLDataServiceApiVoca *object, NSError *error) {
@@ -535,6 +539,7 @@
                 [self displayAnswer:_wordObj];
             }
 
+            [SVProgressHUD dismiss];
         }
     }];
 }
@@ -547,11 +552,28 @@
     if (actionSheet.tag == AS_TAG_SEARCH) {
         if (buttonIndex == AS_SEARCH_BTN_ADD_TO_LEARN) {
             NSLog(@"Add to learn");
-            [[CommonSqlite sharedCommonSqlite] addAWordToStydyingQueue:_wordObj];
-            
-            //update queue value to 0 to consider this word as a new word in DB
+            //update queue value to 3 to consider this word as a new word in DB
             _wordObj.queue = [NSString stringWithFormat:@"%d", QUEUE_NEW_WORD];
-            [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];
+            
+            if (_wordObj.isFromServer) {
+                [[CommonSqlite sharedCommonSqlite] insertWordToDatabase:_wordObj];
+                
+                //because word-id is blank so need to get again after insert it into db
+                _wordObj = [[CommonSqlite sharedCommonSqlite] getWordInformation:_wordObj.question];
+                
+                [[CommonSqlite sharedCommonSqlite] addAWordToStydyingQueue:_wordObj];
+                
+            } else {
+                [[CommonSqlite sharedCommonSqlite] addAWordToStydyingQueue:_wordObj];
+                
+                //remove from buffer
+                [[CommonSqlite sharedCommonSqlite] removeWordFromBuffer:_wordObj];
+                
+                [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];
+            }
+            
+            //update incomming list
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshList" object:nil];
             
         } else if (buttonIndex == AS_SEARCH_BTN_CANCEL) {
 
@@ -602,17 +624,17 @@
             NSLog(@"Update word");
             [self updateWordFromGAE];
             
-        }  else if (buttonIndex == AS_LEARN_BTN_REPORT_WORD) {
-            NSLog(@"report");
-            ReportViewController *reportView = [[ReportViewController alloc] initWithNibName:@"ReportViewController" bundle:nil];
-            reportView.wordObj = _wordObj;
-            
-            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:reportView];
-            
-            [nav setModalPresentationStyle:UIModalPresentationFormSheet];
-            [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-            
-            [self.navigationController presentViewController:nav animated:YES completion:nil];
+//        }  else if (buttonIndex == AS_LEARN_BTN_REPORT_WORD) {
+//            NSLog(@"report");
+//            ReportViewController *reportView = [[ReportViewController alloc] initWithNibName:@"ReportViewController" bundle:nil];
+//            reportView.wordObj = _wordObj;
+//            
+//            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:reportView];
+//            
+//            [nav setModalPresentationStyle:UIModalPresentationFormSheet];
+//            [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+//            
+//            [self.navigationController presentViewController:nav animated:YES completion:nil];
             
         } else if (buttonIndex == AS_LEARN_BTN_CANCEL) {
             NSLog(@"Cancel");

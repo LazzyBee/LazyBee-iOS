@@ -29,7 +29,8 @@ typedef enum {
 } SPEECH_SECTION;
 
 typedef enum {
-    DailyTarget = 0,
+    DailyNewWordTarget = 0,
+    DailyTotalWordsTarget,
     LowestLevel,
     DailyTargetSectionMax
 } DAILY_SECTION;

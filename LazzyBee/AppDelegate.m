@@ -190,6 +190,13 @@
         [[Common sharedCommon] saveDataToUserDefaultStandard:targetNumberObj withKey:KEY_DAILY_TARGET];
     }
     
+    NSNumber *totalWordObj = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_DAILY_TOTAL_TARGET];
+    
+    if (!totalWordObj) {
+        totalWordObj = [NSNumber numberWithInteger:30];
+        [[Common sharedCommon] saveDataToUserDefaultStandard:totalWordObj withKey:KEY_DAILY_TOTAL_TARGET];
+    }
+    
     NSNumber *dbVersion = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_DB_VERSION];
     
     if (!dbVersion) {
