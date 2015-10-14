@@ -15,6 +15,7 @@
 #import "Common.h"
 #import "AppDelegate.h"
 #import "TagManagerHelper.h"
+#import "DictDetailContainerViewController.h"
 
 @interface HomeViewController ()<GADInterstitialDelegate>
 {
@@ -124,6 +125,7 @@
 //    [[CommonSqlite sharedCommonSqlite] pickUpRandom10WordsToStudyingQueue:[[Common sharedCommon] getDailyTarget] withForceFlag:NO];
     
     StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
+    studyViewController.isReviewScreen = NO;
     
     [self.navigationController pushViewController:studyViewController animated:YES];
 }
@@ -156,6 +158,7 @@
         
         //transfer to study screen
         StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
+        studyViewController.isReviewScreen = NO;
         
         [self.navigationController pushViewController:studyViewController animated:YES];
         
@@ -173,6 +176,7 @@
         if (buttonIndex != 0) {
             //transfer to study screen
             StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
+            studyViewController.isReviewScreen = NO;
             
             [self.navigationController pushViewController:studyViewController animated:YES];
         }
@@ -238,11 +242,14 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
     if ([self.navigationController.topViewController isEqual:self]) {
         WordObject *wordObj = (WordObject *)notification.object;
         
-        StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
+/*        StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
         studyViewController.isReviewScreen = YES;
         studyViewController.wordObj = wordObj;
         
-        [self.navigationController pushViewController:studyViewController animated:YES];
+        [self.navigationController pushViewController:studyViewController animated:YES];*/
+        DictDetailContainerViewController *dictDetailContainer = [[DictDetailContainerViewController alloc] initWithNibName:@"DictDetailContainerViewController" bundle:nil];
+        dictDetailContainer.wordObj = wordObj;
+        [self.navigationController pushViewController:dictDetailContainer animated:YES];
     }
 }
 

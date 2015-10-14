@@ -18,6 +18,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+    {
+        [self.navigationController.navigationBar setTranslucent:NO];
+    }
+#endif
+    
+    [self.navigationController.navigationBar setBarTintColor:COMMON_COLOR];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
     [self setTitle:@"About"];
     
     [self getAboutFromFile];

@@ -210,7 +210,6 @@ static HTMLHelper* sharedHTMLHelper = nil;
     
     "       <div style='width:90%%'>\n"
     "           <center><font size='4'> %@ </font></center>\n"  //%@ will be replaced by pronunciation
-    "           <center><font size='5' color='blue'><em> %@ </em></font></center>\n"    //%@ will be replaced by meaning
     "       </div>\n"
     
     "           <p style=\"text-align: center;\"> %@ </p>\n"  //%@ will be replaced by image link, temporary leave it blank
@@ -218,14 +217,17 @@ static HTMLHelper* sharedHTMLHelper = nil;
     "       <div style=\"width:100%%\"></div>\n"
     "            %@ \n"     //%@ will be replaced by strExplainIconTag
     
-    "       <div style=\"width:100%%; font-size:13pt;\"><strong>Example: </strong></div>\n"
+    "       <div style=\"width:90%%; font-size:13pt;\"><strong>Example: </strong></div>\n"
     "            %@ \n"     //%@ will be replaced by strExplainIconTag
-    
+
+    "       <div style='width:90%%'>\n"
+    "           <br><br><br><br><center><font size='4' color='blue'><em> %@ </em></font></center>\n"    //%@ will be replaced by meaning
+    "       </div>\n"
     "   </div>\n"
     "   </body>"
     "</html>\n";
 
-    htmlString = [NSString stringWithFormat:htmlString, word.question, strWordIconTag, strPronounciation, strMeaning, imageLink, strExplainIconTag, strExampleIconTag];
+    htmlString = [NSString stringWithFormat:htmlString, word.question, strWordIconTag, strPronounciation, imageLink, strExplainIconTag, strExampleIconTag, strMeaning];
     return htmlString;
     
 }
@@ -239,6 +241,15 @@ static HTMLHelper* sharedHTMLHelper = nil;
     "<meta content=\"width=device-width, initial-scale=1.0, user-scalable=yes\"\n"
     "name=\"viewport\">\n"
     "<style>\n"
+    ".tl {\n"
+    "    font-size: 14px;\n"
+    "    color: #0e74af;\n"
+    "    font-weight: bold;\n"
+    "}"
+    ".ex {\n"
+    "    color: gray;\n"
+    "    margin-left: 15px;\n"
+    "}"
     "figure {"
     "   text-align: center;"
     "   margin: auto;"

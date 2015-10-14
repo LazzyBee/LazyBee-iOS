@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    SettingsTableViewSectionAbout = 0,
-    SettingsTableViewSectionSpeech,
+//    SettingsTableViewSectionAbout,
+    SettingsTableViewSectionSpeech = 0,
     SettingsTableViewSectionDailyTarget,
     SettingsTableViewSectionAutoPlay,
     SettingsTableViewSectionNotification,
@@ -18,10 +18,10 @@ typedef enum {
     SettingsTableViewSectionMax
 } SETTINGS_TABLEVIEW_SECTION;
 
-typedef enum {
-    About = 0,
-    AboutSectionMax
-} ABOUT_SECTION;
+//typedef enum {
+//    About = 0,
+//    AboutSectionMax
+//} ABOUT_SECTION;
 
 typedef enum {
     SpeakingSpeed = 0,
@@ -47,8 +47,8 @@ typedef enum {
 } NOTIFICATION_SECTION;
 
 typedef enum {
-    UpdateCurrentDate = 0,
-    UpdateDatabase,
+//    UpdateCurrentDate = 0,
+    UpdateDatabase = 0,
     ResetSectionMax
 } RESET_SECTION;
 

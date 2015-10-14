@@ -148,6 +148,9 @@
 		557D7ACB1B85B5B600834A44 /* ic_speaker.png in Resources */ = {isa = PBXBuildFile; fileRef = 557D7AC81B85B5B600834A44 /* ic_speaker.png */; };
 		557D7ACC1B85B5B600834A44 /* ic_speaker@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 557D7AC91B85B5B600834A44 /* ic_speaker@2x.png */; };
 		557D7ACD1B85B5B600834A44 /* ic_speaker@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 557D7ACA1B85B5B600834A44 /* ic_speaker@3x.png */; };
+		5597EC411BCE090700E1F779 /* ic_about.png in Resources */ = {isa = PBXBuildFile; fileRef = 5597EC3E1BCE090700E1F779 /* ic_about.png */; settings = {ASSET_TAGS = (); }; };
+		5597EC421BCE090700E1F779 /* ic_about@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5597EC3F1BCE090700E1F779 /* ic_about@2x.png */; settings = {ASSET_TAGS = (); }; };
+		5597EC431BCE090700E1F779 /* ic_about@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5597EC401BCE090700E1F779 /* ic_about@3x.png */; settings = {ASSET_TAGS = (); }; };
 		559B2AFC1BC61344009AA150 /* DictDetailContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 559B2AFA1BC61344009AA150 /* DictDetailContainerViewController.m */; settings = {ASSET_TAGS = (); }; };
 		559B2AFD1BC61344009AA150 /* DictDetailContainerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 559B2AFB1BC61344009AA150 /* DictDetailContainerViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		55B08BEF1BBE36D000693411 /* LevelPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B08BED1BBE36D000693411 /* LevelPickerViewController.m */; settings = {ASSET_TAGS = (); }; };
@@ -384,6 +387,9 @@
 		557D7AC81B85B5B600834A44 /* ic_speaker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_speaker.png; sourceTree = "<group>"; };
 		557D7AC91B85B5B600834A44 /* ic_speaker@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_speaker@2x.png"; sourceTree = "<group>"; };
 		557D7ACA1B85B5B600834A44 /* ic_speaker@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_speaker@3x.png"; sourceTree = "<group>"; };
+		5597EC3E1BCE090700E1F779 /* ic_about.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_about.png; sourceTree = "<group>"; };
+		5597EC3F1BCE090700E1F779 /* ic_about@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_about@2x.png"; sourceTree = "<group>"; };
+		5597EC401BCE090700E1F779 /* ic_about@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_about@3x.png"; sourceTree = "<group>"; };
 		559B2AF91BC61344009AA150 /* DictDetailContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DictDetailContainerViewController.h; path = List/DictDetailContainerViewController.h; sourceTree = "<group>"; };
 		559B2AFA1BC61344009AA150 /* DictDetailContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DictDetailContainerViewController.m; path = List/DictDetailContainerViewController.m; sourceTree = "<group>"; };
 		559B2AFB1BC61344009AA150 /* DictDetailContainerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DictDetailContainerViewController.xib; path = List/DictDetailContainerViewController.xib; sourceTree = "<group>"; };
@@ -712,6 +718,9 @@
 		4DD3C3BF1B6F218700B6DA71 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				5597EC3E1BCE090700E1F779 /* ic_about.png */,
+				5597EC3F1BCE090700E1F779 /* ic_about@2x.png */,
+				5597EC401BCE090700E1F779 /* ic_about@3x.png */,
 				55452C531BC5128600D6E430 /* ic_dictionary.png */,
 				55452C541BC5128600D6E430 /* ic_dictionary@2x.png */,
 				55452C551BC5128600D6E430 /* ic_dictionary@3x.png */,
@@ -987,6 +996,7 @@
 				552BD5B51BA175E300BF316C /* ic_rabbit.png in Resources */,
 				557D7ACD1B85B5B600834A44 /* ic_speaker@3x.png in Resources */,
 				4DD3C3DB1B6F218700B6DA71 /* ic_share@2x.png in Resources */,
+				5597EC411BCE090700E1F779 /* ic_about.png in Resources */,
 				552BD5C41BA17A6900BF316C /* NotificationTableViewCell.xib in Resources */,
 				557D7ACC1B85B5B600834A44 /* ic_speaker@2x.png in Resources */,
 				4DD3C3E11B6F218700B6DA71 /* avatarDefault@2x.png in Resources */,
@@ -1026,6 +1036,7 @@
 				552BD5BA1BA175E300BF316C /* ic_turtle@3x.png in Resources */,
 				557D7ABE1B8587AF00834A44 /* btnbg@3x.png in Resources */,
 				553F78361BA6D39400D15876 /* rearBanner@3x.png in Resources */,
+				5597EC431BCE090700E1F779 /* ic_about@3x.png in Resources */,
 				55CFD03D1BC373B8006F6C31 /* GTM-M6SZR5 in Resources */,
 				4DD3C3761B6F18D700B6DA71 /* RearViewController.xib in Resources */,
 				552BD5A11BA15F7200BF316C /* SettingsViewController.xib in Resources */,
@@ -1039,6 +1050,7 @@
 				557D7ABD1B8587AF00834A44 /* btnbg@2x.png in Resources */,
 				553F78341BA6D39400D15876 /* rearBanner.png in Resources */,
 				55452C5D1BC513EF00D6E430 /* DictionaryViewController.xib in Resources */,
+				5597EC421BCE090700E1F779 /* ic_about@2x.png in Resources */,
 				4DD3C3A21B6F191C00B6DA71 /* README.txt in Resources */,
 				4DD3C3741B6F18D700B6DA71 /* RearTableViewCell.xib in Resources */,
 			);

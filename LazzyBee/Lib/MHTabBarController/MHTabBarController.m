@@ -118,6 +118,9 @@ static const NSInteger TagOffset = 1000;
 		[button setTitle:viewController.tabBarItem.title forState:UIControlStateNormal];
 		[button setImage:viewController.tabBarItem.image forState:UIControlStateNormal];
 
+//        [button.layer setBorderWidth:1.0];
+//        [button.layer setBorderColor:[[UIColor whiteColor] CGColor]];
+        
 		[button addTarget:self action:@selector(tabButtonPressed:) forControlEvents:UIControlEventTouchDown];
 
 		[self deselectTabButton:button];
@@ -151,7 +154,7 @@ static const NSInteger TagOffset = 1000;
 			rect.size.width = self.view.bounds.size.width - rect.origin.x;
 
 		button.frame = rect;
-		rect.origin.x += rect.size.width;
+		rect.origin.x += rect.size.width + 1;
 
 		if (index == self.selectedIndex)
 			[self centerIndicatorOnButton:button];

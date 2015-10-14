@@ -15,6 +15,7 @@
 #import "HomeViewController.h"
 #import "SettingsViewController.h"
 #import "DictionaryViewController.h"
+#import "AboutViewController.h"
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
@@ -85,7 +86,11 @@
     return headerTitle;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+//    return 1;
+//}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 1;
 }
 
@@ -129,7 +134,11 @@
         }
         
     } else if(indexPath.section == RearTable_Section_Share) {
-        if (indexPath.row == ShareSection_ShareFB) {
+        if (indexPath.row == About_App) {
+            text = @"About";
+            cell.imgIcon.image = [UIImage imageNamed:@"ic_about"];
+            
+        } else if (indexPath.row == ShareSection_ShareFB) {
             text = @"Share";
             cell.imgIcon.image = [UIImage imageNamed:@"ic_share"];
         }
@@ -188,14 +197,25 @@
         }
         
     } else if (indexPath.section == RearTable_Section_Share) {
-        FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-        content.contentURL = [NSURL URLWithString:@"http://www.lazzybee.com"];
-        
-        FBSDKShareDialog *shareDialog = [[FBSDKShareDialog alloc] init];
-        shareDialog.shareContent = content;
-        
-        shareDialog.delegate = (id)self;
-        [shareDialog show];
+        if (indexPath.row == About_App) {
+            AboutViewController *aboutView = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
+            
+            newFrontController = [[UINavigationController alloc] initWithRootViewController:aboutView];
+            
+            self.sidePanelController.centerPanel = newFrontController;
+            
+            presentedCell = indexPath;  // <- store the presented row
+            
+        } else if (indexPath.row == ShareSection_ShareFB) {
+            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+            content.contentURL = [NSURL URLWithString:@"http://www.lazzybee.com"];
+            
+            FBSDKShareDialog *shareDialog = [[FBSDKShareDialog alloc] init];
+            shareDialog.shareContent = content;
+            
+            shareDialog.delegate = (id)self;
+            [shareDialog show];
+        }
     }
 }
 

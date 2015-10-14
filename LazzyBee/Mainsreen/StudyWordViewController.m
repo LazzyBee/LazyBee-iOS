@@ -18,6 +18,7 @@
 #import "Common.h"
 #import "TagManagerHelper.h"
 #import "SVProgressHUD.h"
+#import "DictDetailContainerViewController.h"
 
 #define AS_TAG_SEARCH 1
 #define AS_TAG_LEARN 2
@@ -650,11 +651,14 @@
     if ([self.navigationController.topViewController isEqual:self]) {
         WordObject *wordObj = (WordObject *)notification.object;
         
-        StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
+/*        StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
         studyViewController.isReviewScreen = YES;
         studyViewController.wordObj = wordObj;
         
-        [self.navigationController pushViewController:studyViewController animated:YES];
+        [self.navigationController pushViewController:studyViewController animated:YES];*/
+        DictDetailContainerViewController *dictDetailContainer = [[DictDetailContainerViewController alloc] initWithNibName:@"DictDetailContainerViewController" bundle:nil];
+        dictDetailContainer.wordObj = wordObj;
+        [self.navigationController pushViewController:dictDetailContainer animated:YES];
     }
 }
 
