@@ -12,6 +12,7 @@
 typedef enum {
     DictVietnam = 0,
     DictEnglish,
+    DictLazzyBee,
     DictMax,
 } DICTIONARY_TYPE;
 

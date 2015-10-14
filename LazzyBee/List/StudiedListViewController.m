@@ -13,6 +13,7 @@
 #import "StudyWordViewController.h"
 #import "TagManagerHelper.h"
 #import "SVProgressHUD.h"
+#import "DictDetailContainerViewController.h"
 
 @interface StudiedListViewController ()
 {
@@ -220,11 +221,16 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectRowFromSearch" object:wordObj];
         
     } else {
-        StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
+/*        StudyWordViewController *studyViewController = [[StudyWordViewController alloc] initWithNibName:@"StudyWordViewController" bundle:nil];
         studyViewController.isReviewScreen = YES;
         studyViewController.wordObj = wordObj;
         
-        [self.navigationController pushViewController:studyViewController animated:YES];
+        [self.navigationController pushViewController:studyViewController animated:YES];*/
+        
+        DictDetailContainerViewController *dictDetailContainer = [[DictDetailContainerViewController alloc] initWithNibName:@"DictDetailContainerViewController" bundle:nil];
+        dictDetailContainer.wordObj = wordObj;
+        
+        [self.navigationController pushViewController:dictDetailContainer animated:YES];
     }
 
 }

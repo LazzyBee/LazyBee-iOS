@@ -30,6 +30,8 @@
             
         } else if (_dictType == DictEnglish) {
             htmlString = [[HTMLHelper sharedHTMLHelper] createHTMLDict:_wordObj dictType:@"en"];
+        } else if (_dictType == DictLazzyBee) {
+            htmlString = [[HTMLHelper sharedHTMLHelper]createHTMLForAnswer:_wordObj withPackage:@"common"];
         }
     }
     

@@ -8,7 +8,6 @@
 
 #import "SettingsViewController.h"
 #import "CommonSqlite.h"
-#import "AboutViewController.h"
 #import "Common.h"
 #import "AppDelegate.h"
 #import "SpeedTableViewCell.h"
@@ -83,10 +82,11 @@
     // Return the number of rows in the section.
     // If you're serving data from an array, return the length of the array:
     
-    if (section == SettingsTableViewSectionAbout) {
-        return AboutSectionMax;
-        
-    } else if (section == SettingsTableViewSectionSpeech) {
+//    if (section == SettingsTableViewSectionAbout) {
+//        return AboutSectionMax;
+//        
+//    } else
+    if (section == SettingsTableViewSectionSpeech) {
         return SpeechSectionMax;
         
     } else if (section == SettingsTableViewSectionDailyTarget) {
@@ -124,7 +124,7 @@
     static NSString *normalCellIdentifier = @"NormalCell";
     
     switch (indexPath.section) {
-        case SettingsTableViewSectionAbout:
+        /*case SettingsTableViewSectionAbout:
             {
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:normalCellIdentifier];
                 if (cell == nil) {
@@ -140,7 +140,7 @@
                 
                 return cell;
             }
-            break;
+            break;*/
         
         case SettingsTableViewSectionSpeech:
             switch (indexPath.row) {
@@ -182,7 +182,7 @@
                         
                         if (targetNumberObj) {
                             cell.textLabel.textAlignment = NSTextAlignmentCenter;
-                            cell.textLabel.text = [NSString stringWithFormat:@"Daily new words target: %ld words", [targetNumberObj integerValue]];
+                            cell.textLabel.text = [NSString stringWithFormat:@"Daily new words: %ld words", [targetNumberObj integerValue]];
                         }
                         
                         return cell;
@@ -205,7 +205,7 @@
                         
                         if (targetNumberObj) {
                             cell.textLabel.textAlignment = NSTextAlignmentCenter;
-                            cell.textLabel.text = [NSString stringWithFormat:@"Daily total words target: %ld words", [targetNumberObj integerValue]];
+                            cell.textLabel.text = [NSString stringWithFormat:@"Daily total words: %ld words", [targetNumberObj integerValue]];
                         }
                         
                         return cell;
@@ -322,7 +322,7 @@
             
             case SettingsTableViewSectionReset:
                 switch (indexPath.row) {
-                    case UpdateCurrentDate:
+/*                    case UpdateCurrentDate:
                         {
                             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:normalCellIdentifier];
                             if (cell == nil) {
@@ -339,7 +339,7 @@
                             
                             return cell;
                         }
-                        break;
+                        break;*/
                         
                     case UpdateDatabase:
                         {
@@ -376,13 +376,13 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     switch (indexPath.section) {
-        case SettingsTableViewSectionAbout:
+        /*case SettingsTableViewSectionAbout:
             {
                 AboutViewController *aboutView = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
                 
                 [self.navigationController pushViewController:aboutView animated:YES];
             }
-            break;
+            break;*/
             
         case SettingsTableViewSectionSpeech:
             switch (indexPath.row) {
@@ -451,7 +451,7 @@
             
         case SettingsTableViewSectionReset:
             switch (indexPath.row) {
-                case UpdateCurrentDate:
+/*                case UpdateCurrentDate:
                 {
                     [[CommonSqlite sharedCommonSqlite] resetDateOfPickedWordList];
                     
@@ -460,7 +460,7 @@
                     
                     [alert show];
                 }
-                    break;
+                    break;*/
                     
                 case UpdateDatabase:
                 {
