@@ -11,6 +11,7 @@
 #import "MHTabBarController.h"
 #import "TagManagerHelper.h"
 #import "CommonSqlite.h"
+#import "AppDelegate.h"
 
 @interface DictDetailContainerViewController ()
 {
@@ -31,6 +32,25 @@
     
     self.navigationItem.rightBarButtonItems = @[actionButton];
     
+    //admob
+    GADRequest *request = [GADRequest request];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    TAGContainer *container = appDelegate.container;
+    BOOL enableAds = [[container stringForKey:@"adv_enable"] boolValue];
+    
+    if (enableAds) {
+        _adBanner.hidden = NO;
+        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"g_pub_id"],[container stringForKey:@"adv_home_id"] ];
+        
+        self.adBanner.adUnitID = advStr;//@"ca-app-pub-3940256099942544/2934735716";
+        
+        self.adBanner.rootViewController = self;
+        [self.adBanner loadRequest:request];
+        
+    } else {
+        _adBanner.hidden = YES;
+    }
+    
     DictDetailViewController *vnViewController = [[DictDetailViewController alloc] initWithNibName:@"DictDetailViewController" bundle:nil];
     vnViewController.dictType = DictVietnam;
     vnViewController.wordObj = _wordObj;
@@ -46,13 +66,23 @@
     lazzyViewController.wordObj = _wordObj;
     lazzyViewController.title = @"Lazzy Bee";
     
-    NSArray *viewControllers = @[enViewController, vnViewController, lazzyViewController];
+    NSArray *viewControllers = @[vnViewController, enViewController, lazzyViewController];
     
     tabViewController = [[MHTabBarController alloc] init];
     
     tabViewController.delegate = (id)self;
     tabViewController.viewControllers = viewControllers;
-    [tabViewController.view setFrame:self.view.frame];
+    
+    CGRect rect;
+
+    if (enableAds) {
+        rect = self.view.frame;
+        rect.size.height = _adBanner.frame.origin.y;
+    } else {
+        rect = self.view.frame;
+    }
+    
+    [tabViewController.view setFrame:rect];
     
     tabViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth |
                                                 UIViewAutoresizingFlexibleHeight |

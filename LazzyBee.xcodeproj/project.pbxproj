@@ -158,7 +158,12 @@
 		55B08BF41BBE6FAF00693411 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B08BF21BBE6FAF00693411 /* ReportViewController.m */; settings = {ASSET_TAGS = (); }; };
 		55B08BF51BBE6FAF00693411 /* ReportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55B08BF31BBE6FAF00693411 /* ReportViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		55BDC8A61BC76FFF0015B199 /* TagManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BDC8A51BC76FFF0015B199 /* TagManagerHelper.m */; settings = {ASSET_TAGS = (); }; };
+		55C092321BCF4301005C78B5 /* PopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C092311BCF4301005C78B5 /* PopupView.m */; settings = {ASSET_TAGS = (); }; };
+		55C092341BCF431E005C78B5 /* PopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55C092331BCF431E005C78B5 /* PopupView.xib */; settings = {ASSET_TAGS = (); }; };
 		55CFD03D1BC373B8006F6C31 /* GTM-M6SZR5 in Resources */ = {isa = PBXBuildFile; fileRef = 55CFD03C1BC373B8006F6C31 /* GTM-M6SZR5 */; settings = {ASSET_TAGS = (); }; };
+		55FE8EA11BCF69AD00059AA7 /* bee.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FE8E9E1BCF69AD00059AA7 /* bee.png */; settings = {ASSET_TAGS = (); }; };
+		55FE8EA21BCF69AD00059AA7 /* bee@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FE8E9F1BCF69AD00059AA7 /* bee@2x.png */; settings = {ASSET_TAGS = (); }; };
+		55FE8EA31BCF69AD00059AA7 /* bee@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FE8EA01BCF69AD00059AA7 /* bee@3x.png */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -401,7 +406,13 @@
 		55B08BF31BBE6FAF00693411 /* ReportViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ReportViewController.xib; path = Mainsreen/ReportViewController.xib; sourceTree = "<group>"; };
 		55BDC8A41BC76FFF0015B199 /* TagManagerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TagManagerHelper.h; path = Common/TagManagerHelper.h; sourceTree = "<group>"; };
 		55BDC8A51BC76FFF0015B199 /* TagManagerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TagManagerHelper.m; path = Common/TagManagerHelper.m; sourceTree = "<group>"; };
+		55C092301BCF4301005C78B5 /* PopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopupView.h; path = Popup/PopupView.h; sourceTree = "<group>"; };
+		55C092311BCF4301005C78B5 /* PopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopupView.m; path = Popup/PopupView.m; sourceTree = "<group>"; };
+		55C092331BCF431E005C78B5 /* PopupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PopupView.xib; path = Popup/PopupView.xib; sourceTree = "<group>"; };
 		55CFD03C1BC373B8006F6C31 /* GTM-M6SZR5 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTM-M6SZR5"; sourceTree = SOURCE_ROOT; };
+		55FE8E9E1BCF69AD00059AA7 /* bee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bee.png; sourceTree = "<group>"; };
+		55FE8E9F1BCF69AD00059AA7 /* bee@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bee@2x.png"; sourceTree = "<group>"; };
+		55FE8EA01BCF69AD00059AA7 /* bee@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bee@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -460,6 +471,7 @@
 		4D35B3441B6BC7C600EA67C2 /* LazzyBee */ = {
 			isa = PBXGroup;
 			children = (
+				55C0922F1BCF42BF005C78B5 /* Popup */,
 				4D7C285D1BABD18D005B274E /* GTools */,
 				552BD5971BA15F7200BF316C /* Settings */,
 				4D7C27631BABB556005B274E /* GTL */,
@@ -752,6 +764,9 @@
 		4DD3C3C91B6F218700B6DA71 /* logo */ = {
 			isa = PBXGroup;
 			children = (
+				55FE8E9E1BCF69AD00059AA7 /* bee.png */,
+				55FE8E9F1BCF69AD00059AA7 /* bee@2x.png */,
+				55FE8EA01BCF69AD00059AA7 /* bee@3x.png */,
 			);
 			path = logo;
 			sourceTree = "<group>";
@@ -896,6 +911,16 @@
 			name = Mainscreen;
 			sourceTree = "<group>";
 		};
+		55C0922F1BCF42BF005C78B5 /* Popup */ = {
+			isa = PBXGroup;
+			children = (
+				55C092301BCF4301005C78B5 /* PopupView.h */,
+				55C092311BCF4301005C78B5 /* PopupView.m */,
+				55C092331BCF431E005C78B5 /* PopupView.xib */,
+			);
+			name = Popup;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -981,6 +1006,7 @@
 				553F78301BA6D12800D15876 /* Images.xcassets in Resources */,
 				4DD3C3D41B6F218700B6DA71 /* ic_heart.png in Resources */,
 				552BD56B1BA1362A00BF316C /* README.txt in Resources */,
+				55FE8EA31BCF69AD00059AA7 /* bee@3x.png in Resources */,
 				55B08BF51BBE6FAF00693411 /* ReportViewController.xib in Resources */,
 				552DC77F1B872A4F00770FA1 /* StudiedTableViewCell.xib in Resources */,
 				4DD3C3DF1B6F218700B6DA71 /* arrow_white@3x.png in Resources */,
@@ -1007,6 +1033,7 @@
 				55452C621BC527CC00D6E430 /* DictDetailViewController.xib in Resources */,
 				4DD3C3E41B6F218700B6DA71 /* cancel@2x.png in Resources */,
 				4DD3C3DC1B6F218700B6DA71 /* ic_share@3x.png in Resources */,
+				55FE8EA11BCF69AD00059AA7 /* bee.png in Resources */,
 				552BD5B81BA175E300BF316C /* ic_turtle.png in Resources */,
 				552BD56A1BA1362A00BF316C /* README.txt in Resources */,
 				557288EC1BB2844700EA0CE9 /* SVProgressHUD.bundle in Resources */,
@@ -1044,11 +1071,13 @@
 				4DD3C3E51B6F218700B6DA71 /* cancel@3x.png in Resources */,
 				55B08BF01BBE36D000693411 /* LevelPickerViewController.xib in Resources */,
 				552BD5B91BA175E300BF316C /* ic_turtle@2x.png in Resources */,
+				55C092341BCF431E005C78B5 /* PopupView.xib in Resources */,
 				552BD5A61BA15FE600BF316C /* ic_home@2x.png in Resources */,
 				552BD5BF1BA178A500BF316C /* DailyTargetViewController.xib in Resources */,
 				4DD3C3D61B6F218700B6DA71 /* ic_heart@3x.png in Resources */,
 				557D7ABD1B8587AF00834A44 /* btnbg@2x.png in Resources */,
 				553F78341BA6D39400D15876 /* rearBanner.png in Resources */,
+				55FE8EA21BCF69AD00059AA7 /* bee@2x.png in Resources */,
 				55452C5D1BC513EF00D6E430 /* DictionaryViewController.xib in Resources */,
 				5597EC421BCE090700E1F779 /* ic_about@2x.png in Resources */,
 				4DD3C3A21B6F191C00B6DA71 /* README.txt in Resources */,
@@ -1091,6 +1120,7 @@
 				55B08BEF1BBE36D000693411 /* LevelPickerViewController.m in Sources */,
 				4DD3C3BC1B6F1AA700B6DA71 /* Reachability.m in Sources */,
 				557288DB1BB25DAA00EA0CE9 /* GTLObject.m in Sources */,
+				55C092321BCF4301005C78B5 /* PopupView.m in Sources */,
 				559B2AFC1BC61344009AA150 /* DictDetailContainerViewController.m in Sources */,
 				4DD3C3971B6F191C00B6DA71 /* AsyncImageView.m in Sources */,
 				557288EB1BB2844700EA0CE9 /* SVIndefiniteAnimatedView.m in Sources */,

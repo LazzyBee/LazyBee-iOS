@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "WordObject.h"
+@import GoogleMobileAds;
 
 @interface DictDetailContainerViewController : UIViewController
 {
@@ -15,4 +16,6 @@
 }
 
 @property (nonatomic, strong) WordObject *wordObj;
+
+@property (weak, nonatomic) IBOutlet GADBannerView *adBanner;
 @end
