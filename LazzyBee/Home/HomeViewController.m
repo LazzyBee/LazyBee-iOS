@@ -104,6 +104,13 @@
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    if (popupView) {
+        popupView.alpha = 0;
+        [popupView removeFromSuperview];
+    }
+}
+
 - (void)displayPopupView:(NSString *)popupText withURL:(NSString *)popupURL {
     CGRect rect = CGRectMake(self.view.frame.size.width/6, self.view.frame.size.height - 65, self.view.frame.size.width/1.5, 50);
     
@@ -120,9 +127,13 @@
     popupView.alpha = 0;
     [self.view addSubview:popupView];
 
-    [UIView animateWithDuration:1 animations:^(void) {
+//    [UIView animateWithDuration:1 animations:^(void) {
+//        popupView.alpha = 1;
+//    } completion:nil];
+    
+    [UIView animateWithDuration:1 delay:3 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^(void) {
         popupView.alpha = 1;
-    } completion:nil];
+    }completion:nil];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer

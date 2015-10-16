@@ -37,7 +37,7 @@
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     TAGContainer *container = appDelegate.container;
     BOOL enableAds = [[container stringForKey:@"adv_enable"] boolValue];
-    
+
     if (enableAds) {
         _adBanner.hidden = NO;
         NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"g_pub_id"],[container stringForKey:@"adv_home_id"] ];
@@ -110,7 +110,7 @@
 */
 
 - (void)showActionsPanel {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to learn", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to learn", @"Report", nil];
 
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     [actionSheet showInView:self.view];
@@ -144,8 +144,32 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshList" object:nil];
         
     } else if (buttonIndex == 1) {
+        NSLog(@"Report");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report" message:@"Open facebook to report this word?" delegate:(id)self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Open", nil];
+        alert.tag = 1;
+        
+        [alert show];
+        
+    } else if (buttonIndex == 2) {
         
         NSLog(@"Cancel");
+    }
+}
+
+#pragma mark alert delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (alertView.tag == 1) {   //report
+        if (buttonIndex != 0) {
+            NSString *postLink = @"fb://profile/1012100435467230";
+            
+            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:postLink]]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:postLink]];
+                
+            } else {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/lazzybees"]];
+            }
+        }
     }
 }
 @end

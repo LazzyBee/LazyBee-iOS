@@ -954,6 +954,25 @@ static CommonSqlite* sharedCommonSqlite = nil;
         }
         
         sqlite3_finalize(dbps);
+        
+        //update queue to NEW_WORD for picked words
+        NSString *strIDList = @"";
+        if ([pickedIDArr count] > 0) {
+            strIDList = [[Common sharedCommon] stringByRemovingSpaceAndNewLineSymbol:[pickedIDArr description]];
+            
+            strQuery = [NSString stringWithFormat:@"UPDATE \"vocabulary\" SET queue = %d where id IN %@", QUEUE_NEW_WORD, strIDList];
+            
+            charQuery = [strQuery UTF8String];
+            
+            sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+            
+            if(SQLITE_DONE != sqlite3_step(dbps)) {
+                NSLog(@"Error while updating. %s", sqlite3_errmsg(db));
+            }
+            
+            sqlite3_finalize(dbps);
+        }
+        
         sqlite3_close(db);
     }
 }
