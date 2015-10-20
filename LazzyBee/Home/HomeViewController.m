@@ -275,7 +275,7 @@
     BOOL enableAds = [[container stringForKey:@"adv_enable"] boolValue];
     
     if (enableAds) {
-        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"g_pub_id"],[container stringForKey:@"adv_home_id"] ];
+        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"admob_pub_id"],[container stringForKey:@"adv_fullscreen_id"] ];
         
         self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:advStr];
         self.interstitial.delegate = self;

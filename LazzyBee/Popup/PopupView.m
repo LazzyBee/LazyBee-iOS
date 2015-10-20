@@ -50,6 +50,7 @@
 
 - (IBAction)gestureTapHandle:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_popupURL]];
+    [self removeFromSuperview];
 }
 
 - (void)closePopup {

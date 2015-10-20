@@ -168,6 +168,19 @@
     return dateString;
 }
 
+- (NSString *)getNextDatetimeWithFormat:(NSString *)formatString {
+    NSString *dateString = nil;
+    NSLocale* currentLocale = [NSLocale currentLocale];
+    [[NSDate date] descriptionWithLocale:currentLocale];
+    
+    NSTimeInterval nextTimeInterval = [self getCurrentDatetimeInSec] + 24*3600;
+    NSDate *nextDate = [NSDate dateWithTimeIntervalSince1970:nextTimeInterval];
+    
+    dateString = [self dateStringFromDate:nextDate withFormat:formatString];
+    
+    return dateString;
+}
+
 - (NSString *)dateStringFromDate:(NSDate *)date withFormat:(NSString *)formatString {
     NSString *dateString = nil;
     //this format must be corresponding to the format of publication.revisionDate

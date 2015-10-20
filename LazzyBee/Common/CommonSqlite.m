@@ -146,6 +146,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
     
     NSMutableArray *resArr = [[NSMutableArray alloc] init];
     
+//    NSMutableDictionary *log = [[NSMutableDictionary alloc] init];//for test
     while(sqlite3_step(dbps) == SQLITE_ROW) {
         WordObject *wordObj = [[WordObject alloc] init];
         
@@ -211,6 +212,42 @@ static CommonSqlite* sharedCommonSqlite = nil;
         }
         
         [resArr addObject:wordObj];
+        
+        /* for test - begin */
+/*        NSData *data = [wordObj.answers dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *dictAnswer = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        NSString *strPronounciation = [dictAnswer valueForKey:@"pronoun"];
+        
+        //A word may has many meanings corresponding to many fields (common, it, economic...)
+        //The meaning of each field is considered as a package
+        NSDictionary *dictPackages = [dictAnswer valueForKey:@"packages"];
+        NSDictionary *dictSinglePackage = [dictPackages valueForKey:@"common"];
+        //"common":{"meaning":"", "explain":"<p>The edge of something is the part of it that is farthest from the center.</p>", "example":"<p>He ran to the edge of the cliff.</p>"}}
+        
+        NSString *strExplanation = [dictSinglePackage valueForKey:@"explain"];
+        NSString *strExample = [dictSinglePackage valueForKey:@"example"];
+        NSMutableDictionary *item = [[NSMutableDictionary alloc] init];
+        BOOL found = NO;
+        
+        if (strPronounciation == nil || strPronounciation.length == 0) {
+            [item setValue:@"pronounce" forKey:@"pronounce"];
+            found = YES;
+        }
+        
+        if (strExplanation == nil || strExplanation.length == 0) {
+            [item setValue:@"explain" forKey:@"explain"];
+            found = YES;
+        }
+        
+        if (strExample == nil || strExample.length == 0) {
+            [item setValue:@"example" forKey:@"example"];
+            found = YES;
+        }
+        
+        if (found == YES) {
+            [log setObject:item forKey:wordObj.question];
+        }*/
+        /* for test - end */
     }
     
     sqlite3_finalize(dbps);

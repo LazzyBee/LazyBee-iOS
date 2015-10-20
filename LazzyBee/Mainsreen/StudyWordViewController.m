@@ -57,11 +57,16 @@
 
     if (enableAds) {
         viewReservationForAds.hidden = NO;
-        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"g_pub_id"],[container stringForKey:@"adv_home_id"] ];
+        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"admob_pub_id"],[container stringForKey:@"adv_default_id"] ];
         
         self.adBanner.adUnitID = advStr;//@"ca-app-pub-3940256099942544/2934735716";
         
         self.adBanner.rootViewController = self;
+        
+        request.testDevices = @[
+                                @"8466af21f9717b97f0ba30fa23e53e1ba94d3422"
+                                ];
+        
         [self.adBanner loadRequest:request];
         
     } else {
@@ -704,8 +709,15 @@
     
     if (alertView.tag == 1) {   //report
         if (buttonIndex != 0) {
-            NSString *postLink = @"fb://profile/1012100435467230";
+            NSString *postLink = @"fb://profile/1012100435467230";//fb_comment_url
+            
+            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            TAGContainer *container = appDelegate.container;
+            postLink = [container stringForKey:@"fb_comment_url"];
 
+            if (postLink == nil || postLink.length == 0) {
+                postLink = @"fb://profile/1012100435467230";
+            }
             if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:postLink]]) {
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:postLink]];
                 

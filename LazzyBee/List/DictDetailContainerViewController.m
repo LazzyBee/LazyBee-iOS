@@ -40,11 +40,16 @@
 
     if (enableAds) {
         _adBanner.hidden = NO;
-        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"g_pub_id"],[container stringForKey:@"adv_home_id"] ];
+        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"admob_pub_id"],[container stringForKey:@"adv_dictionary_id"] ];
         
         self.adBanner.adUnitID = advStr;//@"ca-app-pub-3940256099942544/2934735716";
         
         self.adBanner.rootViewController = self;
+        
+        request.testDevices = @[
+                                @"8466af21f9717b97f0ba30fa23e53e1ba94d3422"
+                                ];
+        
         [self.adBanner loadRequest:request];
         
     } else {
