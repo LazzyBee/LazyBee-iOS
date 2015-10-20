@@ -215,16 +215,29 @@
     
     NSInteger count = [[CommonSqlite sharedCommonSqlite] getCountOfPickedWord];    
     
-    if (notificationFlag && count > 0) {
+    if (notificationFlag) {
         UILocalNotification *locNotification = [[UILocalNotification alloc] init];
-        
-        NSString *beginOfDay = [[Common sharedCommon] getCurrentDatetimeWithFormat:@"dd/MM/yyyy"];
+        NSString *beginOfDay = @"";
+        if (count > 0) {
+            beginOfDay = [[Common sharedCommon] getCurrentDatetimeWithFormat:@"dd/MM/yyyy"];
+        } else {
+            beginOfDay = [[Common sharedCommon] getNextDatetimeWithFormat:@"dd/MM/yyyy"];
+        }
+            
         NSString *remindTime = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_REMIND_TIME];
         
         beginOfDay = [NSString stringWithFormat:@"%@ %@", beginOfDay, remindTime];
         
         locNotification.fireDate = [[Common sharedCommon] dateFromString:beginOfDay];
-        locNotification.alertBody = @"Lazzy Bee! It's about to learn.";
+        
+        TAGContainer *container = self.container;
+        NSString *alertContent = [container stringForKey:@"notify_text"];
+        if (alertContent == nil || alertContent.length == 0) {
+            alertContent = @"Lazzy Bee! It's about to learn.";
+        }
+        
+        locNotification.alertBody = alertContent;
+        
         locNotification.repeatCalendar = [NSCalendar currentCalendar];
         locNotification.repeatInterval = kCFCalendarUnitWeekday;
         locNotification.soundName = UILocalNotificationDefaultSoundName;

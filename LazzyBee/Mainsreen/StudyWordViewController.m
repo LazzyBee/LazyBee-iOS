@@ -24,13 +24,14 @@
 #define AS_TAG_LEARN 2
 
 #define AS_SEARCH_BTN_ADD_TO_LEARN  0
-#define AS_SEARCH_BTN_CANCEL        1
+#define AS_SEARCH_BTN_REPORT        1
+#define AS_SEARCH_BTN_CANCEL        2
 
 #define AS_LEARN_BTN_IGNORE_WORD   0
 #define AS_LEARN_BTN_LEARNT_WORD  1
 #define AS_LEARN_BTN_UPDATE_WORD   2
-//#define AS_LEARN_BTN_REPORT_WORD   3
-#define AS_LEARN_BTN_CANCEL        3
+#define AS_LEARN_BTN_REPORT_WORD   3
+#define AS_LEARN_BTN_CANCEL        4
 
 @interface StudyWordViewController ()
 {
@@ -56,11 +57,16 @@
 
     if (enableAds) {
         viewReservationForAds.hidden = NO;
-        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"g_pub_id"],[container stringForKey:@"adv_home_id"] ];
+        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"admob_pub_id"],[container stringForKey:@"adv_default_id"] ];
         
         self.adBanner.adUnitID = advStr;//@"ca-app-pub-3940256099942544/2934735716";
         
         self.adBanner.rootViewController = self;
+        
+        request.testDevices = @[
+                                @"8466af21f9717b97f0ba30fa23e53e1ba94d3422"
+                                ];
+        
         [self.adBanner loadRequest:request];
         
     } else {
@@ -249,7 +255,7 @@
 
 - (void)showActionsPanel {
     if (_isReviewScreen) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to learn", nil];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to learn", @"Report", nil];
         
         actionSheet.tag = AS_TAG_SEARCH;
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -257,9 +263,9 @@
         
     } else {
 
-//        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", @"Report", nil];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", @"Report", nil];
 
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", nil];
+//        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", nil];
         
         actionSheet.tag = AS_TAG_LEARN;
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -576,6 +582,12 @@
             //update incomming list
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshList" object:nil];
             
+        } else if (buttonIndex == AS_SEARCH_BTN_REPORT) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report" message:@"Open facebook to report this word?" delegate:(id)self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Open", nil];
+            alert.tag = 1;
+            
+            [alert show];
+            
         } else if (buttonIndex == AS_SEARCH_BTN_CANCEL) {
 
             NSLog(@"Cancel");
@@ -625,17 +637,23 @@
             NSLog(@"Update word");
             [self updateWordFromGAE];
             
-//        }  else if (buttonIndex == AS_LEARN_BTN_REPORT_WORD) {
-//            NSLog(@"report");
-//            ReportViewController *reportView = [[ReportViewController alloc] initWithNibName:@"ReportViewController" bundle:nil];
-//            reportView.wordObj = _wordObj;
-//            
-//            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:reportView];
-//            
-//            [nav setModalPresentationStyle:UIModalPresentationFormSheet];
-//            [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-//            
-//            [self.navigationController presentViewController:nav animated:YES completion:nil];
+        }  else if (buttonIndex == AS_LEARN_BTN_REPORT_WORD) {
+            NSLog(@"report");
+/*            ReportViewController *reportView = [[ReportViewController alloc] initWithNibName:@"ReportViewController" bundle:nil];
+            reportView.wordObj = _wordObj;
+            
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:reportView];
+            
+            [nav setModalPresentationStyle:UIModalPresentationFormSheet];
+            [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            
+            [self.navigationController presentViewController:nav animated:YES completion:nil];*/
+
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report" message:@"Open facebook to report this word?" delegate:(id)self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Open", nil];
+            alert.tag = 1;
+            
+            [alert show];
+            
             
         } else if (buttonIndex == AS_LEARN_BTN_CANCEL) {
             NSLog(@"Cancel");
@@ -682,6 +700,30 @@
         if (_wordObj) {
             [self displayAnswer:_wordObj];
             [self showHideButtonsPanel:YES];
+        }
+    }
+}
+
+#pragma mark alert delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (alertView.tag == 1) {   //report
+        if (buttonIndex != 0) {
+            NSString *postLink = @"fb://profile/1012100435467230";//fb_comment_url
+            
+            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            TAGContainer *container = appDelegate.container;
+            postLink = [container stringForKey:@"fb_comment_url"];
+
+            if (postLink == nil || postLink.length == 0) {
+                postLink = @"fb://profile/1012100435467230";
+            }
+            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:postLink]]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:postLink]];
+                
+            } else {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/lazzybees"]];
+            }
         }
     }
 }

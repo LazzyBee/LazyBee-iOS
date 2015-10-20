@@ -11,6 +11,7 @@
 #import "MHTabBarController.h"
 #import "TagManagerHelper.h"
 #import "CommonSqlite.h"
+#import "AppDelegate.h"
 
 @interface DictDetailContainerViewController ()
 {
@@ -31,6 +32,30 @@
     
     self.navigationItem.rightBarButtonItems = @[actionButton];
     
+    //admob
+    GADRequest *request = [GADRequest request];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    TAGContainer *container = appDelegate.container;
+    BOOL enableAds = [[container stringForKey:@"adv_enable"] boolValue];
+
+    if (enableAds) {
+        _adBanner.hidden = NO;
+        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"admob_pub_id"],[container stringForKey:@"adv_dictionary_id"] ];
+        
+        self.adBanner.adUnitID = advStr;//@"ca-app-pub-3940256099942544/2934735716";
+        
+        self.adBanner.rootViewController = self;
+        
+        request.testDevices = @[
+                                @"8466af21f9717b97f0ba30fa23e53e1ba94d3422"
+                                ];
+        
+        [self.adBanner loadRequest:request];
+        
+    } else {
+        _adBanner.hidden = YES;
+    }
+    
     DictDetailViewController *vnViewController = [[DictDetailViewController alloc] initWithNibName:@"DictDetailViewController" bundle:nil];
     vnViewController.dictType = DictVietnam;
     vnViewController.wordObj = _wordObj;
@@ -46,13 +71,23 @@
     lazzyViewController.wordObj = _wordObj;
     lazzyViewController.title = @"Lazzy Bee";
     
-    NSArray *viewControllers = @[enViewController, vnViewController, lazzyViewController];
+    NSArray *viewControllers = @[vnViewController, enViewController, lazzyViewController];
     
     tabViewController = [[MHTabBarController alloc] init];
     
     tabViewController.delegate = (id)self;
     tabViewController.viewControllers = viewControllers;
-    [tabViewController.view setFrame:self.view.frame];
+    
+    CGRect rect;
+
+    if (enableAds) {
+        rect = self.view.frame;
+        rect.size.height = _adBanner.frame.origin.y;
+    } else {
+        rect = self.view.frame;
+    }
+    
+    [tabViewController.view setFrame:rect];
     
     tabViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth |
                                                 UIViewAutoresizingFlexibleHeight |
@@ -80,7 +115,7 @@
 */
 
 - (void)showActionsPanel {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to learn", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to learn", @"Report", nil];
 
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     [actionSheet showInView:self.view];
@@ -114,8 +149,32 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshList" object:nil];
         
     } else if (buttonIndex == 1) {
+        NSLog(@"Report");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report" message:@"Open facebook to report this word?" delegate:(id)self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Open", nil];
+        alert.tag = 1;
+        
+        [alert show];
+        
+    } else if (buttonIndex == 2) {
         
         NSLog(@"Cancel");
+    }
+}
+
+#pragma mark alert delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (alertView.tag == 1) {   //report
+        if (buttonIndex != 0) {
+            NSString *postLink = @"fb://profile/1012100435467230";
+            
+            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:postLink]]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:postLink]];
+                
+            } else {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/lazzybees"]];
+            }
+        }
     }
 }
 @end

@@ -57,6 +57,7 @@ typedef enum {
 - (NSInteger)getDailyTarget;
 
 - (NSString *)getCurrentDatetimeWithFormat:(NSString *)formatString;
+- (NSString *)getNextDatetimeWithFormat:(NSString *)formatString;
 - (NSString *)dateStringFromDate:(NSDate *)date withFormat:(NSString *)formatString;
 - (NSString *)timeStringFromDate:(NSDate *)date;
 - (NSString *)stringDateFromString:(NSString *)dateStr;

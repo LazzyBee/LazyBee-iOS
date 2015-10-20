@@ -92,7 +92,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" id="8ID-5O-DH1">
-                            <rect key="frame" x="8" y="4" width="70" height="48"/>
+                            <rect key="frame" x="6" y="4" width="75" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="btnbg.png">
                                 <string key="title">&lt; 10 Min
@@ -105,7 +105,7 @@ Again</string>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" id="quq-gJ-D7i">
-                            <rect key="frame" x="86" y="4" width="70" height="48"/>
+                            <rect key="frame" x="84" y="4" width="75" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="1 day (hard)" backgroundImage="btnbg.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -116,7 +116,7 @@ Again</string>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" id="BTU-UK-4xW">
-                            <rect key="frame" x="164" y="4" width="70" height="48"/>
+                            <rect key="frame" x="162" y="4" width="75" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="5 days (norm)" backgroundImage="btnbg.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -127,7 +127,7 @@ Again</string>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" id="qJL-Ae-ZMZ">
-                            <rect key="frame" x="242" y="4" width="70" height="48"/>
+                            <rect key="frame" x="240" y="4" width="75" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="10 days (easy)" backgroundImage="btnbg.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

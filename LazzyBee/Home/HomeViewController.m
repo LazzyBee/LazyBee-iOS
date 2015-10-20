@@ -16,10 +16,12 @@
 #import "AppDelegate.h"
 #import "TagManagerHelper.h"
 #import "DictDetailContainerViewController.h"
+#import "PopupView.h"
 
 @interface HomeViewController ()<GADInterstitialDelegate>
 {
     SearchViewController *searchView;
+    PopupView *popupView;
 }
 
 /// The interstitial ad.
@@ -79,8 +81,8 @@
 /*    GADRequest *request = [GADRequest request];
     self.adBanner.adUnitID = @"ca-app-pub-3940256099942544/2934735716";
     self.adBanner.rootViewController = self;
-    [self.adBanner loadRequest:request];
-    [self createAndLoadInterstitial];*/
+    [self.adBanner loadRequest:request];*/
+    [self createAndLoadInterstitial];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -88,6 +90,61 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    TAGContainer *container = appDelegate.container;
+    NSString *popupText = [container stringForKey:@"popup_text"];
+    NSString *popupURL = [container stringForKey:@"popup_url"];
+    NSLog(@"popupText :: %@", popupText);
+    NSLog(@"popupURL :: %@", popupURL);
+    
+    if (popupText && popupURL &&
+        popupText.length > 0 && popupURL.length > 0) {
+        [self displayPopupView:popupText withURL:popupURL];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    if (popupView) {
+        popupView.alpha = 0;
+        [popupView removeFromSuperview];
+    }
+}
+
+- (void)displayPopupView:(NSString *)popupText withURL:(NSString *)popupURL {
+    CGRect rect = CGRectMake(self.view.frame.size.width/6, self.view.frame.size.height - 65, self.view.frame.size.width/1.5, 50);
+    
+    if (!popupView) {
+        popupView = [[PopupView alloc] initWithFrame:rect];
+    }
+    
+    [popupView setFrame:rect];
+    
+    popupView.popupText = popupText;
+    popupView.popupURL = popupURL;
+    popupView.lbInfo.text = popupText;
+    
+    popupView.alpha = 0;
+    [self.view addSubview:popupView];
+
+//    [UIView animateWithDuration:1 animations:^(void) {
+//        popupView.alpha = 1;
+//    } completion:nil];
+    
+    [UIView animateWithDuration:1 delay:3 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^(void) {
+        popupView.alpha = 1;
+    }completion:nil];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return TRUE;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    popupView.alpha = 0;
+    [popupView removeFromSuperview];
+}
 /*
 #pragma mark - Navigation
 
@@ -213,8 +270,14 @@
 
 #pragma mark admob
 - (void)createAndLoadInterstitial {
-        self.interstitial =
-        [[GADInterstitial alloc] initWithAdUnitID:@"ca-app-pub-3940256099942544/4411468910"];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    TAGContainer *container = appDelegate.container;
+    BOOL enableAds = [[container stringForKey:@"adv_enable"] boolValue];
+    
+    if (enableAds) {
+        NSString *advStr = [NSString stringWithFormat:@"%@/%@", [container stringForKey:@"admob_pub_id"],[container stringForKey:@"adv_fullscreen_id"] ];
+        
+        self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:advStr];
         self.interstitial.delegate = self;
     
         GADRequest *request = [GADRequest request];
@@ -225,6 +288,7 @@
                                 @"8466af21f9717b97f0ba30fa23e53e1ba94d3422"
                                 ];
         [self.interstitial loadRequest:request];
+    }
 }
 
 - (void)interstitial:(GADInterstitial *)interstitial
