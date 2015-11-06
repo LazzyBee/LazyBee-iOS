@@ -88,6 +88,14 @@
 		552DC77A1B87292F00770FA1 /* StudiedListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 552DC7781B87292F00770FA1 /* StudiedListViewController.xib */; };
 		552DC77E1B872A4F00770FA1 /* StudiedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 552DC77C1B872A4F00770FA1 /* StudiedTableViewCell.m */; };
 		552DC77F1B872A4F00770FA1 /* StudiedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 552DC77D1B872A4F00770FA1 /* StudiedTableViewCell.xib */; };
+		55308B431BF03A2900FF0457 /* DayStatus.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55308B421BF03A2900FF0457 /* DayStatus.xib */; };
+		55308B461BF03A7500FF0457 /* DayStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 55308B451BF03A7500FF0457 /* DayStatus.m */; };
+		55308B4D1BF0423A00FF0457 /* day_ring_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 55308B471BF0423A00FF0457 /* day_ring_gray.png */; };
+		55308B4E1BF0423A00FF0457 /* day_ring_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55308B481BF0423A00FF0457 /* day_ring_gray@2x.png */; };
+		55308B4F1BF0423A00FF0457 /* day_ring_gray@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55308B491BF0423A00FF0457 /* day_ring_gray@3x.png */; };
+		55308B501BF0423A00FF0457 /* day_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = 55308B4A1BF0423A00FF0457 /* day_ring.png */; };
+		55308B511BF0423A00FF0457 /* day_ring@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55308B4B1BF0423A00FF0457 /* day_ring@2x.png */; };
+		55308B521BF0423A00FF0457 /* day_ring@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55308B4C1BF0423A00FF0457 /* day_ring@3x.png */; };
 		553F78301BA6D12800D15876 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 553F782F1BA6D12800D15876 /* Images.xcassets */; };
 		553F78341BA6D39400D15876 /* rearBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 553F78311BA6D39400D15876 /* rearBanner.png */; };
 		553F78351BA6D39400D15876 /* rearBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 553F78321BA6D39400D15876 /* rearBanner@2x.png */; };
@@ -320,6 +328,15 @@
 		552DC77B1B872A4F00770FA1 /* StudiedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StudiedTableViewCell.h; path = List/StudiedTableViewCell.h; sourceTree = "<group>"; };
 		552DC77C1B872A4F00770FA1 /* StudiedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StudiedTableViewCell.m; path = List/StudiedTableViewCell.m; sourceTree = "<group>"; };
 		552DC77D1B872A4F00770FA1 /* StudiedTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StudiedTableViewCell.xib; path = List/StudiedTableViewCell.xib; sourceTree = "<group>"; };
+		55308B421BF03A2900FF0457 /* DayStatus.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DayStatus.xib; path = StreakStatus/DayStatus.xib; sourceTree = "<group>"; };
+		55308B441BF03A7500FF0457 /* DayStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DayStatus.h; path = StreakStatus/DayStatus.h; sourceTree = "<group>"; };
+		55308B451BF03A7500FF0457 /* DayStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DayStatus.m; path = StreakStatus/DayStatus.m; sourceTree = "<group>"; };
+		55308B471BF0423A00FF0457 /* day_ring_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = day_ring_gray.png; sourceTree = "<group>"; };
+		55308B481BF0423A00FF0457 /* day_ring_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "day_ring_gray@2x.png"; sourceTree = "<group>"; };
+		55308B491BF0423A00FF0457 /* day_ring_gray@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "day_ring_gray@3x.png"; sourceTree = "<group>"; };
+		55308B4A1BF0423A00FF0457 /* day_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = day_ring.png; sourceTree = "<group>"; };
+		55308B4B1BF0423A00FF0457 /* day_ring@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "day_ring@2x.png"; sourceTree = "<group>"; };
+		55308B4C1BF0423A00FF0457 /* day_ring@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "day_ring@3x.png"; sourceTree = "<group>"; };
 		553F782F1BA6D12800D15876 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		553F78311BA6D39400D15876 /* rearBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rearBanner.png; sourceTree = "<group>"; };
 		553F78321BA6D39400D15876 /* rearBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rearBanner@2x.png"; sourceTree = "<group>"; };
@@ -737,6 +754,9 @@
 				559E67B61BEF4E8800232439 /* StreakViewController.h */,
 				559E67B71BEF4E8800232439 /* StreakViewController.m */,
 				559E67B81BEF4E8800232439 /* StreakViewController.xib */,
+				55308B421BF03A2900FF0457 /* DayStatus.xib */,
+				55308B441BF03A7500FF0457 /* DayStatus.h */,
+				55308B451BF03A7500FF0457 /* DayStatus.m */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -838,6 +858,12 @@
 		4DD3C3CA1B6F218700B6DA71 /* others */ = {
 			isa = PBXGroup;
 			children = (
+				55308B471BF0423A00FF0457 /* day_ring_gray.png */,
+				55308B481BF0423A00FF0457 /* day_ring_gray@2x.png */,
+				55308B491BF0423A00FF0457 /* day_ring_gray@3x.png */,
+				55308B4A1BF0423A00FF0457 /* day_ring.png */,
+				55308B4B1BF0423A00FF0457 /* day_ring@2x.png */,
+				55308B4C1BF0423A00FF0457 /* day_ring@3x.png */,
 				559E67C11BEF569100232439 /* hive@3x.png */,
 				559E67C21BEF569100232439 /* hive.png */,
 				559E67C31BEF569100232439 /* hive@2x.png */,
@@ -1099,7 +1125,9 @@
 				55452C6A1BC528F600D6E430 /* MHTabBarIndicator@2x.png in Resources */,
 				552BD5A91BA1621500BF316C /* About.txt in Resources */,
 				559E67AC1BEB0A2600232439 /* button_square@2x.png in Resources */,
+				55308B4D1BF0423A00FF0457 /* day_ring_gray.png in Resources */,
 				4DD3C3D81B6F218700B6DA71 /* ic_setting@2x.png in Resources */,
+				55308B501BF0423A00FF0457 /* day_ring.png in Resources */,
 				4DD3C39C1B6F191C00B6DA71 /* FBAudienceNetwork.README.txt in Resources */,
 				557D7ABC1B8587AF00834A44 /* btnbg.png in Resources */,
 				552BD5B51BA175E300BF316C /* ic_rabbit.png in Resources */,
@@ -1123,6 +1151,7 @@
 				552BD56A1BA1362A00BF316C /* README.txt in Resources */,
 				557288EC1BB2844700EA0CE9 /* SVProgressHUD.bundle in Resources */,
 				559E67A81BEB0A2600232439 /* button_long@2x.png in Resources */,
+				55308B4F1BF0423A00FF0457 /* day_ring_gray@3x.png in Resources */,
 				4DD3C3AF1B6F199B00B6DA71 /* HomeViewController.xib in Resources */,
 				55452C561BC5128700D6E430 /* ic_dictionary.png in Resources */,
 				552BD5A51BA15FE600BF316C /* ic_home.png in Resources */,
@@ -1138,6 +1167,7 @@
 				557526A91BDF54BA007810C7 /* ic_graph.png in Resources */,
 				559B2AFD1BC61344009AA150 /* DictDetailContainerViewController.xib in Resources */,
 				4DD3C3781B6F18D700B6DA71 /* SubRearViewController.xib in Resources */,
+				55308B521BF0423A00FF0457 /* day_ring@3x.png in Resources */,
 				55452C581BC5128700D6E430 /* ic_dictionary@3x.png in Resources */,
 				559E67BE1BEF526A00232439 /* streak_ring@3x.png in Resources */,
 				4DD3C3DD1B6F218700B6DA71 /* arrow_white.png in Resources */,
@@ -1148,6 +1178,7 @@
 				4DD3C3A11B6F191C00B6DA71 /* LICENSE in Resources */,
 				55452C571BC5128700D6E430 /* ic_dictionary@2x.png in Resources */,
 				552BD59F1BA15F7200BF316C /* AboutViewController.xib in Resources */,
+				55308B4E1BF0423A00FF0457 /* day_ring_gray@2x.png in Resources */,
 				55452C691BC528F600D6E430 /* MHTabBarIndicator.png in Resources */,
 				4DD3C39A1B6F191C00B6DA71 /* FacebookSDK.strings in Resources */,
 				559E67C41BEF569100232439 /* hive@3x.png in Resources */,
@@ -1161,6 +1192,7 @@
 				4DD3C3761B6F18D700B6DA71 /* RearViewController.xib in Resources */,
 				559E67A71BEB0A2600232439 /* button_long.png in Resources */,
 				559E67C61BEF569100232439 /* hive@2x.png in Resources */,
+				55308B431BF03A2900FF0457 /* DayStatus.xib in Resources */,
 				552BD5A11BA15F7200BF316C /* SettingsViewController.xib in Resources */,
 				4DD3C3DE1B6F218700B6DA71 /* arrow_white@2x.png in Resources */,
 				559E67AB1BEB0A2600232439 /* button_square.png in Resources */,
@@ -1181,6 +1213,7 @@
 				55452C5D1BC513EF00D6E430 /* DictionaryViewController.xib in Resources */,
 				5597EC421BCE090700E1F779 /* ic_about@2x.png in Resources */,
 				559E67AE1BEB0A2600232439 /* button_short@3x.png in Resources */,
+				55308B511BF0423A00FF0457 /* day_ring@2x.png in Resources */,
 				4DD3C3A21B6F191C00B6DA71 /* README.txt in Resources */,
 				557526AA1BDF54BA007810C7 /* ic_graph@2x.png in Resources */,
 				4DD3C3741B6F18D700B6DA71 /* RearTableViewCell.xib in Resources */,
@@ -1239,6 +1272,7 @@
 				557288CF1BB25DAA00EA0CE9 /* GTMHTTPFetchHistory.m in Sources */,
 				55452C5C1BC513EF00D6E430 /* DictionaryViewController.m in Sources */,
 				557D7AC31B858BE300834A44 /* StudyWordViewController.m in Sources */,
+				55308B461BF03A7500FF0457 /* DayStatus.m in Sources */,
 				557288D41BB25DAA00EA0CE9 /* GTLBase64.m in Sources */,
 				557288CE1BB25DAA00EA0CE9 /* GTMHTTPFetcherService.m in Sources */,
 				4DD3C3731B6F18D700B6DA71 /* RearTableViewCell.m in Sources */,

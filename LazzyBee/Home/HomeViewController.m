@@ -16,7 +16,9 @@
 #import "AppDelegate.h"
 #import "TagManagerHelper.h"
 #import "DictDetailContainerViewController.h"
+#import "StreakViewController.h"
 #import "PopupView.h"
+
 
 @interface HomeViewController ()<GADInterstitialDelegate>
 {
@@ -254,13 +256,18 @@
     NSString *alertContent = @"";
     
     if (![completeTargetFlag boolValue]) {
-        [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithBool:YES] withKey:@"CompletedDailyTargetFlag"];
+/*        [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithBool:YES] withKey:@"CompletedDailyTargetFlag"];
         
-        alertContent = @"You have completed your daily target.";
+        alertContent = @"You have completed your daily target.";*/
         
         //save streak info
         NSTimeInterval curDate = [[Common sharedCommon] getBeginOfDayInSec];
         [[Common sharedCommon] saveStreak:curDate];
+        
+        //show streak view
+        StreakViewController *streak = [[StreakViewController alloc] initWithNibName:@"StreakViewController" bundle:nil];
+        
+        [self.navigationController presentViewController:streak animated:YES completion:nil];
         
     } else {
         alertContent = @"You have learnt very hard. Now is the time to relax.";

@@ -9,5 +9,18 @@
 #import <UIKit/UIKit.h>
 
 @interface StreakViewController : UIViewController
-
+{
+    IBOutlet UILabel *lbStreakCount;
+    IBOutlet UILabel *lbCongratulation;
+    
+    
+    IBOutlet UIView *viewDayOne;
+    IBOutlet UIView *viewDayTwo;
+    IBOutlet UIView *viewDayThree;
+    IBOutlet UIView *viewDayFour;
+    IBOutlet UIView *viewDayFive;
+    IBOutlet UIView *viewDaySix;
+    IBOutlet UIView *viewDaySeven;
+    IBOutlet UIView *dayContainer;
+}
 @end
