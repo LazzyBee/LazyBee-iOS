@@ -91,17 +91,23 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    TAGContainer *container = appDelegate.container;
-    NSString *popupText = [container stringForKey:@"popup_text"];
-    NSString *popupURL = [container stringForKey:@"popup_url"];
-    NSLog(@"popupText :: %@", popupText);
-    NSLog(@"popupURL :: %@", popupURL);
-    
-    if (popupText && popupURL &&
-        popupText.length > 0 && popupURL.length > 0) {
-        [self displayPopupView:popupText withURL:popupURL];
-    }
+    dispatch_queue_t taskQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(taskQ, ^{
+        [NSThread sleepForTimeInterval:1.0];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            TAGContainer *container = appDelegate.container;
+            NSString *popupText = [container stringForKey:@"popup_text"];
+            NSString *popupURL = [container stringForKey:@"popup_url"];
+            NSLog(@"popupText :: %@", popupText);
+            NSLog(@"popupURL :: %@", popupURL);
+            
+            if (popupText && popupURL &&
+                popupText.length > 0 && popupURL.length > 0) {
+                [self displayPopupView:popupText withURL:popupURL];
+            }
+        });
+    });
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -144,6 +150,9 @@
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     popupView.alpha = 0;
     [popupView removeFromSuperview];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"rotateScreen" object:nil];
+
 }
 /*
 #pragma mark - Navigation
@@ -189,7 +198,7 @@
 
 - (IBAction)btnStudiedListClick:(id)sender {
     StudiedListViewController *studiedListViewController = [[StudiedListViewController alloc] initWithNibName:@"StudiedListViewController" bundle:nil];
-    studiedListViewController.screenType = List_Incomming;
+    studiedListViewController.screenType = List_Incoming;
     
     [self.navigationController pushViewController:studiedListViewController animated:YES];
 }
@@ -248,6 +257,10 @@
         [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithBool:YES] withKey:@"CompletedDailyTargetFlag"];
         
         alertContent = @"You have completed your daily target.";
+        
+        //save streak info
+        NSTimeInterval curDate = [[Common sharedCommon] getBeginOfDayInSec];
+        [[Common sharedCommon] saveStreak:curDate];
         
     } else {
         alertContent = @"You have learnt very hard. Now is the time to relax.";

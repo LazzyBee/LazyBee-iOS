@@ -211,6 +211,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    
+    [self stopPlaySoundOnWebview];
+}
+
 /*
 #pragma mark - Navigation
 
@@ -220,6 +225,10 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (void)stopPlaySoundOnWebview {
+    [webViewWord stringByEvaluatingJavaScriptFromString:@"cancelSpeech()"];
+}
 
 - (void)setStudyScreenMode:(STUDY_SCREEN_MODE)studyScreenMode {
     _studyScreenMode = studyScreenMode;
@@ -299,6 +308,8 @@
 }
 
 - (void)displayQuestion:(WordObject *)wordObj {
+    [self stopPlaySoundOnWebview];
+    
     //display question
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSURL *baseURL = [NSURL fileURLWithPath:path];
@@ -322,6 +333,8 @@
 }
 
 - (void)displayAnswer:(WordObject *)wordObj {
+    [self stopPlaySoundOnWebview];
+    
     //display question
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSURL *baseURL = [NSURL fileURLWithPath:path];
@@ -331,7 +344,7 @@
     if (wordObj) {
         htmlString = [[HTMLHelper sharedHTMLHelper]createHTMLForAnswer:wordObj withPackage:@"common"];
     }
-    
+
     [webViewWord loadHTMLString:htmlString baseURL:baseURL];
     
     _isAnswerScreen = YES;
@@ -579,7 +592,7 @@
                 [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];
             }
             
-            //update incomming list
+            //update incoming list
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshList" object:nil];
             
         } else if (buttonIndex == AS_SEARCH_BTN_REPORT) {

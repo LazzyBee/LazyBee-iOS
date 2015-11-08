@@ -24,7 +24,7 @@
 - (NSArray *)getNewWordsList;
 - (NSArray *)getStudyAgainListWithLimit:(NSInteger)limit;
 - (NSArray *)getReviewList;
-- (NSArray *)getIncommingList;
+- (NSArray *)getIncomingList;
 
 - (NSArray *)getSearchHintList:(NSString *)searchText;
 - (NSArray *)getSearchResultList:(NSString *)searchText;

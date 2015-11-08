@@ -68,11 +68,17 @@ static HTMLHelper* sharedHTMLHelper = nil;
                                     "   speaker.rate = rate;" //0.1
                                     "   speaker.pitch = 1.0;"
                                     "   speaker.volume = 1.0;"
+                                    "   speechSynthesis.cancel();"
                                     "   speechSynthesis.speak(speaker);"
+                                    "}"
+                                    //cancel speech
+                                    "function cancelSpeech() {"
+                                    "   speechSynthesis.pause();"
+                                    "   speechSynthesis.cancel();"
                                     "}"
                                 "</script>"
                             "</head>\n"
-                            "<body >\n"
+                            "<body>\n"
                                 "<div style='width:100%%'>\n"
                                 "%@\n"  //strWordIconTag
                                 "</div>\n"
@@ -194,7 +200,13 @@ static HTMLHelper* sharedHTMLHelper = nil;
     "   speaker.rate = rate;" //0.1
     "   speaker.pitch = 1.0;"
     "   speaker.volume = 1.0;"
+    "   speechSynthesis.cancel();"
     "   speechSynthesis.speak(speaker);"
+    "}"
+    //cancel speech
+    "function cancelSpeech() {"
+    "   speechSynthesis.pause();"
+    "   speechSynthesis.cancel();"
     "}"
     "</script>"
     

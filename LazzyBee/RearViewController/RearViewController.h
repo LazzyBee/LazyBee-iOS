@@ -18,6 +18,7 @@ typedef enum {
 typedef enum {
     HomeSection_Home = 0,
     HomeSection_Dictionary,
+    HomeSection_Progress,
     HomeSection_Max
 } ABOUT_SECTION_ITEM;
 

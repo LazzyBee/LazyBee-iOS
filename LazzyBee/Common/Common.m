@@ -772,4 +772,58 @@
     [synthesizer speakUtterance:utterance];
 }
 
+//streak
+- (void)saveStreak:(NSTimeInterval)date {
+    NSNumber *number = [NSNumber numberWithDouble:date];
+    NSMutableArray *streakArr = [[NSMutableArray alloc] initWithArray:[self loadStreak]];
+    
+    [streakArr addObject:number];
+    
+    NSData* archivedData = [NSKeyedArchiver archivedDataWithRootObject:streakArr];
+    
+    [self saveDataToUserDefaultStandard:archivedData withKey:@"StreakInfo"];
+}
+
+- (NSArray *)loadStreak {
+    NSData* archivedData = [self loadDataFromUserDefaultStandardWithKey:@"StreakInfo"];
+    
+    NSArray *streakArr = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+    
+    return streakArr;
+}
+
+- (NSInteger)getCountOfStreak {
+    NSTimeInterval curDate = [self getBeginOfDayInSec];
+    NSArray *streakArr = [self loadStreak];
+    NSInteger count = 0;
+    NSTimeInterval streakDate = 0;
+    
+    if ([streakArr count] > 0) {
+        //the last date in streak could be current date or yesterday
+        streakDate = [[streakArr objectAtIndex:[streakArr count] - 1] doubleValue];
+        NSTimeInterval offset = curDate - streakDate;
+        if (offset == 24 * 3600 || offset == 0) {
+            count++;
+        } else {
+            return count;
+        }
+        
+        curDate = streakDate;
+        
+        for (int i = ((int)[streakArr count] - 2); i >=0; i--) {
+            streakDate = [[streakArr objectAtIndex:i] doubleValue];
+            NSTimeInterval offset = curDate - streakDate;
+            
+            if (offset == 24 * 3600) {
+                count++;
+            } else {
+                break;
+            }
+            
+            curDate = streakDate;
+        }
+    }
+    
+    return count;
+}
 @end

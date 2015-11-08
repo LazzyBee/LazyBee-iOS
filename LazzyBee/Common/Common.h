@@ -93,5 +93,9 @@ typedef enum {
 - (NSString *)stringByRemovingSpaceAndNewLineSymbol:(NSString *)text;
 
 - (void)textToSpeech:(NSString *)text withRate:(float)rate;
+
+- (void)saveStreak:(NSTimeInterval)date;
+- (NSArray *)loadStreak;
+- (NSInteger)getCountOfStreak;
 @end
 #endif

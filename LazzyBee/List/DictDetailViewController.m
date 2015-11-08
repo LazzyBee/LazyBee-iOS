@@ -43,6 +43,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [self stopPlaySoundOnWebview];
+}
+
 /*
 #pragma mark - Navigation
 
@@ -52,5 +56,7 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+- (void)stopPlaySoundOnWebview {
+    [webviewWord stringByEvaluatingJavaScriptFromString:@"cancelSpeech()"];
+}
 @end

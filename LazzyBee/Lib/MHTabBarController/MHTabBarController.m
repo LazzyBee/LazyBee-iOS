@@ -53,12 +53,51 @@ static const NSInteger TagOffset = 1000;
 	[self.view addSubview:indicatorImageView];
 
 	[self reloadTabButtons];
+    
+    UISwipeGestureRecognizer *swipeGestRight = [[UISwipeGestureRecognizer alloc] initWithTarget:(id)self action:@selector(swipeGestureHandle:)];
+    [swipeGestRight setDirection:UISwipeGestureRecognizerDirectionRight];
+    [self.view addGestureRecognizer:swipeGestRight];
+    
+    UISwipeGestureRecognizer *swipeGestLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:(id)self action:@selector(swipeGestureHandle:)];
+    [swipeGestLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.view addGestureRecognizer:swipeGestLeft];
 }
 
 - (void)viewWillLayoutSubviews
 {
 	[super viewWillLayoutSubviews];
 	[self layoutTabButtons];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return TRUE;
+}
+
+- (void)swipeGestureHandle:(UISwipeGestureRecognizer *)gesture {
+    if (gesture.direction == UISwipeGestureRecognizerDirectionRight) {
+        if (_selectedIndex <= 0) {
+            //do nothing
+        } else {
+            NSInteger newIndex = _selectedIndex - 1;
+            if (newIndex < [_viewControllers count]) {
+                UIViewController *newView = [_viewControllers objectAtIndex:newIndex];
+                
+                [self setSelectedViewController:newView animated:YES];
+            }
+        }
+    } else if (gesture.direction == UISwipeGestureRecognizerDirectionLeft) {
+        if (_selectedIndex >= [_viewControllers count] - 1) {
+            //do nothing
+        } else {
+            NSInteger newIndex = _selectedIndex + 1;
+            if (newIndex >= 0) {
+                UIViewController *newView = [_viewControllers objectAtIndex:newIndex];
+                
+                [self setSelectedViewController:newView animated:YES];
+            }
+        }
+    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

@@ -77,7 +77,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
     return resArr;
 }
 
-- (NSArray *)getIncommingList {
+- (NSArray *)getIncomingList {
     NSArray *resArr = [self fetchWordsFromVocabularyForKey:@"buffer"];
     
     return resArr;
@@ -109,7 +109,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
 }
 
 - (NSArray *)getSearchHintList:(NSString *)searchText {
-    NSString *strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where question like '%@%%' ORDER BY level", searchText];
+    NSString *strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" where question like '%@%%' OR  question like '%% %@%%' ORDER BY level", searchText, searchText];
     
     NSString *dbPath = [self getDatabasePath];
     NSArray *resArr = [self getWordByQueryString:strQuery fromDatabase:dbPath];

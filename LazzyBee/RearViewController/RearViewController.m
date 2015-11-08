@@ -16,6 +16,7 @@
 #import "SettingsViewController.h"
 #import "DictionaryViewController.h"
 #import "AboutViewController.h"
+#import "InformationViewController.h"
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
@@ -25,6 +26,7 @@
 @interface RearViewController()
 {
     NSIndexPath *presentedCell;
+    InformationViewController *infoView;
 }
 
 @end
@@ -124,6 +126,10 @@
         } else if (indexPath.row == HomeSection_Dictionary) {
             text = @"Dictionary";
             cell.imgIcon.image = [UIImage imageNamed:@"ic_dictionary"];
+            
+        } else if (indexPath.row == HomeSection_Progress) {
+            text = @"Learning progress";
+            cell.imgIcon.image = [UIImage imageNamed:@"ic_graph"];
         }
         
     } else if(indexPath.section == RearTable_Section_Support) {
@@ -183,6 +189,10 @@
             self.sidePanelController.centerPanel = newFrontController;
             
             presentedCell = indexPath;  // <- store the presented row
+            
+        } else if (indexPath.row == HomeSection_Progress) {
+//            [self.sidePanelController showCenterPanelAnimated:YES];
+            [self displayInformation];
         }
         
     } else if (indexPath.section == RearTable_Section_Support) {
@@ -209,6 +219,7 @@
         } else if (indexPath.row == ShareSection_ShareFB) {
             FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
             content.contentURL = [NSURL URLWithString:@"http://www.lazzybee.com"];
+//            content.imageURL = [NSURL URLWithString:@"http://www.lazzybee.com/favicon.png"];
             
             FBSDKShareDialog *shareDialog = [[FBSDKShareDialog alloc] init];
             shareDialog.shareContent = content;
@@ -243,6 +254,27 @@
 
 - (void)sharerDidCancel:(id<FBSDKSharing>)sharer {
     NSLog(@"share cancelled");
+}
+
+- (void)displayInformation {
+    if (infoView == nil) {
+        infoView = [[InformationViewController alloc] initWithNibName:@"InformationViewController" bundle:nil];
+    }
+    
+    infoView.view.alpha = 0;
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    CGRect rect = appDelegate.window.frame;
+    [infoView.view setFrame:rect];
+    
+    [appDelegate.window addSubview:infoView.view];
+    
+    [UIView animateWithDuration:0.3 animations:^(void) {
+        infoView.view.alpha = 1;
+    }];
+    
+    [infoView loadInformation];
 }
 
 @end

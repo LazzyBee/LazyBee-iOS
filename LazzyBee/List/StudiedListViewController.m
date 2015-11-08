@@ -28,10 +28,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    if (_screenType == List_Incomming) {
-        [TagManagerHelper pushOpenScreenEvent:@"iIncommingScreen"];
+    if (_screenType == List_Incoming) {
+        [TagManagerHelper pushOpenScreenEvent:@"iIncomingScreen"];
         
-        [self setTitle:@"Incomming List"];
+        [self setTitle:@"Incoming List"];
         
     } else if (_screenType == List_StudiedList) {
         [TagManagerHelper pushOpenScreenEvent:@"iLeantScreen"];
@@ -239,8 +239,8 @@
     [wordList removeAllObjects];
     [levelsDictionary removeAllObjects];
     
-    if (_screenType == List_Incomming) {
-        [wordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getIncommingList]];
+    if (_screenType == List_Incoming) {
+        [wordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getIncomingList]];
         
     } else if (_screenType == List_StudiedList) {
         [wordList addObjectsFromArray:[[CommonSqlite sharedCommonSqlite] getStudiedList]];
@@ -260,7 +260,7 @@
         }
     }
     
-    if (_screenType != List_Incomming) {
+    if (_screenType != List_Incoming) {
         //group by level
         for (WordObject *wordObj in wordList) {
             NSMutableArray *arr = [levelsDictionary objectForKey:wordObj.level];
@@ -284,7 +284,7 @@
 }
 
 - (void)refreshList {
-    if (_screenType == List_Incomming) {
+    if (_screenType == List_Incoming) {
         [self tableReload];
     }
 }
@@ -310,8 +310,15 @@
             wordObj.level      = object.level;
             wordObj.package    = object.packages;
             wordObj.gid        = [NSString stringWithFormat:@"%@", object.gid];
-            wordObj.langEN     = object.lEn;
-            wordObj.langVN     = object.lVn;
+            
+            if (object.lEn && object.lEn.length > 0) {
+                wordObj.langEN     = object.lEn;
+            }
+            
+            if (object.lVn && object.lVn.length > 0) {
+                wordObj.langVN     = object.lVn;
+            }
+            
             wordObj.package    = object.packages;
             wordObj.eFactor    = @"2500";
             wordObj.queue      = @"0";
@@ -341,6 +348,13 @@
             
         } else {
             [SVProgressHUD dismiss];
+        }
+        
+        if ([wordList count] == 0) {
+            viewNoresult.hidden = NO;
+            lbNoresult.text = [NSString stringWithFormat:@"No result for \"%@\"\nWe will update soon.", _searchText];
+        } else {
+            viewNoresult.hidden = YES;
         }
     }];
 }
