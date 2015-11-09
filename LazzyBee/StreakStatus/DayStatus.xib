@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DayStatus">
             <connections>
-                <outlet property="imgRing" destination="cmI-5Z-ypr" id="tMJ-sG-Q0e"/>
+                <outlet property="imgRing" destination="cmI-5Z-ypr" id="rC6-3k-IOy"/>
                 <outlet property="lbDay" destination="DcN-4w-9gv" id="BjZ-zb-qMw"/>
                 <outlet property="view" destination="iN0-l3-epB" id="RTq-dx-KJd"/>
             </connections>

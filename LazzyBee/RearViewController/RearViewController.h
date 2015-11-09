@@ -24,6 +24,7 @@ typedef enum {
 
 typedef enum {
     SupportSection_Settings = 0,
+    SupportSection_Help,
     SupportSection_Max
 } SUUPORT_SECTION_ITEM;
 

@@ -17,6 +17,8 @@
 
 @property (strong, nonatomic) IBOutlet UIView *view;
 
+
 @property (strong, nonatomic) NSString *strDay;
 @property (assign, nonatomic) BOOL streakStatus;
+
 @end

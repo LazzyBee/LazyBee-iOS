@@ -29,9 +29,10 @@
 
 #define AS_LEARN_BTN_IGNORE_WORD   0
 #define AS_LEARN_BTN_LEARNT_WORD  1
-#define AS_LEARN_BTN_UPDATE_WORD   2
-#define AS_LEARN_BTN_REPORT_WORD   3
-#define AS_LEARN_BTN_CANCEL        4
+#define AS_LEARN_BTN_DICTIONARY  2
+#define AS_LEARN_BTN_UPDATE_WORD   3
+#define AS_LEARN_BTN_REPORT_WORD   4
+#define AS_LEARN_BTN_CANCEL        5
 
 @interface StudyWordViewController ()
 {
@@ -272,7 +273,7 @@
         
     } else {
 
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", @"Report", nil];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Dictionary", @"Update", @"Report", nil];
 
 //        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", nil];
         
@@ -645,6 +646,12 @@
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"completedDailyTarget" object:nil];
             }
+            
+        } else if (buttonIndex == AS_LEARN_BTN_DICTIONARY) {
+            DictDetailContainerViewController *dictDetailContainer = [[DictDetailContainerViewController alloc] initWithNibName:@"DictDetailContainerViewController" bundle:nil];
+            dictDetailContainer.wordObj = _wordObj;
+            [self.navigationController pushViewController:dictDetailContainer animated:YES];
+            
             
         } else if (buttonIndex == AS_LEARN_BTN_UPDATE_WORD) {
             NSLog(@"Update word");

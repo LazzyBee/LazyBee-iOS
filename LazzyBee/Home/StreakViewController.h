@@ -12,6 +12,7 @@
 {
     IBOutlet UILabel *lbStreakCount;
     IBOutlet UILabel *lbCongratulation;
+    IBOutlet UIImageView *imgRingStreak;
     
     
     IBOutlet UIView *viewDayOne;
@@ -22,5 +23,9 @@
     IBOutlet UIView *viewDaySix;
     IBOutlet UIView *viewDaySeven;
     IBOutlet UIView *dayContainer;
+    
+    
+    IBOutlet UIScrollView *scrollViewContainer;
+    IBOutlet UIButton *btnContinue;
 }
 @end

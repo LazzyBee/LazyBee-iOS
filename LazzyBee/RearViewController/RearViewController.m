@@ -17,6 +17,7 @@
 #import "DictionaryViewController.h"
 #import "AboutViewController.h"
 #import "InformationViewController.h"
+#import "HelpViewController.h"
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
@@ -137,6 +138,10 @@
         if (indexPath.row == SupportSection_Settings) {
             text = @"Settings";
             cell.imgIcon.image = [UIImage imageNamed:@"ic_setting"];
+            
+        } else if (indexPath.row == SupportSection_Help) {
+            text = @"Help";
+            cell.imgIcon.image = [UIImage imageNamed:@"ic_help"];
         }
         
     } else if(indexPath.section == RearTable_Section_Share) {
@@ -204,6 +209,15 @@
             self.sidePanelController.centerPanel = newFrontController;
             
             presentedCell = indexPath;  // <- store the presented row
+            
+        }  else if (indexPath.row == SupportSection_Help) {
+            HelpViewController *helpViewController = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil];
+            newFrontController = [[UINavigationController alloc] initWithRootViewController:helpViewController];
+            
+            [newFrontController setModalPresentationStyle:UIModalPresentationFormSheet];
+            [newFrontController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            
+            [self presentViewController:newFrontController animated:YES completion:nil];
         }
         
     } else if (indexPath.section == RearTable_Section_Share) {

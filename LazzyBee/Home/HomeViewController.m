@@ -10,6 +10,7 @@
 #import "StudyWordViewController.h"
 #import "StudiedListViewController.h"
 #import "SearchViewController.h"
+#import "HelpViewController.h"
 #import "CommonDefine.h"
 #import "CommonSqlite.h"
 #import "Common.h"
@@ -78,6 +79,20 @@
                                              selector:@selector(didSelectRowFromSearch:)
                                                  name:@"didSelectRowFromSearch"
                                                object:nil];
+    
+    NSNumber *isFirstRunObj = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:IS_FIRST_RUN];
+    
+    if (isFirstRunObj == nil || [isFirstRunObj boolValue] == YES) {
+        HelpViewController *helpViewController = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:helpViewController];
+        
+        [nav setModalPresentationStyle:UIModalPresentationFormSheet];
+        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+        
+        [self presentViewController:nav animated:YES completion:nil];
+        
+        [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithBool:NO] withKey:IS_FIRST_RUN];
+    }
     
     //admob
 /*    GADRequest *request = [GADRequest request];
@@ -266,18 +281,21 @@
         
         //show streak view
         StreakViewController *streak = [[StreakViewController alloc] initWithNibName:@"StreakViewController" bundle:nil];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:streak];
+        [nav setModalPresentationStyle:UIModalPresentationFormSheet];
+        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         
-        [self.navigationController presentViewController:streak animated:YES completion:nil];
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
         
     } else {
         alertContent = @"You have learnt very hard. Now is the time to relax.";
+        
+        //show alert to congrat
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congratulation" message:alertContent delegate:(id)self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alert.tag = 2;
+        
+        [alert show];
     }
-    
-    //show alert to congrat
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congratulation" message:alertContent delegate:(id)self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    alert.tag = 2;
-    
-    [alert show];
 }
 
 - (void)noWordToStudyToday {

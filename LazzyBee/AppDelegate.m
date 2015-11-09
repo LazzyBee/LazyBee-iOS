@@ -203,6 +203,13 @@
         dbVersion = [NSNumber numberWithInteger:1];
         [[Common sharedCommon] saveDataToUserDefaultStandard:dbVersion withKey:KEY_DB_VERSION];
     }
+    
+    NSNumber *isFirstRun = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:IS_FIRST_RUN];
+    
+    if (!isFirstRun) {
+        isFirstRun = [NSNumber numberWithBool:YES];
+        [[Common sharedCommon] saveDataToUserDefaultStandard:reminderNumberObj withKey:IS_FIRST_RUN];
+    }
 }
 
 - (void)scheduleNotification {

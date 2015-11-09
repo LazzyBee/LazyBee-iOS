@@ -183,7 +183,6 @@
 
 - (NSString *)dateStringFromDate:(NSDate *)date withFormat:(NSString *)formatString {
     NSString *dateString = nil;
-    //this format must be corresponding to the format of publication.revisionDate
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     
     NSString *locale = [[NSLocale currentLocale] localeIdentifier];
@@ -200,7 +199,6 @@
 
 - (NSString *)timeStringFromDate:(NSDate *)date {
     NSString *dateString = nil;
-    //this format must be corresponding to the format of publication.revisionDate
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     
     NSString *locale = [[NSLocale currentLocale] localeIdentifier];
@@ -312,7 +310,21 @@
     return rv;
 }
 
+- (NSString *)getDayOfWeek:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"EEEE"];
+    NSLocale *frLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    [dateFormatter setLocale:frLocale];
+//    NSString *locale = [[NSLocale currentLocale] localeIdentifier];
+//    NSLocale *currentLocale = [[NSLocale alloc] initWithLocaleIdentifier:locale];
+//    [dateFormatter setLocale:currentLocale];
+//    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    
+    return [dateFormatter stringFromDate:date];
+}
 
+
+//folder
 -(NSString *)applicationSupportFolder {
     return [[[NSFileManager defaultManager] URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:NULL] path];
 }

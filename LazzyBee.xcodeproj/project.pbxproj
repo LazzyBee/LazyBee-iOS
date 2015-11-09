@@ -59,6 +59,16 @@
 		4DD3C3E41B6F218700B6DA71 /* cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4DD3C3D21B6F218700B6DA71 /* cancel@2x.png */; };
 		4DD3C3E51B6F218700B6DA71 /* cancel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4DD3C3D31B6F218700B6DA71 /* cancel@3x.png */; };
 		4DD8CAE61BB0073100FED1C9 /* GTLDataServiceApi_Sources.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DD8CAE41BB0073100FED1C9 /* GTLDataServiceApi_Sources.m */; };
+		550289FA1BF07C2A007181C3 /* PlaySoundLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 550289F91BF07C2A007181C3 /* PlaySoundLib.m */; };
+		550289FF1BF0820D007181C3 /* magic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 550289FD1BF0820D007181C3 /* magic.mp3 */; };
+		55028A031BF08BAB007181C3 /* ic_help.png in Resources */ = {isa = PBXBuildFile; fileRef = 55028A001BF08BAB007181C3 /* ic_help.png */; };
+		55028A041BF08BAB007181C3 /* ic_help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55028A011BF08BAB007181C3 /* ic_help@2x.png */; };
+		55028A051BF08BAB007181C3 /* ic_help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55028A021BF08BAB007181C3 /* ic_help@3x.png */; };
+		55028A091BF08C17007181C3 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55028A071BF08C17007181C3 /* HelpViewController.m */; };
+		55028A0A1BF08C17007181C3 /* HelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55028A081BF08C17007181C3 /* HelpViewController.xib */; };
+		55028A0E1BF092C2007181C3 /* bee_rotate.png in Resources */ = {isa = PBXBuildFile; fileRef = 55028A0B1BF092C2007181C3 /* bee_rotate.png */; };
+		55028A0F1BF092C2007181C3 /* bee_rotate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55028A0C1BF092C2007181C3 /* bee_rotate@2x.png */; };
+		55028A101BF092C2007181C3 /* bee_rotate@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55028A0D1BF092C2007181C3 /* bee_rotate@3x.png */; };
 		552BD5691BA1362A00BF316C /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 552BD5601BA1362A00BF316C /* GoogleMobileAds.framework */; };
 		552BD56A1BA1362A00BF316C /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 552BD5671BA1362A00BF316C /* README.txt */; };
 		552BD56B1BA1362A00BF316C /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 552BD5681BA1362A00BF316C /* README.txt */; };
@@ -285,6 +295,18 @@
 		4DD3C3D31B6F218700B6DA71 /* cancel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel@3x.png"; sourceTree = "<group>"; };
 		4DD8CAE41BB0073100FED1C9 /* GTLDataServiceApi_Sources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLDataServiceApi_Sources.m; path = GTL/gAPI/GTLDataServiceApi_Sources.m; sourceTree = "<group>"; };
 		4DD8CAE51BB0073100FED1C9 /* GTLDataServiceApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLDataServiceApi.h; path = GTL/gAPI/GTLDataServiceApi.h; sourceTree = "<group>"; };
+		550289F81BF07C2A007181C3 /* PlaySoundLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaySoundLib.h; sourceTree = "<group>"; };
+		550289F91BF07C2A007181C3 /* PlaySoundLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaySoundLib.m; sourceTree = "<group>"; };
+		550289FD1BF0820D007181C3 /* magic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = magic.mp3; path = Resource/Sound/magic.mp3; sourceTree = "<group>"; };
+		55028A001BF08BAB007181C3 /* ic_help.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_help.png; sourceTree = "<group>"; };
+		55028A011BF08BAB007181C3 /* ic_help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_help@2x.png"; sourceTree = "<group>"; };
+		55028A021BF08BAB007181C3 /* ic_help@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_help@3x.png"; sourceTree = "<group>"; };
+		55028A061BF08C17007181C3 /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
+		55028A071BF08C17007181C3 /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
+		55028A081BF08C17007181C3 /* HelpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpViewController.xib; sourceTree = "<group>"; };
+		55028A0B1BF092C2007181C3 /* bee_rotate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bee_rotate.png; sourceTree = "<group>"; };
+		55028A0C1BF092C2007181C3 /* bee_rotate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bee_rotate@2x.png"; sourceTree = "<group>"; };
+		55028A0D1BF092C2007181C3 /* bee_rotate@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bee_rotate@3x.png"; sourceTree = "<group>"; };
 		552BD5601BA1362A00BF316C /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		552BD5621BA1362A00BF316C /* GADMAdNetworkAdapterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMAdNetworkAdapterProtocol.h; sourceTree = "<group>"; };
 		552BD5631BA1362A00BF316C /* GADMAdNetworkConnectorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMAdNetworkConnectorProtocol.h; sourceTree = "<group>"; };
@@ -671,6 +693,9 @@
 				4DD3C3701B6F18D700B6DA71 /* SubRearViewController.h */,
 				4DD3C3711B6F18D700B6DA71 /* SubRearViewController.m */,
 				4DD3C3721B6F18D700B6DA71 /* SubRearViewController.xib */,
+				55028A061BF08C17007181C3 /* HelpViewController.h */,
+				55028A071BF08C17007181C3 /* HelpViewController.m */,
+				55028A081BF08C17007181C3 /* HelpViewController.xib */,
 			);
 			path = RearViewController;
 			sourceTree = "<group>";
@@ -764,6 +789,7 @@
 		4DD3C3B01B6F1A9C00B6DA71 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				550289F71BF07C2A007181C3 /* PlaySound */,
 				55BDC8A41BC76FFF0015B199 /* TagManagerHelper.h */,
 				55BDC8A51BC76FFF0015B199 /* TagManagerHelper.m */,
 				552DC7721B871C9900770FA1 /* Algorithm.m */,
@@ -787,6 +813,7 @@
 		4DD3C3BD1B6F217000B6DA71 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				550289FB1BF081D2007181C3 /* Sound */,
 				552BD5A81BA1621500BF316C /* About.txt */,
 				557D7AB01B857DFD00834A44 /* DB */,
 				4DD3C3BE1B6F218700B6DA71 /* images */,
@@ -808,6 +835,9 @@
 		4DD3C3BF1B6F218700B6DA71 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				55028A001BF08BAB007181C3 /* ic_help.png */,
+				55028A011BF08BAB007181C3 /* ic_help@2x.png */,
+				55028A021BF08BAB007181C3 /* ic_help@3x.png */,
 				557526A61BDF54BA007810C7 /* ic_graph.png */,
 				557526A71BDF54BA007810C7 /* ic_graph@2x.png */,
 				557526A81BDF54BA007810C7 /* ic_graph@3x.png */,
@@ -845,6 +875,9 @@
 		4DD3C3C91B6F218700B6DA71 /* logo */ = {
 			isa = PBXGroup;
 			children = (
+				55028A0B1BF092C2007181C3 /* bee_rotate.png */,
+				55028A0C1BF092C2007181C3 /* bee_rotate@2x.png */,
+				55028A0D1BF092C2007181C3 /* bee_rotate@3x.png */,
 				559E67B01BEB135F00232439 /* big_logo.png */,
 				559E67B11BEB135F00232439 /* big_logo@2x.png */,
 				559E67B21BEB135F00232439 /* big_logo@3x.png */,
@@ -896,6 +929,23 @@
 				4DD3C3D31B6F218700B6DA71 /* cancel@3x.png */,
 			);
 			path = others;
+			sourceTree = "<group>";
+		};
+		550289F71BF07C2A007181C3 /* PlaySound */ = {
+			isa = PBXGroup;
+			children = (
+				550289F81BF07C2A007181C3 /* PlaySoundLib.h */,
+				550289F91BF07C2A007181C3 /* PlaySoundLib.m */,
+			);
+			path = PlaySound;
+			sourceTree = "<group>";
+		};
+		550289FB1BF081D2007181C3 /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				550289FD1BF0820D007181C3 /* magic.mp3 */,
+			);
+			name = Sound;
 			sourceTree = "<group>";
 		};
 		552BD55F1BA1362A00BF316C /* GoogleMobileAdsSdkiOS-7.4.1 */ = {
@@ -1109,6 +1159,7 @@
 			files = (
 				557D7AC41B858BE300834A44 /* StudyWordViewController.xib in Resources */,
 				559E67BA1BEF4E8800232439 /* StreakViewController.xib in Resources */,
+				55028A041BF08BAB007181C3 /* ic_help@2x.png in Resources */,
 				553F78301BA6D12800D15876 /* Images.xcassets in Resources */,
 				4DD3C3D41B6F218700B6DA71 /* ic_heart.png in Resources */,
 				559E67AA1BEB0A2600232439 /* button_short@2x.png in Resources */,
@@ -1125,6 +1176,7 @@
 				55452C6A1BC528F600D6E430 /* MHTabBarIndicator@2x.png in Resources */,
 				552BD5A91BA1621500BF316C /* About.txt in Resources */,
 				559E67AC1BEB0A2600232439 /* button_square@2x.png in Resources */,
+				55028A031BF08BAB007181C3 /* ic_help.png in Resources */,
 				55308B4D1BF0423A00FF0457 /* day_ring_gray.png in Resources */,
 				4DD3C3D81B6F218700B6DA71 /* ic_setting@2x.png in Resources */,
 				55308B501BF0423A00FF0457 /* day_ring.png in Resources */,
@@ -1137,6 +1189,7 @@
 				552BD5C41BA17A6900BF316C /* NotificationTableViewCell.xib in Resources */,
 				557D7ACC1B85B5B600834A44 /* ic_speaker@2x.png in Resources */,
 				4DD3C3E11B6F218700B6DA71 /* avatarDefault@2x.png in Resources */,
+				55028A051BF08BAB007181C3 /* ic_help@3x.png in Resources */,
 				557D7AB21B857DFD00834A44 /* english.db in Resources */,
 				4DD3C3D51B6F218700B6DA71 /* ic_heart@2x.png in Resources */,
 				4DD3C3DA1B6F218700B6DA71 /* ic_share.png in Resources */,
@@ -1155,12 +1208,15 @@
 				4DD3C3AF1B6F199B00B6DA71 /* HomeViewController.xib in Resources */,
 				55452C561BC5128700D6E430 /* ic_dictionary.png in Resources */,
 				552BD5A51BA15FE600BF316C /* ic_home.png in Resources */,
+				55028A101BF092C2007181C3 /* bee_rotate@3x.png in Resources */,
+				55028A0A1BF08C17007181C3 /* HelpViewController.xib in Resources */,
 				552BD5AE1BA1738D00BF316C /* SpeedTableViewCell.xib in Resources */,
 				554330411B8C21D5001DFB6F /* SearchViewController.xib in Resources */,
 				559E67C51BEF569100232439 /* hive.png in Resources */,
 				559E67C01BEF526A00232439 /* streak_ring.png in Resources */,
 				552BD5B71BA175E300BF316C /* ic_rabbit@3x.png in Resources */,
 				4DD3C3E01B6F218700B6DA71 /* avatarDefault.png in Resources */,
+				55028A0F1BF092C2007181C3 /* bee_rotate@2x.png in Resources */,
 				559E67BF1BEF526A00232439 /* streak_ring@2x.png in Resources */,
 				559E67B41BEB135F00232439 /* big_logo@2x.png in Resources */,
 				4DD3C3E31B6F218700B6DA71 /* cancel.png in Resources */,
@@ -1172,7 +1228,9 @@
 				559E67BE1BEF526A00232439 /* streak_ring@3x.png in Resources */,
 				4DD3C3DD1B6F218700B6DA71 /* arrow_white.png in Resources */,
 				552BD5B61BA175E300BF316C /* ic_rabbit@2x.png in Resources */,
+				550289FF1BF0820D007181C3 /* magic.mp3 in Resources */,
 				4DD3C3D91B6F218700B6DA71 /* ic_setting@3x.png in Resources */,
+				55028A0E1BF092C2007181C3 /* bee_rotate.png in Resources */,
 				557288CB1BB25DAA00EA0CE9 /* GTMOAuth2ViewTouch.xib in Resources */,
 				4DD3C3D71B6F218700B6DA71 /* ic_setting.png in Resources */,
 				4DD3C3A11B6F191C00B6DA71 /* LICENSE in Resources */,
@@ -1237,6 +1295,7 @@
 				557288C91BB25DAA00EA0CE9 /* GTMOAuth2SignIn.m in Sources */,
 				4DD3C3B91B6F1AA700B6DA71 /* Common.m in Sources */,
 				557288D71BB25DAA00EA0CE9 /* GTLDateTime.m in Sources */,
+				550289FA1BF07C2A007181C3 /* PlaySoundLib.m in Sources */,
 				557288C81BB25DAA00EA0CE9 /* GTMOAuth2Authentication.m in Sources */,
 				557288D31BB25DAA00EA0CE9 /* GTMReadMonitorInputStream.m in Sources */,
 				4DD3C3A41B6F191C00B6DA71 /* UIViewController+JASidePanel.m in Sources */,
@@ -1300,6 +1359,7 @@
 				552DC7791B87292F00770FA1 /* StudiedListViewController.m in Sources */,
 				557288D81BB25DAA00EA0CE9 /* GTLErrorObject.m in Sources */,
 				554330401B8C21D5001DFB6F /* SearchViewController.m in Sources */,
+				55028A091BF08C17007181C3 /* HelpViewController.m in Sources */,
 				552BD5BE1BA178A500BF316C /* DailyTargetViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
