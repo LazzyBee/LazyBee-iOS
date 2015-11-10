@@ -14,6 +14,8 @@
 #import "TagManagerHelper.h"
 #import "SVProgressHUD.h"
 #import "DictDetailContainerViewController.h"
+#import "MGSwipeTableCell.h"
+#import "MGSwipeButton.h"
 
 @interface StudiedListViewController ()
 {
@@ -159,6 +161,8 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 
+    cell.delegate = (id)self;
+    
     WordObject *wordObj = nil;
     
     if (_screenType == List_StudiedList ||
@@ -198,23 +202,23 @@
     return cell;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_screenType == List_Incoming) {
-        return YES;
-    }
-    
-    return NO;
-
-}
-
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_screenType == List_Incoming) {
-        return UITableViewCellEditingStyleDelete;
-    }
-    
-    return UITableViewCellEditingStyleNone;
-}
+//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+//    if (_screenType == List_Incoming) {
+//        return YES;
+//    }
+//    
+//    return NO;
+//
+//}
+//
+//- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (_screenType == List_Incoming) {
+//        return UITableViewCellEditingStyleDelete;
+//    }
+//    
+//    return UITableViewCellEditingStyleNone;
+//}
 
 #pragma mark table delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -253,10 +257,10 @@
 
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    
+//}
 
 - (void)tableReload {
     [wordList removeAllObjects];
@@ -313,72 +317,155 @@
 }
 
 - (void)searchOnServer {
-    static GTLServiceDataServiceApi *service = nil;
-    if (!service) {
-        service = [[GTLServiceDataServiceApi alloc] init];
-        service.retryEnabled = YES;
-        //[GTMHTTPFetcher setLoggingEnabled:YES];
-    }
-    
-    [SVProgressHUD showWithStatus:nil];
-    GTLQueryDataServiceApi *query = [GTLQueryDataServiceApi queryForGetVocaByQWithQ:_searchText];
-    //TODO: Add waiting progress here
-    [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLDataServiceApiVoca *object, NSError *error) {
-        if (object != nil){
-            NSLog(object.JSONString);
-            //TODO: Update word: q, a, level, package, (and ee, ev)
-            WordObject *wordObj = [[WordObject alloc] init];
-            wordObj.question   = object.q;
-            wordObj.answers    = object.a;
-            wordObj.level      = object.level;
-            wordObj.package    = object.packages;
-            wordObj.gid        = [NSString stringWithFormat:@"%@", object.gid];
-            
-            if (object.lEn && object.lEn.length > 0) {
-                wordObj.langEN     = object.lEn;
-            }
-            
-            if (object.lVn && object.lVn.length > 0) {
-                wordObj.langVN     = object.lVn;
-            }
-            
-            wordObj.package    = object.packages;
-            wordObj.eFactor    = @"2500";
-            wordObj.queue      = @"0";
-            wordObj.isFromServer = YES;
-
-            [wordList addObject:wordObj];
-            
-            //group by level
-            for (WordObject *wordObj in wordList) {
-                NSMutableArray *arr = [levelsDictionary objectForKey:wordObj.level];
-                
-                if (arr == nil) {
-                    arr = [[NSMutableArray alloc] init];
-                }
-                [arr addObject:wordObj];
-                
-                [levelsDictionary setObject:arr forKey:wordObj.level];
-                
-                keyArr = [levelsDictionary allKeys];
-                keyArr = [keyArr sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-            }
-            
-            lbHeaderInfo.text = [NSString stringWithFormat:@"Total: %lu", (unsigned long)[wordList count]];
-            [wordsTableView reloadData];
-            
-            [SVProgressHUD dismiss];
-            
-        } else {
-            [SVProgressHUD dismiss];
+    if ([[Common sharedCommon] networkIsActive]) {
+        static GTLServiceDataServiceApi *service = nil;
+        if (!service) {
+            service = [[GTLServiceDataServiceApi alloc] init];
+            service.retryEnabled = YES;
+            //[GTMHTTPFetcher setLoggingEnabled:YES];
         }
         
-        if ([wordList count] == 0) {
-            viewNoresult.hidden = NO;
-            lbNoresult.text = [NSString stringWithFormat:@"No result for \"%@\"\nWe will update soon.", _searchText];
-        } else {
-            viewNoresult.hidden = YES;
+        [SVProgressHUD showWithStatus:nil];
+        GTLQueryDataServiceApi *query = [GTLQueryDataServiceApi queryForGetVocaByQWithQ:_searchText];
+        //TODO: Add waiting progress here
+        [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLDataServiceApiVoca *object, NSError *error) {
+            if (object != nil){
+                NSLog(object.JSONString);
+                //TODO: Update word: q, a, level, package, (and ee, ev)
+                WordObject *wordObj = [[WordObject alloc] init];
+                wordObj.question   = object.q;
+                wordObj.answers    = object.a;
+                wordObj.level      = object.level;
+                wordObj.package    = object.packages;
+                wordObj.gid        = [NSString stringWithFormat:@"%@", object.gid];
+                
+                if (object.lEn && object.lEn.length > 0) {
+                    wordObj.langEN     = object.lEn;
+                }
+                
+                if (object.lVn && object.lVn.length > 0) {
+                    wordObj.langVN     = object.lVn;
+                }
+                
+                wordObj.package    = object.packages;
+                wordObj.eFactor    = @"2500";
+                wordObj.queue      = @"0";
+                wordObj.isFromServer = YES;
+
+                [wordList addObject:wordObj];
+                
+                //group by level
+                for (WordObject *wordObj in wordList) {
+                    NSMutableArray *arr = [levelsDictionary objectForKey:wordObj.level];
+                    
+                    if (arr == nil) {
+                        arr = [[NSMutableArray alloc] init];
+                    }
+                    [arr addObject:wordObj];
+                    
+                    [levelsDictionary setObject:arr forKey:wordObj.level];
+                    
+                    keyArr = [levelsDictionary allKeys];
+                    keyArr = [keyArr sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+                }
+                
+                lbHeaderInfo.text = [NSString stringWithFormat:@"Total: %lu", (unsigned long)[wordList count]];
+                [wordsTableView reloadData];
+                
+                [SVProgressHUD dismiss];
+                
+            } else {
+                [SVProgressHUD dismiss];
+            }
+            
+            if ([wordList count] == 0) {
+                viewNoresult.hidden = NO;
+                lbNoresult.text = [NSString stringWithFormat:@"No result for \"%@\"\nWe will update soon.", _searchText];
+            } else {
+                viewNoresult.hidden = YES;
+            }
+        }];
+    }
+}
+
+#pragma mark swipe delegate
+//-(BOOL) swipeTableCell:(MGSwipeTableCell*) cell canSwipe:(MGSwipeDirection) direction;
+//{
+//    if (_screenType == MyAlbumScreen) {
+//        return NO;
+//
+//    } else {
+//        return YES;
+//    }
+//}
+
+-(NSArray*) swipeTableCell:(StudiedTableViewCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
+             swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings
+{
+    if (_screenType == List_Incoming) {
+        swipeSettings.transition = MGSwipeTransitionStatic;
+        
+        if (direction == MGSwipeDirectionRightToLeft) {
+            expansionSettings.fillOnTrigger = NO;
+            expansionSettings.threshold = 1.1;
+
+            MGSwipeButton *btnDone = nil;
+
+            btnDone = [MGSwipeButton buttonWithTitle:@"Done" backgroundColor:BLUE_COLOR padding:20 callback:^BOOL(MGSwipeTableCell *sender) {
+                
+                return NO;
+            }];
+            
+            MGSwipeButton *btnIgnore = nil;
+            
+            btnIgnore = [MGSwipeButton buttonWithTitle:@"Ignore" backgroundColor:[UIColor lightGrayColor] padding:20 callback:^BOOL(MGSwipeTableCell *sender) {
+                
+                return NO;
+            }];
+
+            return @[btnDone, btnIgnore];
         }
-    }];
+        
+    }
+    
+    return nil;
+}
+
+-(BOOL) swipeTableCell:(StudiedTableViewCell*) cell tappedButtonAtIndex:(NSInteger) index direction:(MGSwipeDirection)direction fromExpansion:(BOOL) fromExpansion
+{
+    if (_screenType == List_Incoming) {
+        WordObject *wordObj = nil;
+        NSIndexPath *indexPath = [wordsTableView indexPathForCell:cell];
+        if (direction == MGSwipeDirectionRightToLeft && index == 0) {   //Done
+            NSLog(@"Done");
+            //update queue value in DB
+            indexPath = [wordsTableView indexPathForCell:cell];
+            wordObj = [wordList objectAtIndex:indexPath.row];
+            
+            wordObj.queue = [NSString stringWithFormat:@"%d", QUEUE_DONE];
+            
+        } else if (direction == MGSwipeDirectionRightToLeft && index == 1) {   //Ignore
+            NSLog(@"Ignore");
+            //update queue value in DB
+            indexPath = [wordsTableView indexPathForCell:cell];
+            wordObj = [wordList objectAtIndex:indexPath.row];
+            
+            wordObj.queue = [NSString stringWithFormat:@"%d", QUEUE_SUSPENDED];
+        }
+        
+        if (wordList) {
+            [[CommonSqlite sharedCommonSqlite] updateWord:wordObj];
+            
+            //remove from buffer
+            [[CommonSqlite sharedCommonSqlite] removeWordFromBuffer:wordObj];
+            
+            [wordList removeObject:wordObj];
+            
+            lbHeaderInfo.text = [NSString stringWithFormat:@"Total: %lu", (unsigned long)[wordList count]];
+            [wordsTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    }
+    
+    return NO;  //Don't autohide
 }
 @end

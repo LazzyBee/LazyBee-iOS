@@ -10,6 +10,7 @@
 #import "DayStatus.h"
 #import "Common.h"
 #import "PlaySoundLib.h"
+#import "TagManagerHelper.h"
 
 #define NUMBER_OF_DAYS 7
 // This is defined in Math.h
@@ -26,6 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [TagManagerHelper pushOpenScreenEvent:@"iStreakCongratulation"];
     // Do any additional setup after loading the view from its nib.
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)

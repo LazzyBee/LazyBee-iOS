@@ -10,6 +10,7 @@
 #import "CommonSqlite.h"
 #import "WordObject.h"
 #import "Common.h"
+#import "TagManagerHelper.h"
 
 @interface InformationViewController ()
 {
@@ -23,6 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [TagManagerHelper pushOpenScreenEvent:@"iLearningProgress"];
     // Do any additional setup after loading the view from its nib.
     levelsDictionary = [[NSMutableDictionary alloc] init];
     wordList = [[NSMutableArray alloc] init];

@@ -1,24 +1,22 @@
 //
-//  AboutViewController.m
+//  ChooseMajorViewController.m
 //  LazzyBee
 //
-//  Created by HuKhong on 3/3/15.
-//  Copyright (c) 2015 HuKhong. All rights reserved.
+//  Created by HuKhong on 11/10/15.
+//  Copyright © 2015 Born2go. All rights reserved.
 //
 
-#import "AboutViewController.h"
-#import "TagManagerHelper.h"
+#import "ChooseMajorViewController.h"
 #import "Common.h"
 
-@interface AboutViewController ()
+@interface ChooseMajorViewController ()
 
 @end
 
-@implementation AboutViewController
+@implementation ChooseMajorViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [TagManagerHelper pushOpenScreenEvent:@"iAbout"];
     // Do any additional setup after loading the view from its nib.
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
@@ -26,16 +24,17 @@
         [self.navigationController.navigationBar setTranslucent:NO];
     }
 #endif
-    
     [self.navigationController.navigationBar setBarTintColor:COMMON_COLOR];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
-    [self setTitle:@"About"];
+    [self setTitle:@"Major List"];
     
-    [self getAboutFromFile];
+    UIBarButtonItem *btnCancel = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleDone target:(id)self  action:@selector(cancelButtonClick)];
+    self.navigationItem.leftBarButtonItem = btnCancel;
     
-    [loadingIndicator setColor:COMMON_COLOR];
+    UIBarButtonItem *btnDone = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:(id)self  action:@selector(doneButtonClick)];
+    self.navigationItem.rightBarButtonItem = btnDone;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,18 +52,12 @@
 }
 */
 
-- (void)getAboutFromFile {
-    NSString* path = @"";
 
-    path = [[NSBundle mainBundle] pathForResource:@"About"
-                                               ofType:@"txt"];
-    
-    NSString* contentFile = [NSString stringWithContentsOfFile:path
-                                                      encoding:NSUTF8StringEncoding
-                                                         error:NULL];
-    
-    txtAboutContent.text = contentFile;
-    
-    [txtAboutContent setFont:[UIFont systemFontOfSize:16]];
+- (void)cancelButtonClick {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)doneButtonClick {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 @end

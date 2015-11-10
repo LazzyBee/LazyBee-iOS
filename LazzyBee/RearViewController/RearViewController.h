@@ -17,6 +17,7 @@ typedef enum {
 
 typedef enum {
     HomeSection_Home = 0,
+    HomeSection_MajorList,
     HomeSection_Dictionary,
     HomeSection_Progress,
     HomeSection_Max

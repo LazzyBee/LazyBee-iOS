@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MGSwipeTableCell.h"
 
-@interface StudiedTableViewCell : UITableViewCell
+@interface StudiedTableViewCell : MGSwipeTableCell
 {
     
 }

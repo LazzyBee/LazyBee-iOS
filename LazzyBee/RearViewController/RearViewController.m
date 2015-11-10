@@ -18,6 +18,7 @@
 #import "AboutViewController.h"
 #import "InformationViewController.h"
 #import "HelpViewController.h"
+#import "ChooseMajorViewController.h"
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
@@ -124,6 +125,10 @@
             text = @"Home";
             cell.imgIcon.image = [UIImage imageNamed:@"ic_home"];
             
+        } else if (indexPath.row == HomeSection_MajorList) {
+            text = @"Majors list";
+            cell.imgIcon.image = [UIImage imageNamed:@"ic_list"];
+            
         } else if (indexPath.row == HomeSection_Dictionary) {
             text = @"Dictionary";
             cell.imgIcon.image = [UIImage imageNamed:@"ic_dictionary"];
@@ -185,6 +190,15 @@
             self.sidePanelController.centerPanel = newFrontController;
             
             presentedCell = indexPath;  // <- store the presented row
+            
+        } else if (indexPath.row == HomeSection_MajorList) {
+            ChooseMajorViewController *majorViewController = [[ChooseMajorViewController alloc] initWithNibName:@"ChooseMajorViewController" bundle:nil];
+            newFrontController = [[UINavigationController alloc] initWithRootViewController:majorViewController];
+            
+            [newFrontController setModalPresentationStyle:UIModalPresentationFormSheet];
+            [newFrontController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            
+            [self presentViewController:newFrontController animated:YES completion:nil];
             
         } else if (indexPath.row == HomeSection_Dictionary) {
             DictionaryViewController *dictionaryViewController = [[DictionaryViewController alloc] initWithNibName:@"DictionaryViewController" bundle:nil];
