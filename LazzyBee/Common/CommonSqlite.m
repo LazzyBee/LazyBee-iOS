@@ -675,7 +675,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
 }
 
 //pick up "amount" news word-ids from vocabulary, then add to buffer
-- (void)prepareWordsToStudyingQueue:(NSInteger)amount {
+- (void)prepareWordsToStudyingQueue:(NSInteger)amount inPackage:(NSString *)package {
     //get current words list from system table
     NSString *dbPath = [self getDatabasePath];
     NSURL *storeURL = [NSURL URLWithString:dbPath];
@@ -779,7 +779,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
         }
     }*/
     NSString *lowestLevel = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_LOWEST_LEVEL];
-    strQuery = [NSString stringWithFormat:@"SELECT id from \"vocabulary\" WHERE queue = %d AND level >= %@ ORDER BY level LIMIT %ld", QUEUE_UNKNOWN, lowestLevel, (long)amount];
+    strQuery = [NSString stringWithFormat:@"SELECT id from \"vocabulary\" WHERE package LIKE '%%,%@,%%' AND queue = %d AND level >= %@ ORDER BY level LIMIT %ld", package, QUEUE_UNKNOWN, lowestLevel, (long)amount];
     charQuery = [strQuery UTF8String];
     
     sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
@@ -794,6 +794,22 @@ static CommonSqlite* sharedCommonSqlite = nil;
     
     sqlite3_finalize(dbps);
 
+    //if the selected package is not enough, get more from common
+    if ([resArr count] < amount) {
+        strQuery = [NSString stringWithFormat:@"SELECT id from \"vocabulary\" WHERE package LIKE '%%,%@,%%' AND package NOT LIKE '%%,%@,%%' AND queue = %d AND level >= %@ ORDER BY level LIMIT %ld", @"common", package, QUEUE_UNKNOWN, lowestLevel, (long)(amount - [resArr count])];
+        charQuery = [strQuery UTF8String];
+        
+        sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+        
+        while(sqlite3_step(dbps) == SQLITE_ROW) {
+            if (sqlite3_column_text(dbps, 0)) {
+                NSString *wordID = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 0)];
+                
+                [resArr addObject:wordID];
+            }
+        }
+    }
+    
     //create json to re-add to db
     NSMutableDictionary *dictNewWords = [[NSMutableDictionary alloc] init];
     [dictNewWords setObject:[[NSNumber alloc] initWithInteger:[resArr count]] forKey:@"count"];

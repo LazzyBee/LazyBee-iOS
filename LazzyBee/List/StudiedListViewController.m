@@ -54,9 +54,15 @@
     
     [self tableReload];
     
+    //in case clicking on Add to learn
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshList)
                                                  name:@"refreshList"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeMajor)
+                                                 name:@"ChangeMajor"
                                                object:nil];
 }
 
@@ -185,7 +191,18 @@
     //A word may has many meanings corresponding to many fields (common, it, economic...)
     //The meaning of each field is considered as a package
     NSDictionary *dictPackages = [dictAnswer valueForKey:@"packages"];
-    NSDictionary *dictSinglePackage = [dictPackages valueForKey:@"common"];
+    
+    NSString *curMajor = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_SELECTED_MAJOR];
+    if (curMajor == nil || curMajor.length == 0) {
+        curMajor = @"common";
+    }
+    
+    NSDictionary *dictSinglePackage = [dictPackages valueForKey:curMajor];
+    
+    if (dictSinglePackage == nil) {
+        dictSinglePackage = [dictPackages valueForKey:@"common"];
+    }
+    
     //"common":{"meaning":"", "explain":"<p>The edge of something is the part of it that is farthest from the center.</p>", "example":"<p>He ran to the edge of the cliff.</p>"}}
     
     NSString *strMeaning = [dictSinglePackage valueForKey:@"meaning"];
@@ -467,5 +484,22 @@
     }
     
     return NO;  //Don't autohide
+}
+
+- (void)changeMajor {
+    if (_screenType == List_Incoming) {
+        [self prepareWordsToStudyingQueue];
+        
+        [self tableReload];
+    }
+}
+
+- (void)prepareWordsToStudyingQueue {
+    NSString *curMajor = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_SELECTED_MAJOR];
+    
+    if (curMajor == nil || curMajor.length == 0) {
+        curMajor = @"common";
+    }
+    [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE inPackage:curMajor];
 }
 @end

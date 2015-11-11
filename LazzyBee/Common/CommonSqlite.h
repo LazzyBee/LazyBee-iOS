@@ -29,7 +29,7 @@
 - (NSArray *)getSearchHintList:(NSString *)searchText;
 - (NSArray *)getSearchResultList:(NSString *)searchText;
 
-- (void)prepareWordsToStudyingQueue:(NSInteger)amount;
+- (void)prepareWordsToStudyingQueue:(NSInteger)amount inPackage:(NSString *)package;
 - (void)pickUpRandom10WordsToStudyingQueue:(NSInteger)amount withForceFlag:(BOOL)force;
 - (void)addAWordToStydyingQueue:(WordObject *)wordObj;
 - (void)updatePickedWordList:(NSArray *)wordsArr;

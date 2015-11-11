@@ -115,6 +115,10 @@ static HTMLHelper* sharedHTMLHelper = nil;
     //The meaning of each field is considered as a package
     NSDictionary *dictPackages = [dictAnswer valueForKey:@"packages"];
     NSDictionary *dictSinglePackage = [dictPackages valueForKey:package];
+    
+    if (dictSinglePackage == nil) {
+        dictSinglePackage = [dictPackages valueForKey:@"common"];
+    }
     //"common":{"meaning":"", "explain":"<p>The edge of something is the part of it that is farthest from the center.</p>", "example":"<p>He ran to the edge of the cliff.</p>"}}
     
     NSString *strExplanation = [dictSinglePackage valueForKey:@"explain"];

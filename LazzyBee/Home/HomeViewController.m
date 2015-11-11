@@ -58,7 +58,7 @@
     [viewInformation setBackgroundColor:COMMON_COLOR];
     
     //prepare 100 words
-    [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE];
+    [self prepareWordsToStudyingQueue];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(completedDailyTarget)
@@ -202,7 +202,7 @@
 - (IBAction)btnStudyClick:(id)sender {
     //check and pick new words
     if ([[CommonSqlite sharedCommonSqlite] getCountOfBuffer] < [[Common sharedCommon] getDailyTarget]) {
-        [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE];
+        [self prepareWordsToStudyingQueue];
     }
     
 //    [[CommonSqlite sharedCommonSqlite] pickUpRandom10WordsToStudyingQueue:[[Common sharedCommon] getDailyTarget] withForceFlag:NO];
@@ -234,7 +234,8 @@
     } else {
         //pick more words from buffer
         if ([[CommonSqlite sharedCommonSqlite] getCountOfBuffer] < [[Common sharedCommon] getDailyTarget]) {
-            [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE];
+            
+            [self prepareWordsToStudyingQueue];
         }
         
         [[CommonSqlite sharedCommonSqlite] pickUpRandom10WordsToStudyingQueue:[[Common sharedCommon] getDailyTarget] withForceFlag:YES];
@@ -365,5 +366,14 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
         
         [self.navigationController pushViewController:searchResultViewController animated:YES];
     }
+}
+
+- (void)prepareWordsToStudyingQueue {
+    NSString *curMajor = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_SELECTED_MAJOR];
+    
+    if (curMajor == nil || curMajor.length == 0) {
+        curMajor = @"common";
+    }
+    [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE inPackage:curMajor];
 }
 @end

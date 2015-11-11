@@ -9,5 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface ChooseMajorViewController : UIViewController
-
+{
+    
+    IBOutlet UICollectionView *collectionView;
+    
+}
 @end

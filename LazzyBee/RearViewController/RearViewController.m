@@ -56,6 +56,10 @@
     
     lbVersion.text = [NSString stringWithFormat:@"Version %@", appVer];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeMajor)
+                                                 name:@"ChangeMajor"
+                                               object:nil];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -126,7 +130,15 @@
             cell.imgIcon.image = [UIImage imageNamed:@"ic_home"];
             
         } else if (indexPath.row == HomeSection_MajorList) {
-            text = @"Majors list";
+            
+            NSString *currentMajor = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_SELECTED_MAJOR];
+            
+            if (currentMajor && currentMajor.length > 0) {
+                text = [NSString stringWithFormat:@"Majors list (%@)", currentMajor];
+            } else {
+                text = @"Majors list";
+            }
+            
             cell.imgIcon.image = [UIImage imageNamed:@"ic_list"];
             
         } else if (indexPath.row == HomeSection_Dictionary) {
@@ -303,6 +315,10 @@
     }];
     
     [infoView loadInformation];
+}
+
+- (void)changeMajor {
+    [_rearTableView reloadData];
 }
 
 @end

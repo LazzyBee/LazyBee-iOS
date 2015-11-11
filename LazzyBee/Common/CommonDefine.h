@@ -44,7 +44,7 @@
 #define KEY_DAILY_TOTAL_TARGET @"DailyTotalTarget"
 #define KEY_DB_VERSION @"DatabaseVersion"
 #define IS_FIRST_RUN @"IsFirstRun"
-
+#define KEY_SELECTED_MAJOR @"SelectedMajor"
 @interface CommonDefine : NSObject
 
 

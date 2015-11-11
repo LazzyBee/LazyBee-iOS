@@ -343,7 +343,12 @@
     NSString *htmlString = @"";
     
     if (wordObj) {
-        htmlString = [[HTMLHelper sharedHTMLHelper]createHTMLForAnswer:wordObj withPackage:@"common"];
+        NSString *curMajor = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_SELECTED_MAJOR];
+        if (curMajor == nil || curMajor.length == 0) {
+            curMajor = @"common";
+        }
+        
+        htmlString = [[HTMLHelper sharedHTMLHelper]createHTMLForAnswer:wordObj withPackage:curMajor];
     }
 
     [webViewWord loadHTMLString:htmlString baseURL:baseURL];
