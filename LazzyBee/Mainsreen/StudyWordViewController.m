@@ -204,6 +204,12 @@
                                                  selector:@selector(refreshStudyScreen:)
                                                      name:@"refreshStudyScreen"
                                                    object:nil];
+        
+        //in case clicking on Add to learn
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(refreshAfterAddWord:)
+                                                     name:@"AddToLearn"
+                                                   object:nil];
     }
 }
 
@@ -608,7 +614,7 @@
             }
             
             //update incoming list
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshList" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"AddToLearn" object:_wordObj];
             
         } else if (buttonIndex == AS_SEARCH_BTN_REPORT) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report" message:@"Open facebook to report this word?" delegate:(id)self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Open", nil];
@@ -734,6 +740,18 @@
         if (_wordObj) {
             [self displayAnswer:_wordObj];
             [self showHideButtonsPanel:YES];
+        }
+    }
+}
+
+- (void)refreshAfterAddWord:(NSNotification *)notification {
+    if ([self.navigationController.viewControllers indexOfObject:self] != NSNotFound) {
+        WordObject *newWord = (WordObject *)notification.object;
+        
+        if (newWord) {
+            [_nwordList addObject:newWord];
+            
+            lbNewCount.text = [NSString stringWithFormat:@"New: %ld", (unsigned long)[_nwordList count]];
         }
     }
 }

@@ -43,6 +43,7 @@
 - (NSArray *)getAllWords;
 - (void)addMoreFieldToTable;
 - (void)removeWordFromBuffer:(WordObject *)wordObj;
+- (NSTimeInterval)getDateInBuffer;
 @end
 
 #endif

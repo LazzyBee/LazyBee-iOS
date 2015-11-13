@@ -1327,80 +1327,104 @@ static CommonSqlite* sharedCommonSqlite = nil;
         }
     }
     
-    //get word object  from vocabulary
-    strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid from \"vocabulary\" WHERE id IN %@", strIDList];
-    charQuery = [strQuery UTF8String];
+    NSString *curMajor = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_SELECTED_MAJOR];
     
-    sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
-    NSMutableArray *resArr = [[NSMutableArray alloc] init];
-    
-    while(sqlite3_step(dbps) == SQLITE_ROW) {
-        WordObject *wordObj = [[WordObject alloc] init];
-        
-        if (sqlite3_column_text(dbps, 0)) {
-            wordObj.wordid = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 0)];
-        }
-        
-        if (sqlite3_column_text(dbps, 1)) {
-            wordObj.question = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 1)];
-        }
-        
-        if (sqlite3_column_text(dbps, 2)) {
-            wordObj.answers = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 2)];
-        }
-        
-        if (sqlite3_column_text(dbps, 3)) {
-            wordObj.subcats = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 3)];
-        }
-        
-        if (sqlite3_column_text(dbps, 4)) {
-            wordObj.status = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 4)];
-        }
-        
-        if (sqlite3_column_text(dbps, 5)) {
-            wordObj.package = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 5)];
-        }
-        
-        if (sqlite3_column_text(dbps, 6)) {
-            wordObj.level = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 6)];
-        }
-        
-        if (sqlite3_column_text(dbps, 7)) {
-            wordObj.queue = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 7)];
-        }
-        
-        if (sqlite3_column_text(dbps, 8)) {
-            wordObj.due = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 8)];
-        }
-        
-        if (sqlite3_column_text(dbps, 9)) {
-            wordObj.revCount = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 9)];
-        }
-        
-        if (sqlite3_column_text(dbps, 10)) {
-            wordObj.lastInterval = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 10)];
-        }
-        
-        if (sqlite3_column_text(dbps, 11)) {
-            wordObj.eFactor = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 11)];
-        }
-        
-        if (sqlite3_column_text(dbps, 12)) {
-            wordObj.langVN = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 12)];
-        }
-        
-        if (sqlite3_column_text(dbps, 13)) {
-            wordObj.langEN = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 13)];
-        }
-        
-        if (sqlite3_column_text(dbps, 14)) {
-            wordObj.gid = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 14)];
-        }
-        
-        [resArr addObject:wordObj];
+    if (curMajor == nil || curMajor.length == 0) {
+        curMajor = @"common";
     }
     
-    sqlite3_finalize(dbps);
+    NSMutableArray *resArr = [[NSMutableArray alloc] init];
+    
+    while (([resArr count] < [idListArr count])) {
+        //get word object  from vocabulary
+        
+        if (![curMajor isEqualToString:@"common"]) {
+            strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid from \"vocabulary\" WHERE package LIKE '%%,%@,%%' AND id IN %@", curMajor, strIDList];
+            
+        } else {
+            strQuery = [NSString stringWithFormat:@"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid from \"vocabulary\" WHERE package LIKE '%%,%@,%%' AND package NOT LIKE '%%,%@,%%' AND id IN %@", curMajor, [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_SELECTED_MAJOR], strIDList];
+        }
+        
+        charQuery = [strQuery UTF8String];
+        
+        sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+        
+        while(sqlite3_step(dbps) == SQLITE_ROW) {
+            WordObject *wordObj = [[WordObject alloc] init];
+            
+            if (sqlite3_column_text(dbps, 0)) {
+                wordObj.wordid = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 0)];
+            }
+            
+            if (sqlite3_column_text(dbps, 1)) {
+                wordObj.question = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 1)];
+            }
+            
+            if (sqlite3_column_text(dbps, 2)) {
+                wordObj.answers = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 2)];
+            }
+            
+            if (sqlite3_column_text(dbps, 3)) {
+                wordObj.subcats = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 3)];
+            }
+            
+            if (sqlite3_column_text(dbps, 4)) {
+                wordObj.status = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 4)];
+            }
+            
+            if (sqlite3_column_text(dbps, 5)) {
+                wordObj.package = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 5)];
+            }
+            
+            if (sqlite3_column_text(dbps, 6)) {
+                wordObj.level = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 6)];
+            }
+            
+            if (sqlite3_column_text(dbps, 7)) {
+                wordObj.queue = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 7)];
+            }
+            
+            if (sqlite3_column_text(dbps, 8)) {
+                wordObj.due = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 8)];
+            }
+            
+            if (sqlite3_column_text(dbps, 9)) {
+                wordObj.revCount = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 9)];
+            }
+            
+            if (sqlite3_column_text(dbps, 10)) {
+                wordObj.lastInterval = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 10)];
+            }
+            
+            if (sqlite3_column_text(dbps, 11)) {
+                wordObj.eFactor = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 11)];
+            }
+            
+            if (sqlite3_column_text(dbps, 12)) {
+                wordObj.langVN = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 12)];
+            }
+            
+            if (sqlite3_column_text(dbps, 13)) {
+                wordObj.langEN = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 13)];
+            }
+            
+            if (sqlite3_column_text(dbps, 14)) {
+                wordObj.gid = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 14)];
+            }
+            
+            [resArr addObject:wordObj];
+        }
+        
+        sqlite3_finalize(dbps);
+        
+        //if specilized word is not enough
+        if ([resArr count] < [idListArr count] && ![curMajor isEqualToString:@"common"]) {
+            curMajor = @"common";
+        } else {
+            break;
+        }
+    }
+    
     sqlite3_close(db);
     
     return resArr;
@@ -1652,6 +1676,59 @@ static CommonSqlite* sharedCommonSqlite = nil;
     
     sqlite3_finalize(dbps);
     sqlite3_close(db);
+}
+
+- (NSTimeInterval)getDateInBuffer {
+    NSString *dbPath = [self getDatabasePath];
+    NSURL *storeURL = [NSURL URLWithString:dbPath];
+    
+    const char *dbFilePathUTF8 = [[storeURL path] UTF8String];
+    sqlite3 *db;
+    int dbrc; //database return code
+    dbrc = sqlite3_open(dbFilePathUTF8, &db);
+    
+    if (dbrc) {
+        return 0;
+    }
+    sqlite3_stmt *dbps;
+    
+    NSString *strQuery = @"SELECT value from \"system\" WHERE key = 'pickedword'";
+    
+    const char *charQuery = [strQuery UTF8String];
+    
+    sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
+    NSString *strJson = @"";
+    
+    while(sqlite3_step(dbps) == SQLITE_ROW) {
+        if (sqlite3_column_text(dbps, 0)) {
+            strJson = [NSString stringWithUTF8String:(char *)sqlite3_column_text(dbps, 0)];
+        }
+    }
+    
+    sqlite3_finalize(dbps);
+    
+    //parse the result to get date
+    NSData *data = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dictIDList = nil;
+    
+    if (data) {
+        dictIDList = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    }
+    
+
+    NSString *date = nil;
+    if (dictIDList) {
+         date = [dictIDList valueForKey:@"date"];
+    }
+    
+    sqlite3_close(db);
+    
+    NSTimeInterval dateInterval = 0;
+    if (date) {
+        dateInterval = [date doubleValue];
+    }
+    
+    return dateInterval;
 }
 
 @end

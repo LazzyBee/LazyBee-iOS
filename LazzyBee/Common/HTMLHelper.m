@@ -124,6 +124,9 @@ static HTMLHelper* sharedHTMLHelper = nil;
     NSString *strExplanation = [dictSinglePackage valueForKey:@"explain"];
     NSString *strExample = [dictSinglePackage valueForKey:@"example"];
     
+    strExplanation = [strExplanation stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
+    strExample = [strExample stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
+    
     //remove html tag, use for playing speech
     NSString *plainExplanation = @"";
     NSString *plainExample = @"";

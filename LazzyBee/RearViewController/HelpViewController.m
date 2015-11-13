@@ -8,6 +8,7 @@
 
 #import "HelpViewController.h"
 #import "CommonDefine.h"
+#import "HTMLHelper.h"
 
 @interface HelpViewController ()
 
@@ -32,6 +33,14 @@
     
     UIBarButtonItem *btnCancel = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleDone target:(id)self  action:@selector(cancelButtonClick)];
     self.navigationItem.leftBarButtonItem = btnCancel;
+    
+//    NSString *path = [[NSBundle mainBundle] bundlePath];
+//    NSURL *baseURL = [NSURL fileURLWithPath:path];
+    
+    NSString *htmlFile = [[NSBundle mainBundle] pathForResource:@"lazzybee_guide" ofType:@"htm"];
+    NSString* htmlString = [NSString stringWithContentsOfFile:htmlFile encoding:NSUTF8StringEncoding error:nil];
+
+    [webView loadHTMLString:htmlString baseURL:nil];
 }
 
 - (void)didReceiveMemoryWarning {

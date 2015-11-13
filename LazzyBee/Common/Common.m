@@ -114,6 +114,11 @@
     return data;
 }
 
+- (void)clearUserDefaultStandardWithKey:(NSString *)key {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:key];
+}
+
 - (NSInteger)getDailyTarget {
     NSNumber *target  = [self loadDataFromUserDefaultStandardWithKey:KEY_DAILY_TARGET];
     

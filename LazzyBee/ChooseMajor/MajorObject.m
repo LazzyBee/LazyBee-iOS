@@ -26,6 +26,7 @@
         self.majorName = majorName;
         self.majorThumbnail = thumbnail;
         self.checkFlag = flag;
+        self.enabled = YES;
     }
     return self;
 }

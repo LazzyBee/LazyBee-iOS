@@ -92,6 +92,7 @@
 		552BD5BF1BA178A500BF316C /* DailyTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 552BD5BD1BA178A500BF316C /* DailyTargetViewController.xib */; };
 		552BD5C31BA17A6900BF316C /* NotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 552BD5C11BA17A6900BF316C /* NotificationTableViewCell.m */; };
 		552BD5C41BA17A6900BF316C /* NotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 552BD5C21BA17A6900BF316C /* NotificationTableViewCell.xib */; };
+		552CBC021BF48FEF00120B2C /* lazzybee_guide.htm in Resources */ = {isa = PBXBuildFile; fileRef = 552CBC011BF48FEF00120B2C /* lazzybee_guide.htm */; };
 		552DC7711B86BD1E00770FA1 /* WordObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 552DC7701B86BD1E00770FA1 /* WordObject.m */; };
 		552DC7741B871C9900770FA1 /* Algorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 552DC7721B871C9900770FA1 /* Algorithm.m */; };
 		552DC7791B87292F00770FA1 /* StudiedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 552DC7771B87292F00770FA1 /* StudiedListViewController.m */; };
@@ -225,6 +226,17 @@
 		55E106421BF1E2DD008A6BEA /* ic_list.png in Resources */ = {isa = PBXBuildFile; fileRef = 55E1063F1BF1E2DD008A6BEA /* ic_list.png */; };
 		55E106431BF1E2DD008A6BEA /* ic_list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55E106401BF1E2DD008A6BEA /* ic_list@2x.png */; };
 		55E106441BF1E2DD008A6BEA /* ic_list@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55E106411BF1E2DD008A6BEA /* ic_list@3x.png */; };
+		55F6C72A1BF5959C0084B369 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C71F1BF5959C0084B369 /* blank.png */; };
+		55F6C72B1BF5959C0084B369 /* blank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C7201BF5959C0084B369 /* blank@2x.png */; };
+		55F6C72C1BF5959C0084B369 /* blank@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C7211BF5959C0084B369 /* blank@3x.png */; };
+		55F6C72D1BF5959C0084B369 /* science@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C7221BF5959C0084B369 /* science@2x.png */; };
+		55F6C72E1BF5959C0084B369 /* medicine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C7231BF5959C0084B369 /* medicine@2x.png */; };
+		55F6C72F1BF5959C0084B369 /* it@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C7241BF5959C0084B369 /* it@2x.png */; };
+		55F6C7301BF5959C0084B369 /* economic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C7251BF5959C0084B369 /* economic@2x.png */; };
+		55F6C7311BF5959C0084B369 /* economic@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C7261BF5959C0084B369 /* economic@3x.png */; };
+		55F6C7321BF5959C0084B369 /* medicine@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C7271BF5959C0084B369 /* medicine@3x.png */; };
+		55F6C7331BF5959C0084B369 /* it@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C7281BF5959C0084B369 /* it@3x.png */; };
+		55F6C7341BF5959C0084B369 /* science@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55F6C7291BF5959C0084B369 /* science@3x.png */; };
 		55FE8EA11BCF69AD00059AA7 /* bee.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FE8E9E1BCF69AD00059AA7 /* bee.png */; };
 		55FE8EA21BCF69AD00059AA7 /* bee@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FE8E9F1BCF69AD00059AA7 /* bee@2x.png */; };
 		55FE8EA31BCF69AD00059AA7 /* bee@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FE8EA01BCF69AD00059AA7 /* bee@3x.png */; };
@@ -361,6 +373,7 @@
 		552BD5C01BA17A6900BF316C /* NotificationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationTableViewCell.h; sourceTree = "<group>"; };
 		552BD5C11BA17A6900BF316C /* NotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationTableViewCell.m; sourceTree = "<group>"; };
 		552BD5C21BA17A6900BF316C /* NotificationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationTableViewCell.xib; sourceTree = "<group>"; };
+		552CBC011BF48FEF00120B2C /* lazzybee_guide.htm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = lazzybee_guide.htm; path = Resource/lazzybee_guide.htm; sourceTree = "<group>"; };
 		552DC76F1B86BD1E00770FA1 /* WordObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WordObject.h; path = Objects/WordObject.h; sourceTree = "<group>"; };
 		552DC7701B86BD1E00770FA1 /* WordObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WordObject.m; path = Objects/WordObject.m; sourceTree = "<group>"; };
 		552DC7721B871C9900770FA1 /* Algorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Algorithm.m; path = Common/Algorithm.m; sourceTree = "<group>"; };
@@ -548,6 +561,17 @@
 		55E1063F1BF1E2DD008A6BEA /* ic_list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_list.png; sourceTree = "<group>"; };
 		55E106401BF1E2DD008A6BEA /* ic_list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_list@2x.png"; sourceTree = "<group>"; };
 		55E106411BF1E2DD008A6BEA /* ic_list@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_list@3x.png"; sourceTree = "<group>"; };
+		55F6C71F1BF5959C0084B369 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
+		55F6C7201BF5959C0084B369 /* blank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank@2x.png"; sourceTree = "<group>"; };
+		55F6C7211BF5959C0084B369 /* blank@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank@3x.png"; sourceTree = "<group>"; };
+		55F6C7221BF5959C0084B369 /* science@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "science@2x.png"; sourceTree = "<group>"; };
+		55F6C7231BF5959C0084B369 /* medicine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "medicine@2x.png"; sourceTree = "<group>"; };
+		55F6C7241BF5959C0084B369 /* it@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "it@2x.png"; sourceTree = "<group>"; };
+		55F6C7251BF5959C0084B369 /* economic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "economic@2x.png"; sourceTree = "<group>"; };
+		55F6C7261BF5959C0084B369 /* economic@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "economic@3x.png"; sourceTree = "<group>"; };
+		55F6C7271BF5959C0084B369 /* medicine@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "medicine@3x.png"; sourceTree = "<group>"; };
+		55F6C7281BF5959C0084B369 /* it@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "it@3x.png"; sourceTree = "<group>"; };
+		55F6C7291BF5959C0084B369 /* science@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "science@3x.png"; sourceTree = "<group>"; };
 		55FE8E9E1BCF69AD00059AA7 /* bee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bee.png; sourceTree = "<group>"; };
 		55FE8E9F1BCF69AD00059AA7 /* bee@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bee@2x.png"; sourceTree = "<group>"; };
 		55FE8EA01BCF69AD00059AA7 /* bee@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bee@3x.png"; sourceTree = "<group>"; };
@@ -862,6 +886,7 @@
 		4DD3C3BD1B6F217000B6DA71 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				552CBC011BF48FEF00120B2C /* lazzybee_guide.htm */,
 				550289FB1BF081D2007181C3 /* Sound */,
 				552BD5A81BA1621500BF316C /* About.txt */,
 				557D7AB01B857DFD00834A44 /* DB */,
@@ -1159,6 +1184,17 @@
 		55E106361BF1DF18008A6BEA /* majors */ = {
 			isa = PBXGroup;
 			children = (
+				55F6C71F1BF5959C0084B369 /* blank.png */,
+				55F6C7201BF5959C0084B369 /* blank@2x.png */,
+				55F6C7211BF5959C0084B369 /* blank@3x.png */,
+				55F6C7221BF5959C0084B369 /* science@2x.png */,
+				55F6C7231BF5959C0084B369 /* medicine@2x.png */,
+				55F6C7241BF5959C0084B369 /* it@2x.png */,
+				55F6C7251BF5959C0084B369 /* economic@2x.png */,
+				55F6C7261BF5959C0084B369 /* economic@3x.png */,
+				55F6C7271BF5959C0084B369 /* medicine@3x.png */,
+				55F6C7281BF5959C0084B369 /* it@3x.png */,
+				55F6C7291BF5959C0084B369 /* science@3x.png */,
 				55C1B2171BF2F0C600D917EB /* checkmark@2x.png */,
 				55C1B2181BF2F0C600D917EB /* checkmark@3x.png */,
 				55C1B2191BF2F0C600D917EB /* uncheck.png */,
@@ -1258,6 +1294,7 @@
 				557D7AC41B858BE300834A44 /* StudyWordViewController.xib in Resources */,
 				559E67BA1BEF4E8800232439 /* StreakViewController.xib in Resources */,
 				55028A041BF08BAB007181C3 /* ic_help@2x.png in Resources */,
+				55F6C72A1BF5959C0084B369 /* blank.png in Resources */,
 				553F78301BA6D12800D15876 /* Images.xcassets in Resources */,
 				4DD3C3D41B6F218700B6DA71 /* ic_heart.png in Resources */,
 				559E67AA1BEB0A2600232439 /* button_short@2x.png in Resources */,
@@ -1289,8 +1326,11 @@
 				5597EC411BCE090700E1F779 /* ic_about.png in Resources */,
 				552BD5C41BA17A6900BF316C /* NotificationTableViewCell.xib in Resources */,
 				557D7ACC1B85B5B600834A44 /* ic_speaker@2x.png in Resources */,
+				55F6C7341BF5959C0084B369 /* science@3x.png in Resources */,
+				55F6C7331BF5959C0084B369 /* it@3x.png in Resources */,
 				55C1B2201BF2F0C600D917EB /* uncheck@3x.png in Resources */,
 				4DD3C3E11B6F218700B6DA71 /* avatarDefault@2x.png in Resources */,
+				55F6C7311BF5959C0084B369 /* economic@3x.png in Resources */,
 				55C1B21C1BF2F0C600D917EB /* checkmark@2x.png in Resources */,
 				55028A051BF08BAB007181C3 /* ic_help@3x.png in Resources */,
 				55E106431BF1E2DD008A6BEA /* ic_list@2x.png in Resources */,
@@ -1303,6 +1343,7 @@
 				559E67A91BEB0A2600232439 /* button_short.png in Resources */,
 				4DD3C3DC1B6F218700B6DA71 /* ic_share@3x.png in Resources */,
 				55C1B2141BF2E21A00D917EB /* MajorCollectionViewCell.xib in Resources */,
+				55F6C72F1BF5959C0084B369 /* it@2x.png in Resources */,
 				55C1B2161BF2F00300D917EB /* checkmark.png in Resources */,
 				55FE8EA11BCF69AD00059AA7 /* bee.png in Resources */,
 				557526A51BDF5308007810C7 /* InformationViewController.xib in Resources */,
@@ -1323,6 +1364,7 @@
 				559E67C01BEF526A00232439 /* streak_ring.png in Resources */,
 				552BD5B71BA175E300BF316C /* ic_rabbit@3x.png in Resources */,
 				4DD3C3E01B6F218700B6DA71 /* avatarDefault.png in Resources */,
+				55F6C72E1BF5959C0084B369 /* medicine@2x.png in Resources */,
 				55E1062D1BF18B14008A6BEA /* LICENSE in Resources */,
 				55028A0F1BF092C2007181C3 /* bee_rotate@2x.png in Resources */,
 				559E67BF1BEF526A00232439 /* streak_ring@2x.png in Resources */,
@@ -1338,6 +1380,7 @@
 				4DD3C3DD1B6F218700B6DA71 /* arrow_white.png in Resources */,
 				552BD5B61BA175E300BF316C /* ic_rabbit@2x.png in Resources */,
 				550289FF1BF0820D007181C3 /* magic.mp3 in Resources */,
+				55F6C72D1BF5959C0084B369 /* science@2x.png in Resources */,
 				4DD3C3D91B6F218700B6DA71 /* ic_setting@3x.png in Resources */,
 				55E106421BF1E2DD008A6BEA /* ic_list.png in Resources */,
 				55028A0E1BF092C2007181C3 /* bee_rotate.png in Resources */,
@@ -1347,12 +1390,16 @@
 				55452C571BC5128700D6E430 /* ic_dictionary@2x.png in Resources */,
 				552BD59F1BA15F7200BF316C /* AboutViewController.xib in Resources */,
 				55308B4E1BF0423A00FF0457 /* day_ring_gray@2x.png in Resources */,
+				55F6C72C1BF5959C0084B369 /* blank@3x.png in Resources */,
 				55452C691BC528F600D6E430 /* MHTabBarIndicator.png in Resources */,
+				55F6C7301BF5959C0084B369 /* economic@2x.png in Resources */,
 				4DD3C39A1B6F191C00B6DA71 /* FacebookSDK.strings in Resources */,
 				559E67C41BEF569100232439 /* hive@3x.png in Resources */,
+				55F6C72B1BF5959C0084B369 /* blank@2x.png in Resources */,
 				557288EA1BB2844700EA0CE9 /* LICENSE.txt in Resources */,
 				557D7ACB1B85B5B600834A44 /* ic_speaker.png in Resources */,
 				552BD5BA1BA175E300BF316C /* ic_turtle@3x.png in Resources */,
+				55F6C7321BF5959C0084B369 /* medicine@3x.png in Resources */,
 				557D7ABE1B8587AF00834A44 /* btnbg@3x.png in Resources */,
 				553F78361BA6D39400D15876 /* rearBanner@3x.png in Resources */,
 				5597EC431BCE090700E1F779 /* ic_about@3x.png in Resources */,
@@ -1381,6 +1428,7 @@
 				553F78341BA6D39400D15876 /* rearBanner.png in Resources */,
 				55FE8EA21BCF69AD00059AA7 /* bee@2x.png in Resources */,
 				55452C5D1BC513EF00D6E430 /* DictionaryViewController.xib in Resources */,
+				552CBC021BF48FEF00120B2C /* lazzybee_guide.htm in Resources */,
 				5597EC421BCE090700E1F779 /* ic_about@2x.png in Resources */,
 				559E67AE1BEB0A2600232439 /* button_short@3x.png in Resources */,
 				55308B511BF0423A00FF0457 /* day_ring@2x.png in Resources */,

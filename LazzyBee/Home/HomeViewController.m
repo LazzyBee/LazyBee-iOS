@@ -272,30 +272,44 @@
     NSString *alertContent = @"";
     
     if (![completeTargetFlag boolValue]) {
-/*        [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithBool:YES] withKey:@"CompletedDailyTargetFlag"];
-        
-        alertContent = @"You have completed your daily target.";*/
-        
-        //save streak info
+        //in case user complete previous daily target in next day
+        //so need to compare current date with date in pickedword
+        NSTimeInterval oldDate = [[CommonSqlite sharedCommonSqlite] getDateInBuffer];
         NSTimeInterval curDate = [[Common sharedCommon] getBeginOfDayInSec];
-        [[Common sharedCommon] saveStreak:curDate];
         
-        //show streak view
-        StreakViewController *streak = [[StreakViewController alloc] initWithNibName:@"StreakViewController" bundle:nil];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:streak];
-        [nav setModalPresentationStyle:UIModalPresentationFormSheet];
-        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         
-        [self.navigationController presentViewController:nav animated:YES completion:nil];
+        if (curDate == oldDate) {
+            [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithBool:YES] withKey:@"CompletedDailyTargetFlag"];
+            
+            //save streak info
+            [[Common sharedCommon] saveStreak:curDate];
+            
+            //show streak view
+            StreakViewController *streak = [[StreakViewController alloc] initWithNibName:@"StreakViewController" bundle:nil];
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:streak];
+            [nav setModalPresentationStyle:UIModalPresentationFormSheet];
+            [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            
+            [self.navigationController presentViewController:nav animated:YES completion:nil];
+            
+        } else {
+            
+        }
         
     } else {
-        alertContent = @"You have learnt very hard. Now is the time to relax.";
         
-        //show alert to congrat
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congratulation" message:alertContent delegate:(id)self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        alert.tag = 2;
+        NSTimeInterval oldDate = [[CommonSqlite sharedCommonSqlite] getDateInBuffer];
+        NSTimeInterval curDate = [[Common sharedCommon] getBeginOfDayInSec];
         
-        [alert show];
+        if (curDate == oldDate) {
+            alertContent = @"You have learnt very hard. Now is the time to relax.";
+            
+            //show alert to congrat
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congratulation" message:alertContent delegate:(id)self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            alert.tag = 2;
+            
+            [alert show];
+        }
     }
 }
 

@@ -18,21 +18,21 @@
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <animations/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="IT" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1Wf-Ns-3zj">
-                        <rect key="frame" x="38" y="130" width="87" height="25"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming soon" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1Wf-Ns-3zj">
+                        <rect key="frame" x="31" y="127" width="89" height="32"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <animations/>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="uncheck.png" id="Nr3-Js-gms">
-                        <rect key="frame" x="3" y="130" width="25" height="25"/>
+                        <rect key="frame" x="6" y="133" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                     </imageView>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark.png" id="m0t-Mm-Zsk">
-                        <rect key="frame" x="8" y="135" width="15" height="15"/>
+                        <rect key="frame" x="10" y="137" width="12" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                     </imageView>
@@ -47,7 +47,7 @@
                 <outlet property="imgThumbnail" destination="NBW-ad-7u7" id="djX-Vx-dJN"/>
                 <outlet property="lbMajorName" destination="1Wf-Ns-3zj" id="GEK-mH-LFO"/>
             </connections>
-            <point key="canvasLocation" x="190" y="164.5"/>
+            <point key="canvasLocation" x="189.5" y="164"/>
         </collectionViewCell>
     </objects>
     <resources>

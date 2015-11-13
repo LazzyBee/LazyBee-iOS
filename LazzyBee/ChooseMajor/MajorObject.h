@@ -21,6 +21,7 @@
 @property (nonatomic, strong) NSString *majorName;
 @property (nonatomic, strong) NSString *majorThumbnail;
 @property (nonatomic, assign) BOOL checkFlag;
+@property (nonatomic, assign) BOOL enabled;
 
 - (id)initWithName:(NSString *)majorName thumbnail:(NSString *)thumbnail andCheckFlag:(BOOL)flag;
 @end

@@ -22,6 +22,8 @@
     NSMutableDictionary *levelsDictionary;
     NSMutableArray *wordList;
     NSArray *keyArr;
+    
+    UIRefreshControl *refreshControl;
 }
 @end
 
@@ -34,6 +36,11 @@
         [TagManagerHelper pushOpenScreenEvent:@"iIncomingScreen"];
         
         [self setTitle:@"Incoming List"];
+        
+        refreshControl = [[UIRefreshControl alloc] init];
+        refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to re-fill"];
+        [refreshControl addTarget:self action:@selector(refreshIncomingTable) forControlEvents:UIControlEventValueChanged];
+        [wordsTableView addSubview:refreshControl];
         
     } else if (_screenType == List_StudiedList) {
         [TagManagerHelper pushOpenScreenEvent:@"iLeantScreen"];
@@ -57,7 +64,7 @@
     //in case clicking on Add to learn
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshList)
-                                                 name:@"refreshList"
+                                                 name:@"AddToLearn"
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -501,5 +508,11 @@
         curMajor = @"common";
     }
     [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE inPackage:curMajor];
+}
+
+- (void)refreshIncomingTable {
+    [refreshControl endRefreshing];
+    [self prepareWordsToStudyingQueue];
+    [self tableReload];
 }
 @end

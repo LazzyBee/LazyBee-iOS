@@ -122,6 +122,16 @@
     }
     
     [majorsArr addObject:medObj];
+    
+    //blank
+    MajorObject *blankObj = [[MajorObject alloc] initWithName:@"Coming soon" thumbnail:@"blank.png" andCheckFlag:NO];
+    blankObj.enabled = NO;
+    [majorsArr addObject:blankObj];
+    
+    //blank
+    MajorObject *blankObj2 = [[MajorObject alloc] initWithName:@"Coming soon" thumbnail:@"blank.png" andCheckFlag:NO];
+    blankObj2.enabled = NO;
+    [majorsArr addObject:blankObj2];
 }
 
 - (void)cancelButtonClick {
@@ -129,10 +139,17 @@
 }
 
 - (void)doneButtonClick {
+    BOOL found = NO;
     for (MajorObject *majorObj in majorsArr) {
         if (majorObj.checkFlag == YES) {
+            found = YES;
             [[Common sharedCommon] saveDataToUserDefaultStandard:majorObj.majorName withKey:KEY_SELECTED_MAJOR];
+            break;
         }
+    }
+    
+    if (found == NO) {
+        [[Common sharedCommon] clearUserDefaultStandardWithKey:KEY_SELECTED_MAJOR];
     }
     
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
@@ -169,6 +186,13 @@
     majorCell.lbMajorName.text = majorObject.majorName;
     majorCell.imgThumbnail.image = [UIImage imageNamed:majorObject.majorThumbnail];
     majorCell.imgCheck.hidden = !majorObject.checkFlag;
+    majorCell.userInteractionEnabled = majorObject.enabled;
+    
+    if (majorObject.enabled == NO) {
+        majorCell.alpha = 0.5;
+    } else {
+        majorCell.alpha = 1.0;
+    }
     
     return majorCell;
 }

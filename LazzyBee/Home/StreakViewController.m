@@ -118,7 +118,7 @@
         
         for (int j = 0; j < NUMBER_OF_DAYS; j++) {
             if ([streakArr count] > j) {
-                streakNumber = [streakArr objectAtIndex:j];
+                streakNumber = [streakArr objectAtIndex:[streakArr count] - 1 - j];
                 
                 if ([streakNumber doubleValue] == dayInInterval) {
                     status = YES;
