@@ -17,12 +17,15 @@ typedef enum {
 
 typedef enum {
     HomeSection_Home = 0,
+    HomeSection_MajorList,
     HomeSection_Dictionary,
+    HomeSection_Progress,
     HomeSection_Max
 } ABOUT_SECTION_ITEM;
 
 typedef enum {
     SupportSection_Settings = 0,
+    SupportSection_Help,
     SupportSection_Max
 } SUUPORT_SECTION_ITEM;
 

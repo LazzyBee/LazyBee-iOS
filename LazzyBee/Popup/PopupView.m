@@ -24,8 +24,6 @@
         rect.size.width = frame.size.width;
         [self.view setFrame:rect];
         
-        [self addSubview:self.view];
-        
         self.view.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.view.layer.borderWidth = 3.0f;
         
@@ -49,7 +47,9 @@
 //}
 
 - (IBAction)gestureTapHandle:(id)sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_popupURL]];
+    if (_popupURL != nil && _popupURL.length > 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_popupURL]];
+    }
     [self removeFromSuperview];
 }
 

@@ -145,8 +145,8 @@
             [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];
         }
         
-        //update incomming list
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshList" object:nil];
+        //update incoming list
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"AddToLearn" object:_wordObj];
         
     } else if (buttonIndex == 1) {
         NSLog(@"Report");

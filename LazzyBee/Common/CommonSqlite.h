@@ -24,12 +24,12 @@
 - (NSArray *)getNewWordsList;
 - (NSArray *)getStudyAgainListWithLimit:(NSInteger)limit;
 - (NSArray *)getReviewList;
-- (NSArray *)getIncommingList;
+- (NSArray *)getIncomingList;
 
 - (NSArray *)getSearchHintList:(NSString *)searchText;
 - (NSArray *)getSearchResultList:(NSString *)searchText;
 
-- (void)prepareWordsToStudyingQueue:(NSInteger)amount;
+- (void)prepareWordsToStudyingQueue:(NSInteger)amount inPackage:(NSString *)package;
 - (void)pickUpRandom10WordsToStudyingQueue:(NSInteger)amount withForceFlag:(BOOL)force;
 - (void)addAWordToStydyingQueue:(WordObject *)wordObj;
 - (void)updatePickedWordList:(NSArray *)wordsArr;
@@ -43,6 +43,7 @@
 - (NSArray *)getAllWords;
 - (void)addMoreFieldToTable;
 - (void)removeWordFromBuffer:(WordObject *)wordObj;
+- (NSTimeInterval)getDateInBuffer;
 @end
 
 #endif

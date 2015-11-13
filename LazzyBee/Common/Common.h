@@ -54,6 +54,7 @@ typedef enum {
 - (NSArray *)loadDataFromPlist:(NSString *)plistFile;
 - (void)saveDataToUserDefaultStandard:(id)data withKey:(NSString *)key;
 - (id)loadDataFromUserDefaultStandardWithKey:(NSString *)key;
+- (void)clearUserDefaultStandardWithKey:(NSString *)key;
 - (NSInteger)getDailyTarget;
 
 - (NSString *)getCurrentDatetimeWithFormat:(NSString *)formatString;
@@ -66,6 +67,7 @@ typedef enum {
 - (NSTimeInterval)getBeginOfDayInMinisec;
 - (NSTimeInterval)getCurrentDatetimeInSec;
 - (NSTimeInterval)getBeginOfDayInSec;
+- (NSString *)getDayOfWeek:(NSDate *)date;
 
 - (void)trashFileAtPathAndEmpptyTrash:(NSString *)path;
 - (NSString *)trashFileAtPath:(NSString *)path;
@@ -93,5 +95,9 @@ typedef enum {
 - (NSString *)stringByRemovingSpaceAndNewLineSymbol:(NSString *)text;
 
 - (void)textToSpeech:(NSString *)text withRate:(float)rate;
+
+- (void)saveStreak:(NSTimeInterval)date;
+- (NSArray *)loadStreak;
+- (NSInteger)getCountOfStreak;
 @end
 #endif

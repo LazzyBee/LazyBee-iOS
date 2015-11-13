@@ -81,11 +81,11 @@ static Algorithm* sharedAlgorithm = nil;
         if (day <= 30)
             str = [NSString stringWithFormat:@"%d day(s)", (int)round(day)];
         else {
-            int month = day / 30;
-            str = [NSString stringWithFormat:@"%d month(s)", (int)round(month)];
+            float month = (float)day / 30;
+            str = [NSString stringWithFormat:@"%0.1f month(s)", month];
             
             if (month > 12) {
-                double year = day / 365;
+                float year = month / 12;
 
                 str = [NSString stringWithFormat:@"%0.1f year(s)", year];
             }

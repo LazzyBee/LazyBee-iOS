@@ -68,11 +68,17 @@ static HTMLHelper* sharedHTMLHelper = nil;
                                     "   speaker.rate = rate;" //0.1
                                     "   speaker.pitch = 1.0;"
                                     "   speaker.volume = 1.0;"
+                                    "   speechSynthesis.cancel();"
                                     "   speechSynthesis.speak(speaker);"
+                                    "}"
+                                    //cancel speech
+                                    "function cancelSpeech() {"
+                                    "   speechSynthesis.pause();"
+                                    "   speechSynthesis.cancel();"
                                     "}"
                                 "</script>"
                             "</head>\n"
-                            "<body >\n"
+                            "<body>\n"
                                 "<div style='width:100%%'>\n"
                                 "%@\n"  //strWordIconTag
                                 "</div>\n"
@@ -109,10 +115,17 @@ static HTMLHelper* sharedHTMLHelper = nil;
     //The meaning of each field is considered as a package
     NSDictionary *dictPackages = [dictAnswer valueForKey:@"packages"];
     NSDictionary *dictSinglePackage = [dictPackages valueForKey:package];
+    
+    if (dictSinglePackage == nil) {
+        dictSinglePackage = [dictPackages valueForKey:@"common"];
+    }
     //"common":{"meaning":"", "explain":"<p>The edge of something is the part of it that is farthest from the center.</p>", "example":"<p>He ran to the edge of the cliff.</p>"}}
     
     NSString *strExplanation = [dictSinglePackage valueForKey:@"explain"];
     NSString *strExample = [dictSinglePackage valueForKey:@"example"];
+    
+    strExplanation = [strExplanation stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
+    strExample = [strExample stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
     
     //remove html tag, use for playing speech
     NSString *plainExplanation = @"";
@@ -194,7 +207,13 @@ static HTMLHelper* sharedHTMLHelper = nil;
     "   speaker.rate = rate;" //0.1
     "   speaker.pitch = 1.0;"
     "   speaker.volume = 1.0;"
+    "   speechSynthesis.cancel();"
     "   speechSynthesis.speak(speaker);"
+    "}"
+    //cancel speech
+    "function cancelSpeech() {"
+    "   speechSynthesis.pause();"
+    "   speechSynthesis.cancel();"
     "}"
     "</script>"
     

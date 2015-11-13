@@ -10,13 +10,16 @@
 #import "StudyWordViewController.h"
 #import "StudiedListViewController.h"
 #import "SearchViewController.h"
+#import "HelpViewController.h"
 #import "CommonDefine.h"
 #import "CommonSqlite.h"
 #import "Common.h"
 #import "AppDelegate.h"
 #import "TagManagerHelper.h"
 #import "DictDetailContainerViewController.h"
+#import "StreakViewController.h"
 #import "PopupView.h"
+
 
 @interface HomeViewController ()<GADInterstitialDelegate>
 {
@@ -55,7 +58,7 @@
     [viewInformation setBackgroundColor:COMMON_COLOR];
     
     //prepare 100 words
-    [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE];
+    [self prepareWordsToStudyingQueue];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(completedDailyTarget)
@@ -77,6 +80,20 @@
                                                  name:@"didSelectRowFromSearch"
                                                object:nil];
     
+    NSNumber *isFirstRunObj = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:IS_FIRST_RUN];
+    
+    if (isFirstRunObj == nil || [isFirstRunObj boolValue] == YES) {
+        HelpViewController *helpViewController = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:helpViewController];
+        
+        [nav setModalPresentationStyle:UIModalPresentationFormSheet];
+        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+        
+        [self presentViewController:nav animated:YES completion:nil];
+        
+        [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithBool:NO] withKey:IS_FIRST_RUN];
+    }
+    
     //admob
 /*    GADRequest *request = [GADRequest request];
     self.adBanner.adUnitID = @"ca-app-pub-3940256099942544/2934735716";
@@ -91,17 +108,23 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    TAGContainer *container = appDelegate.container;
-    NSString *popupText = [container stringForKey:@"popup_text"];
-    NSString *popupURL = [container stringForKey:@"popup_url"];
-    NSLog(@"popupText :: %@", popupText);
-    NSLog(@"popupURL :: %@", popupURL);
-    
-    if (popupText && popupURL &&
-        popupText.length > 0 && popupURL.length > 0) {
-        [self displayPopupView:popupText withURL:popupURL];
-    }
+    dispatch_queue_t taskQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(taskQ, ^{
+        [NSThread sleepForTimeInterval:1.0];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            TAGContainer *container = appDelegate.container;
+            NSString *popupText = [container stringForKey:@"popup_text"];
+            NSString *popupURL = [container stringForKey:@"popup_url"];
+            NSLog(@"popupText :: %@", popupText);
+            NSLog(@"popupURL :: %@", popupURL);
+            
+            if (popupText && popupURL &&
+                popupText.length > 0 && popupURL.length > 0) {
+                [self displayPopupView:popupText withURL:popupURL];
+            }
+        });
+    });
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -144,6 +167,9 @@
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     popupView.alpha = 0;
     [popupView removeFromSuperview];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"rotateScreen" object:nil];
+
 }
 /*
 #pragma mark - Navigation
@@ -176,7 +202,7 @@
 - (IBAction)btnStudyClick:(id)sender {
     //check and pick new words
     if ([[CommonSqlite sharedCommonSqlite] getCountOfBuffer] < [[Common sharedCommon] getDailyTarget]) {
-        [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE];
+        [self prepareWordsToStudyingQueue];
     }
     
 //    [[CommonSqlite sharedCommonSqlite] pickUpRandom10WordsToStudyingQueue:[[Common sharedCommon] getDailyTarget] withForceFlag:NO];
@@ -189,7 +215,7 @@
 
 - (IBAction)btnStudiedListClick:(id)sender {
     StudiedListViewController *studiedListViewController = [[StudiedListViewController alloc] initWithNibName:@"StudiedListViewController" bundle:nil];
-    studiedListViewController.screenType = List_Incomming;
+    studiedListViewController.screenType = List_Incoming;
     
     [self.navigationController pushViewController:studiedListViewController animated:YES];
 }
@@ -208,7 +234,8 @@
     } else {
         //pick more words from buffer
         if ([[CommonSqlite sharedCommonSqlite] getCountOfBuffer] < [[Common sharedCommon] getDailyTarget]) {
-            [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE];
+            
+            [self prepareWordsToStudyingQueue];
         }
         
         [[CommonSqlite sharedCommonSqlite] pickUpRandom10WordsToStudyingQueue:[[Common sharedCommon] getDailyTarget] withForceFlag:YES];
@@ -245,19 +272,45 @@
     NSString *alertContent = @"";
     
     if (![completeTargetFlag boolValue]) {
-        [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithBool:YES] withKey:@"CompletedDailyTargetFlag"];
+        //in case user complete previous daily target in next day
+        //so need to compare current date with date in pickedword
+        NSTimeInterval oldDate = [[CommonSqlite sharedCommonSqlite] getDateInBuffer];
+        NSTimeInterval curDate = [[Common sharedCommon] getBeginOfDayInSec];
         
-        alertContent = @"You have completed your daily target.";
+        
+        if (curDate == oldDate) {
+            [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithBool:YES] withKey:@"CompletedDailyTargetFlag"];
+            
+            //save streak info
+            [[Common sharedCommon] saveStreak:curDate];
+            
+            //show streak view
+            StreakViewController *streak = [[StreakViewController alloc] initWithNibName:@"StreakViewController" bundle:nil];
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:streak];
+            [nav setModalPresentationStyle:UIModalPresentationFormSheet];
+            [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            
+            [self.navigationController presentViewController:nav animated:YES completion:nil];
+            
+        } else {
+            
+        }
         
     } else {
-        alertContent = @"You have learnt very hard. Now is the time to relax.";
+        
+        NSTimeInterval oldDate = [[CommonSqlite sharedCommonSqlite] getDateInBuffer];
+        NSTimeInterval curDate = [[Common sharedCommon] getBeginOfDayInSec];
+        
+        if (curDate == oldDate) {
+            alertContent = @"You have learnt very hard. Now is the time to relax.";
+            
+            //show alert to congrat
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congratulation" message:alertContent delegate:(id)self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            alert.tag = 2;
+            
+            [alert show];
+        }
     }
-    
-    //show alert to congrat
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congratulation" message:alertContent delegate:(id)self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    alert.tag = 2;
-    
-    [alert show];
 }
 
 - (void)noWordToStudyToday {
@@ -327,5 +380,14 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
         
         [self.navigationController pushViewController:searchResultViewController animated:YES];
     }
+}
+
+- (void)prepareWordsToStudyingQueue {
+    NSString *curMajor = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_SELECTED_MAJOR];
+    
+    if (curMajor == nil || curMajor.length == 0) {
+        curMajor = @"common";
+    }
+    [[CommonSqlite sharedCommonSqlite] prepareWordsToStudyingQueue:BUFFER_SIZE inPackage:curMajor];
 }
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "AboutViewController.h"
+#import "TagManagerHelper.h"
 #import "Common.h"
 
 @interface AboutViewController ()
@@ -17,6 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [TagManagerHelper pushOpenScreenEvent:@"iAbout"];
     // Do any additional setup after loading the view from its nib.
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)

@@ -17,6 +17,7 @@
 #import "LevelPickerViewController.h"
 #import "TAGContainer.h"
 #import "SVProgressHUD.h"
+#import "TagManagerHelper.h"
 
 @interface SettingsViewController ()
 {
@@ -29,6 +30,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [TagManagerHelper pushOpenScreenEvent:@"iSettings"];
     // Do any additional setup after loading the view from its nib.
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)

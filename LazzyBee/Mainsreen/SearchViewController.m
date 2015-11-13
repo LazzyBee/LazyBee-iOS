@@ -26,8 +26,10 @@
     // Do any additional setup after loading the view from its nib.
     [searchBarControl becomeFirstResponder];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    searchBarControl.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didSelectRowFromSearch:)
@@ -57,20 +59,21 @@
  //   [searchBarControl setTintColor:[UIColor whiteColor]];
 //}
 
+
 #pragma mark - keyboard movements
-- (void)keyboardWillShow:(NSNotification *)notification {
-    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    [UIView animateWithDuration:0.3 animations:^{
-
-    }];
-}
-
--(void)keyboardWillHide:(NSNotification *)notification {
-    [UIView animateWithDuration:0.3 animations:^{
-
-    }];
-}
+//- (void)keyboardWillShow:(NSNotification *)notification {
+//    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+//    
+//    [UIView animateWithDuration:0.3 animations:^{
+//
+//    }];
+//}
+//
+//-(void)keyboardWillHide:(NSNotification *)notification {
+//    [UIView animateWithDuration:0.3 animations:^{
+//
+//    }];
+//}
 
 - (IBAction)tapGestureHandle:(id)sender {
     [self.view removeFromSuperview];

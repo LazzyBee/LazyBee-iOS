@@ -29,9 +29,10 @@
 
 #define AS_LEARN_BTN_IGNORE_WORD   0
 #define AS_LEARN_BTN_LEARNT_WORD  1
-#define AS_LEARN_BTN_UPDATE_WORD   2
-#define AS_LEARN_BTN_REPORT_WORD   3
-#define AS_LEARN_BTN_CANCEL        4
+#define AS_LEARN_BTN_DICTIONARY  2
+#define AS_LEARN_BTN_UPDATE_WORD   3
+#define AS_LEARN_BTN_REPORT_WORD   4
+#define AS_LEARN_BTN_CANCEL        5
 
 @interface StudyWordViewController ()
 {
@@ -203,12 +204,23 @@
                                                  selector:@selector(refreshStudyScreen:)
                                                      name:@"refreshStudyScreen"
                                                    object:nil];
+        
+        //in case clicking on Add to learn
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(refreshAfterAddWord:)
+                                                     name:@"AddToLearn"
+                                                   object:nil];
     }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    
+    [self stopPlaySoundOnWebview];
 }
 
 /*
@@ -220,6 +232,10 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (void)stopPlaySoundOnWebview {
+    [webViewWord stringByEvaluatingJavaScriptFromString:@"cancelSpeech()"];
+}
 
 - (void)setStudyScreenMode:(STUDY_SCREEN_MODE)studyScreenMode {
     _studyScreenMode = studyScreenMode;
@@ -263,7 +279,7 @@
         
     } else {
 
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", @"Report", nil];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Dictionary", @"Update", @"Report", nil];
 
 //        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Ignore", @"Done", @"Update", nil];
         
@@ -299,6 +315,8 @@
 }
 
 - (void)displayQuestion:(WordObject *)wordObj {
+    [self stopPlaySoundOnWebview];
+    
     //display question
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSURL *baseURL = [NSURL fileURLWithPath:path];
@@ -322,6 +340,8 @@
 }
 
 - (void)displayAnswer:(WordObject *)wordObj {
+    [self stopPlaySoundOnWebview];
+    
     //display question
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSURL *baseURL = [NSURL fileURLWithPath:path];
@@ -329,9 +349,14 @@
     NSString *htmlString = @"";
     
     if (wordObj) {
-        htmlString = [[HTMLHelper sharedHTMLHelper]createHTMLForAnswer:wordObj withPackage:@"common"];
+        NSString *curMajor = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_SELECTED_MAJOR];
+        if (curMajor == nil || curMajor.length == 0) {
+            curMajor = @"common";
+        }
+        
+        htmlString = [[HTMLHelper sharedHTMLHelper]createHTMLForAnswer:wordObj withPackage:curMajor];
     }
-    
+
     [webViewWord loadHTMLString:htmlString baseURL:baseURL];
     
     _isAnswerScreen = YES;
@@ -521,34 +546,43 @@
 }
 
 - (void)updateWordFromGAE {
-    static GTLServiceDataServiceApi *service = nil;
-    if (!service) {
-        service = [[GTLServiceDataServiceApi alloc] init];
-        service.retryEnabled = YES;
-        //[GTMHTTPFetcher setLoggingEnabled:YES];
-    }
-
-    [SVProgressHUD showWithStatus:nil];
-    GTLQueryDataServiceApi *query = [GTLQueryDataServiceApi queryForGetVocaByQWithQ:self.wordObj.question];
-    //TODO: Add waiting progress here
-    [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLDataServiceApiVoca *object, NSError *error) {
-        if (object != NULL){
-            NSLog(object.JSONString);
-            //TODO: Update word: q, a, level, package, (and ee, ev)
-            _wordObj.question   = object.q;
-            _wordObj.answers    = object.a;
-            _wordObj.level      = object.level;
-            _wordObj.package    = object.packages;
-            
-            [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];
-            
-            if (_isAnswerScreen == YES) {
-                [self displayAnswer:_wordObj];
-            }
-
-            [SVProgressHUD dismiss];
+    
+    if ([[Common sharedCommon] networkIsActive]) {
+        static GTLServiceDataServiceApi *service = nil;
+        if (!service) {
+            service = [[GTLServiceDataServiceApi alloc] init];
+            service.retryEnabled = YES;
+            //[GTMHTTPFetcher setLoggingEnabled:YES];
         }
-    }];
+        
+        [SVProgressHUD showWithStatus:nil];
+        GTLQueryDataServiceApi *query = [GTLQueryDataServiceApi queryForGetVocaByQWithQ:self.wordObj.question];
+        //TODO: Add waiting progress here
+        [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLDataServiceApiVoca *object, NSError *error) {
+            if (object != NULL){
+                NSLog(object.JSONString);
+                //TODO: Update word: q, a, level, package, (and ee, ev)
+                _wordObj.question   = object.q;
+                _wordObj.answers    = object.a;
+                _wordObj.level      = object.level;
+                _wordObj.package    = object.packages;
+                
+                [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];
+                
+                if (_isAnswerScreen == YES) {
+                    [self displayAnswer:_wordObj];
+                }
+            }
+            
+            [SVProgressHUD dismiss];
+        }];
+        
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No connection" message:@"Please double check wifi/3G connection." delegate:(id)self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alert.tag = 2;
+        
+        [alert show];
+    }
 }
 
 
@@ -579,8 +613,8 @@
                 [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];
             }
             
-            //update incomming list
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshList" object:nil];
+            //update incoming list
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"AddToLearn" object:_wordObj];
             
         } else if (buttonIndex == AS_SEARCH_BTN_REPORT) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report" message:@"Open facebook to report this word?" delegate:(id)self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Open", nil];
@@ -632,6 +666,12 @@
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"completedDailyTarget" object:nil];
             }
+            
+        } else if (buttonIndex == AS_LEARN_BTN_DICTIONARY) {
+            DictDetailContainerViewController *dictDetailContainer = [[DictDetailContainerViewController alloc] initWithNibName:@"DictDetailContainerViewController" bundle:nil];
+            dictDetailContainer.wordObj = _wordObj;
+            [self.navigationController pushViewController:dictDetailContainer animated:YES];
+            
             
         } else if (buttonIndex == AS_LEARN_BTN_UPDATE_WORD) {
             NSLog(@"Update word");
@@ -700,6 +740,18 @@
         if (_wordObj) {
             [self displayAnswer:_wordObj];
             [self showHideButtonsPanel:YES];
+        }
+    }
+}
+
+- (void)refreshAfterAddWord:(NSNotification *)notification {
+    if ([self.navigationController.viewControllers indexOfObject:self] != NSNotFound) {
+        WordObject *newWord = (WordObject *)notification.object;
+        
+        if (newWord) {
+            [_nwordList addObject:newWord];
+            
+            lbNewCount.text = [NSString stringWithFormat:@"New: %ld", (unsigned long)[_nwordList count]];
         }
     }
 }

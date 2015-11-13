@@ -10,7 +10,7 @@
 
 typedef enum {
     List_Unknown = 0,
-    List_Incomming,
+    List_Incoming,
     List_StudiedList,
     List_SearchHint,
     List_SearchResult,
@@ -21,6 +21,9 @@ typedef enum {
 {
     IBOutlet UILabel *lbHeaderInfo;
     IBOutlet UITableView *wordsTableView;
+    IBOutlet UIView *viewNoresult;
+    
+    IBOutlet UILabel *lbNoresult;
     
 }
 

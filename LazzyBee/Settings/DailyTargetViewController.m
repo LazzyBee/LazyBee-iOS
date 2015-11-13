@@ -9,6 +9,15 @@
 #import "DailyTargetViewController.h"
 #import "Common.h"
 
+#define NEW_WORD_OPTION_MAX 5
+#define TOTAL_OPTION_MAX 5
+
+#define OPTION_VERY_EASY 0
+#define OPTION_EASY 1
+#define OPTION_NORMAL 2
+#define OPTION_HARD 3
+#define OPTION_IMPOSSIBLE 4
+
 @interface DailyTargetViewController ()
 {
     NSIndexPath *selectedIndexPath;
@@ -37,7 +46,7 @@
         NSNumber *targetNumberObj = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_DAILY_TARGET];
         
         if (targetNumberObj) {
-            selectedIndexPath = [NSIndexPath indexPathForRow:([targetNumberObj integerValue]/5 - 1) inSection:0];
+            selectedIndexPath = [NSIndexPath indexPathForRow:([targetNumberObj integerValue]/5) inSection:0];
         }
         
     } else {
@@ -46,7 +55,7 @@
         NSNumber *targetNumberObj = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_DAILY_TOTAL_TARGET];
         
         if (targetNumberObj) {
-            selectedIndexPath = [NSIndexPath indexPathForRow:(([targetNumberObj integerValue] - 20)/10) inSection:0];
+            selectedIndexPath = [NSIndexPath indexPathForRow:(([targetNumberObj integerValue]/10) - 1) inSection:0];
         }
     }
     
@@ -79,12 +88,12 @@
 - (void)doneButtonClick {
     
     if (_targetType == NewWordTargetType) {
-        NSInteger target = (selectedIndexPath.row + 1) * 5;
+        NSInteger target = (selectedIndexPath.row) * 5;
         NSNumber *targetNumberObj = [NSNumber numberWithInteger:target];
         [[Common sharedCommon] saveDataToUserDefaultStandard:targetNumberObj withKey:KEY_DAILY_TARGET];
         
     } else {
-        NSInteger target = 20 + selectedIndexPath.row * 10;
+        NSInteger target = (selectedIndexPath.row + 1) * 10;
         NSNumber *targetNumberObj = [NSNumber numberWithInteger:target];
         [[Common sharedCommon] saveDataToUserDefaultStandard:targetNumberObj withKey:KEY_DAILY_TOTAL_TARGET];
     }
@@ -108,7 +117,14 @@
     // Return the number of rows in the section.
     // If you're serving data from an array, return the length of the array:
     
-    return 4;
+    if (_targetType == NewWordTargetType) {
+        return NEW_WORD_OPTION_MAX;
+        
+    } else if (_targetType == TotalTargetType) {
+        return TOTAL_OPTION_MAX;
+    }
+    
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -132,30 +148,36 @@
     }
     
     if (_targetType == NewWordTargetType) {
-        if (indexPath.row == 0) {
+        if (indexPath.row == OPTION_VERY_EASY) {
+            cell.textLabel.text = [NSString stringWithFormat:@"0 words - Relax"];
+            
+        } else if (indexPath.row == OPTION_EASY) {
             cell.textLabel.text = [NSString stringWithFormat:@"5 words - Easy"];
             
-        } else if (indexPath.row == 1) {
+        } else if (indexPath.row == OPTION_NORMAL) {
             cell.textLabel.text = [NSString stringWithFormat:@"10 words - Normal"];
             
-        } else if (indexPath.row == 2) {
+        } else if (indexPath.row == OPTION_HARD) {
             cell.textLabel.text = [NSString stringWithFormat:@"15 words - Hard"];
             
-        } else if (indexPath.row == 3) {
+        } else if (indexPath.row == OPTION_IMPOSSIBLE) {
             cell.textLabel.text = [NSString stringWithFormat:@"20 words - Impossible"];
         }
         
     } else {
-        if (indexPath.row == 0) {
+        if (indexPath.row == OPTION_VERY_EASY) {
+            cell.textLabel.text = [NSString stringWithFormat:@"10 words - Very easy"];
+            
+        } else if (indexPath.row == OPTION_EASY) {
             cell.textLabel.text = [NSString stringWithFormat:@"20 words - Easy"];
             
-        } else if (indexPath.row == 1) {
+        } else if (indexPath.row == OPTION_NORMAL) {
             cell.textLabel.text = [NSString stringWithFormat:@"30 words - Normal"];
             
-        } else if (indexPath.row == 2) {
+        } else if (indexPath.row == OPTION_HARD) {
             cell.textLabel.text = [NSString stringWithFormat:@"40 words - Hard"];
             
-        } else if (indexPath.row == 3) {
+        } else if (indexPath.row == OPTION_IMPOSSIBLE) {
             cell.textLabel.text = [NSString stringWithFormat:@"50 words - Impossible"];
         }
     }

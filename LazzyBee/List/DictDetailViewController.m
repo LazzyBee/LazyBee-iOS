@@ -8,6 +8,7 @@
 
 #import "DictDetailViewController.h"
 #import "HTMLHelper.h"
+#import "Common.h"
 #import "CommonDefine.h"
 
 @interface DictDetailViewController ()
@@ -30,8 +31,15 @@
             
         } else if (_dictType == DictEnglish) {
             htmlString = [[HTMLHelper sharedHTMLHelper] createHTMLDict:_wordObj dictType:@"en"];
+            
         } else if (_dictType == DictLazzyBee) {
-            htmlString = [[HTMLHelper sharedHTMLHelper]createHTMLForAnswer:_wordObj withPackage:@"common"];
+            NSString *curMajor = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_SELECTED_MAJOR];
+            
+            if (curMajor == nil || curMajor.length == 0) {
+                curMajor = @"common";
+            }
+            
+            htmlString = [[HTMLHelper sharedHTMLHelper]createHTMLForAnswer:_wordObj withPackage:curMajor];
         }
     }
     
@@ -43,6 +51,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [self stopPlaySoundOnWebview];
+}
+
 /*
 #pragma mark - Navigation
 
@@ -52,5 +64,7 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+- (void)stopPlaySoundOnWebview {
+    [webviewWord stringByEvaluatingJavaScriptFromString:@"cancelSpeech()"];
+}
 @end
