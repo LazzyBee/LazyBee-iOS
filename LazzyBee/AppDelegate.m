@@ -45,7 +45,14 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    HomeViewController *homeViewController = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
+    HomeViewController *homeViewController = nil;
+    
+    if (IS_IPAD) {
+        homeViewController = [[HomeViewController alloc] initWithNibName:@"HomeViewController_iPad" bundle:nil];
+    } else {
+        homeViewController = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
+    }
+    
     UINavigationController *homeNav = [[UINavigationController alloc] initWithRootViewController:homeViewController];
         
     RearViewController *rearViewController = [[RearViewController alloc] init];
@@ -200,7 +207,7 @@
     NSNumber *dbVersion = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:KEY_DB_VERSION];
     
     if (!dbVersion) {
-        dbVersion = [NSNumber numberWithInteger:1];
+        dbVersion = [NSNumber numberWithInteger:2];
         [[Common sharedCommon] saveDataToUserDefaultStandard:dbVersion withKey:KEY_DB_VERSION];
     }
     
@@ -221,6 +228,8 @@
     }
     
     NSInteger count = [[CommonSqlite sharedCommonSqlite] getCountOfPickedWord];    
+    count = count + [[CommonSqlite sharedCommonSqlite] getCountOfInreview];
+    count = count + [[CommonSqlite sharedCommonSqlite] getCountOfStudyAgain];
     
     if (notificationFlag) {
         UILocalNotification *locNotification = [[UILocalNotification alloc] init];

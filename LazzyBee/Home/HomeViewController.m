@@ -55,7 +55,7 @@
     
     self.navigationItem.rightBarButtonItem = searchButton;
     
-    [viewInformation setBackgroundColor:COMMON_COLOR];
+//    [viewInformation setBackgroundColor:COMMON_COLOR];
     
     //prepare 100 words
     [self prepareWordsToStudyingQueue];
@@ -150,13 +150,9 @@
     popupView.alpha = 0;
     [self.view addSubview:popupView];
 
-//    [UIView animateWithDuration:1 animations:^(void) {
-//        popupView.alpha = 1;
-//    } completion:nil];
-    
-    [UIView animateWithDuration:1 delay:3 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^(void) {
+    [UIView animateWithDuration:1 animations:^(void) {
         popupView.alpha = 1;
-    }completion:nil];
+    } completion:nil];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer

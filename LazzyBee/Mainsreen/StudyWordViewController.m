@@ -210,6 +210,11 @@
                                                  selector:@selector(refreshAfterAddWord:)
                                                      name:@"AddToLearn"
                                                    object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(refreshScreenAfterUpdateWord:)
+                                                     name:@"UpdateWord"
+                                                   object:nil];
     }
 }
 
@@ -243,10 +248,21 @@
     NSString *title = @"Learn";
     if (_studyScreenMode == Mode_New_Word) {
         title = @"New Word";
+        
+        btnEasy.enabled = YES;
+        btnNorm.enabled = YES;
+        
     } else if (_studyScreenMode == Mode_Study) {
         title = @"Learn Again";
+        
+        btnEasy.enabled = NO;
+        btnNorm.enabled = NO;
+        
     } else if (_studyScreenMode == Mode_Review) {
         title = @"Review";
+        
+        btnEasy.enabled = YES;
+        btnNorm.enabled = YES;
     }
     
     [self setTitle:title];
@@ -566,6 +582,8 @@
                 _wordObj.answers    = object.a;
                 _wordObj.level      = object.level;
                 _wordObj.package    = object.packages;
+                _wordObj.langEN     = object.lEn;
+                _wordObj.langVN     = object.lVn;
                 
                 [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];
                 
@@ -753,6 +771,16 @@
             
             lbNewCount.text = [NSString stringWithFormat:@"New: %ld", (unsigned long)[_nwordList count]];
         }
+    }
+}
+
+- (void)refreshScreenAfterUpdateWord:(NSNotification *)notification {
+    WordObject *newWord = (WordObject *)notification.object;
+    
+    _wordObj = newWord;
+    
+    if (_isAnswerScreen == YES) {
+        [self displayAnswer:_wordObj];
     }
 }
 

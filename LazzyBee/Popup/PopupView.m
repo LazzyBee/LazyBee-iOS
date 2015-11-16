@@ -24,6 +24,8 @@
         rect.size.width = frame.size.width;
         [self.view setFrame:rect];
         
+        [self addSubview:self.view];
+        
         self.view.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.view.layer.borderWidth = 3.0f;
         

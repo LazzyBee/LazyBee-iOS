@@ -467,7 +467,15 @@
                     
                 case UpdateDatabase:
                 {
-                    [self updateDatabaseFromServer];
+                    if ([[Common sharedCommon] networkIsActive]) {
+                        [self updateDatabaseFromServer];
+                        
+                    } else {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No connection" message:@"Please double check wifi/3G connection." delegate:(id)self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        alert.tag = 2;
+                        
+                        [alert show];
+                    }
                 }
                     break;
                 default:
@@ -569,16 +577,33 @@
         [NSThread sleepForTimeInterval:0.1];
         
         dispatch_sync(dispatch_get_main_queue(), ^{
-            while (serverVersion > dbVersion) {
-                NSString *dbPath = [container stringForKey:@"base_url_db"];
-                dbVersion = dbVersion + 1;
-                dbPath = [NSString stringWithFormat:@"%@%ld.db", dbPath, (long)dbVersion];
+            if (serverVersion > dbVersion) {
+                BOOL updatedFlag = YES;
+                while (serverVersion > dbVersion) {
+                    updatedFlag = YES;
+                    NSString *dbPath = [container stringForKey:@"base_url_db"];
+                    dbVersion = dbVersion + 1;
+                    dbPath = [NSString stringWithFormat:@"%@%ld.db", dbPath, (long)dbVersion];
+                    
+                    updatedFlag = [[CommonSqlite sharedCommonSqlite] updateDatabaseWithPath:dbPath];
+                    
+                    if (updatedFlag) {
+                        [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithInteger:dbVersion] withKey:KEY_DB_VERSION];
+                    } else {
+                        break;
+                    }
+                    
+                }
                 
-                [[CommonSqlite sharedCommonSqlite] updateDatabaseWithPath:dbPath];
+                if (updatedFlag) {
+                    [SVProgressHUD showSuccessWithStatus:@"Update successfully"];
+                } else {
+                    [SVProgressHUD showSuccessWithStatus:@"Update failed"];
+                }
                 
-                [[Common sharedCommon] saveDataToUserDefaultStandard:[NSNumber numberWithInteger:dbVersion] withKey:KEY_DB_VERSION];
+            } else {
+                [SVProgressHUD showSuccessWithStatus:@"Database is up-to-date"];
             }
-            [SVProgressHUD showSuccessWithStatus:@"Update successfully"];
         });
     });
 }

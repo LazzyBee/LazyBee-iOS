@@ -12,6 +12,10 @@
 #import "TagManagerHelper.h"
 #import "CommonSqlite.h"
 #import "AppDelegate.h"
+#import "Common.h"
+#import "SVProgressHUD.h"
+#import "GTMHTTPFetcher.h"
+#import "GTLDataServiceApi.h"
 
 @interface DictDetailContainerViewController ()
 {
@@ -115,7 +119,7 @@
 */
 
 - (void)showActionsPanel {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to learn", @"Report", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:(id)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add to learn", @"Update", @"Report", nil];
 
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     [actionSheet showInView:self.view];
@@ -149,15 +153,59 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"AddToLearn" object:_wordObj];
         
     } else if (buttonIndex == 1) {
+        NSLog(@"Update");
+        [self updateWordFromGAE];
+        
+    } else if (buttonIndex == 2) {
         NSLog(@"Report");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report" message:@"Open facebook to report this word?" delegate:(id)self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Open", nil];
         alert.tag = 1;
         
         [alert show];
         
-    } else if (buttonIndex == 2) {
+    } else if (buttonIndex == 3) {
         
         NSLog(@"Cancel");
+    }
+}
+
+- (void)updateWordFromGAE {
+    
+    if ([[Common sharedCommon] networkIsActive]) {
+        static GTLServiceDataServiceApi *service = nil;
+        if (!service) {
+            service = [[GTLServiceDataServiceApi alloc] init];
+            service.retryEnabled = YES;
+            //[GTMHTTPFetcher setLoggingEnabled:YES];
+        }
+        
+        [SVProgressHUD showWithStatus:nil];
+        GTLQueryDataServiceApi *query = [GTLQueryDataServiceApi queryForGetVocaByQWithQ:self.wordObj.question];
+        //TODO: Add waiting progress here
+        [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLDataServiceApiVoca *object, NSError *error) {
+            if (object != NULL){
+                NSLog(object.JSONString);
+                //TODO: Update word: q, a, level, package, (and ee, ev)
+                _wordObj.question   = object.q;
+                _wordObj.answers    = object.a;
+                _wordObj.level      = object.level;
+                _wordObj.package    = object.packages;
+                _wordObj.langEN     = object.lEn;
+                _wordObj.langVN     = object.lVn;
+                
+                [[CommonSqlite sharedCommonSqlite] updateWord:_wordObj];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateWord" object:_wordObj];
+            }
+            
+            [SVProgressHUD dismiss];
+        }];
+        
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No connection" message:@"Please double check wifi/3G connection." delegate:(id)self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alert.tag = 2;
+        
+        [alert show];
     }
 }
 

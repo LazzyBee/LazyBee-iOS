@@ -195,7 +195,13 @@
     UIViewController *newFrontController = nil;
     if (indexPath.section == RearTable_Section_Home) {
         if (indexPath.row == HomeSection_Home) {
-            HomeViewController *homeViewController = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
+            HomeViewController *homeViewController = nil;
+            
+            if (IS_IPAD) {
+                homeViewController = [[HomeViewController alloc] initWithNibName:@"HomeViewController_iPad" bundle:nil];
+            } else {
+                homeViewController = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
+            }
             
             newFrontController = [[UINavigationController alloc] initWithRootViewController:homeViewController];
             

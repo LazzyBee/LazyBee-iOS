@@ -66,7 +66,7 @@
         
         NSArray *sortDescriptionArr = [NSArray arrayWithObjects:sortWord, nil];
         [wordsArray sortUsingDescriptors:sortDescriptionArr];
-        
+        NSLog(@"All :: %lu", (unsigned long)[wordsArray count]);
         dispatch_sync(dispatch_get_main_queue(), ^{
             [dictTableView reloadData];
             [SVProgressHUD dismiss];

@@ -214,6 +214,7 @@
 		55C1B2201BF2F0C600D917EB /* uncheck@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55C1B21B1BF2F0C600D917EB /* uncheck@3x.png */; };
 		55C1B2231BF2F4F400D917EB /* MajorObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C1B2221BF2F4F400D917EB /* MajorObject.m */; };
 		55CFD03D1BC373B8006F6C31 /* GTM-M6SZR5 in Resources */ = {isa = PBXBuildFile; fileRef = 55CFD03C1BC373B8006F6C31 /* GTM-M6SZR5 */; };
+		55DFAB171BF9D6E700D51F54 /* HomeViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55DFAB161BF9D6E700D51F54 /* HomeViewController_iPad.xib */; };
 		55E1062D1BF18B14008A6BEA /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 55E106281BF18B14008A6BEA /* LICENSE */; };
 		55E1062E1BF18B14008A6BEA /* MGSwipeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E1062A1BF18B14008A6BEA /* MGSwipeButton.m */; };
 		55E1062F1BF18B14008A6BEA /* MGSwipeTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E1062C1BF18B14008A6BEA /* MGSwipeTableCell.m */; };
@@ -546,6 +547,7 @@
 		55C1B2211BF2F4F400D917EB /* MajorObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MajorObject.h; path = ChooseMajor/MajorObject.h; sourceTree = "<group>"; };
 		55C1B2221BF2F4F400D917EB /* MajorObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MajorObject.m; path = ChooseMajor/MajorObject.m; sourceTree = "<group>"; };
 		55CFD03C1BC373B8006F6C31 /* GTM-M6SZR5 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTM-M6SZR5"; sourceTree = SOURCE_ROOT; };
+		55DFAB161BF9D6E700D51F54 /* HomeViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HomeViewController_iPad.xib; path = Home/HomeViewController_iPad.xib; sourceTree = "<group>"; };
 		55E106281BF18B14008A6BEA /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		55E106291BF18B14008A6BEA /* MGSwipeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeButton.h; sourceTree = "<group>"; };
 		55E1062A1BF18B14008A6BEA /* MGSwipeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGSwipeButton.m; sourceTree = "<group>"; };
@@ -849,6 +851,7 @@
 				4DD3C3AB1B6F199B00B6DA71 /* HomeViewController.h */,
 				4DD3C3AC1B6F199B00B6DA71 /* HomeViewController.m */,
 				4DD3C3AD1B6F199B00B6DA71 /* HomeViewController.xib */,
+				55DFAB161BF9D6E700D51F54 /* HomeViewController_iPad.xib */,
 				559E67B61BEF4E8800232439 /* StreakViewController.h */,
 				559E67B71BEF4E8800232439 /* StreakViewController.m */,
 				559E67B81BEF4E8800232439 /* StreakViewController.xib */,
@@ -1373,6 +1376,7 @@
 				557526A91BDF54BA007810C7 /* ic_graph.png in Resources */,
 				559B2AFD1BC61344009AA150 /* DictDetailContainerViewController.xib in Resources */,
 				4DD3C3781B6F18D700B6DA71 /* SubRearViewController.xib in Resources */,
+				55DFAB171BF9D6E700D51F54 /* HomeViewController_iPad.xib in Resources */,
 				55E1063B1BF1DF18008A6BEA /* economic.png in Resources */,
 				55308B521BF0423A00FF0457 /* day_ring@3x.png in Resources */,
 				55452C581BC5128700D6E430 /* ic_dictionary@3x.png in Resources */,
