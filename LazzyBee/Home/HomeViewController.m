@@ -80,6 +80,11 @@
                                                  name:@"didSelectRowFromSearch"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(prepareWordsToStudyingQueue)
+                                                 name:@"ChangeMajor"
+                                               object:nil];
+    
     NSNumber *isFirstRunObj = [[Common sharedCommon] loadDataFromUserDefaultStandardWithKey:IS_FIRST_RUN];
     
     if (isFirstRunObj == nil || [isFirstRunObj boolValue] == YES) {

@@ -19,6 +19,7 @@
 #import "InformationViewController.h"
 #import "HelpViewController.h"
 #import "ChooseMajorViewController.h"
+#import "BarGraphViewController.h"
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
@@ -228,8 +229,15 @@
             presentedCell = indexPath;  // <- store the presented row
             
         } else if (indexPath.row == HomeSection_Progress) {
-//            [self.sidePanelController showCenterPanelAnimated:YES];
-            [self displayInformation];
+//            [self displayInformation];
+            BarGraphViewController *barGraphViewController = [[BarGraphViewController alloc] initWithNibName:@"BarGraphViewController" bundle:nil];
+            newFrontController = [[UINavigationController alloc] initWithRootViewController:barGraphViewController];
+            
+            [newFrontController setModalPresentationStyle:UIModalPresentationFormSheet];
+            [newFrontController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            
+            [self presentViewController:newFrontController animated:YES completion:nil];
+            
         }
         
     } else if (indexPath.section == RearTable_Section_Support) {
