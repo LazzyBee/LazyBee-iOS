@@ -19,6 +19,7 @@
 #import "InformationViewController.h"
 #import "HelpViewController.h"
 #import "ChooseMajorViewController.h"
+#import "BarGraphViewController.h"
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
@@ -195,7 +196,13 @@
     UIViewController *newFrontController = nil;
     if (indexPath.section == RearTable_Section_Home) {
         if (indexPath.row == HomeSection_Home) {
-            HomeViewController *homeViewController = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
+            HomeViewController *homeViewController = nil;
+            
+            if (IS_IPAD) {
+                homeViewController = [[HomeViewController alloc] initWithNibName:@"HomeViewController_iPad" bundle:nil];
+            } else {
+                homeViewController = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
+            }
             
             newFrontController = [[UINavigationController alloc] initWithRootViewController:homeViewController];
             
@@ -222,8 +229,15 @@
             presentedCell = indexPath;  // <- store the presented row
             
         } else if (indexPath.row == HomeSection_Progress) {
-//            [self.sidePanelController showCenterPanelAnimated:YES];
-            [self displayInformation];
+//            [self displayInformation];
+            BarGraphViewController *barGraphViewController = [[BarGraphViewController alloc] initWithNibName:@"BarGraphViewController" bundle:nil];
+            newFrontController = [[UINavigationController alloc] initWithRootViewController:barGraphViewController];
+            
+            [newFrontController setModalPresentationStyle:UIModalPresentationFormSheet];
+            [newFrontController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            
+            [self presentViewController:newFrontController animated:YES completion:nil];
+            
         }
         
     } else if (indexPath.section == RearTable_Section_Support) {
@@ -319,6 +333,10 @@
 
 - (void)changeMajor {
     [_rearTableView reloadData];
+}
+
+- (IBAction)tapOnHeader:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.lazzybee.com"]];
 }
 
 @end

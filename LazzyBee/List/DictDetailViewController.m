@@ -20,6 +20,45 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.   
+    [self fillData];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshScreenAfterUpdateWord:)
+                                                 name:@"UpdateWord"
+                                               object:nil];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [self stopPlaySoundOnWebview];
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+- (void)stopPlaySoundOnWebview {
+    [webviewWord stringByEvaluatingJavaScriptFromString:@"cancelSpeech()"];
+}
+
+- (void)refreshScreenAfterUpdateWord:(NSNotification *)notification {
+    WordObject *newWord = (WordObject *)notification.object;
+    
+    _wordObj = newWord;
+    
+    [self fillData];
+}
+
+- (void)fillData {
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSURL *baseURL = [NSURL fileURLWithPath:path];
     
@@ -44,27 +83,5 @@
     }
     
     [webviewWord loadHTMLString:htmlString baseURL:baseURL];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [self stopPlaySoundOnWebview];
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-- (void)stopPlaySoundOnWebview {
-    [webviewWord stringByEvaluatingJavaScriptFromString:@"cancelSpeech()"];
 }
 @end

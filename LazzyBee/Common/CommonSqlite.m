@@ -213,7 +213,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
         
         [resArr addObject:wordObj];
         
-        /* for test - begin */
+        /* for test :: check empty content - begin */
 /*        NSData *data = [wordObj.answers dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dictAnswer = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         NSString *strPronounciation = [dictAnswer valueForKey:@"pronoun"];
@@ -241,6 +241,16 @@ static CommonSqlite* sharedCommonSqlite = nil;
         
         if (strExample == nil || strExample.length == 0) {
             [item setValue:@"example" forKey:@"example"];
+            found = YES;
+        }
+        
+        if (wordObj.langEN == nil || wordObj.langEN.length == 0) {
+            [item setValue:@"langEN" forKey:@"langEN"];
+            found = YES;
+        }
+        
+        if (wordObj.langVN == nil || wordObj.langVN.length == 0) {
+            [item setValue:@"langVN" forKey:@"langVN"];
             found = YES;
         }
         
@@ -284,7 +294,11 @@ static CommonSqlite* sharedCommonSqlite = nil;
      @property (nonatomic, strong) NSString *eFactor;
      id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor
      */
-    NSString *strQuery = [NSString stringWithFormat:@"UPDATE \"vocabulary\" SET queue = %d, due = %d, rev_count = %d, last_ivl = %d, e_factor = %d where question = \'%@\'", [wordObj.queue intValue], [wordObj.due intValue], [wordObj.revCount intValue], [wordObj.lastInterval intValue], [wordObj.eFactor intValue], wordObj.question];
+    NSString *formattedAnswer = [wordObj.answers stringByReplacingOccurrencesOfString:@"\'" withString:@"\'\'"];
+    NSString *formattedVN = [wordObj.langVN stringByReplacingOccurrencesOfString:@"\'" withString:@"\'\'"];
+    NSString *formattedEN = [wordObj.langEN stringByReplacingOccurrencesOfString:@"\'" withString:@"\'\'"];
+    
+    NSString *strQuery = [NSString stringWithFormat:@"UPDATE \"vocabulary\" SET queue = %d, due = %d, rev_count = %d, last_ivl = %d, e_factor = %d, answers = \'%@\', l_vn = \'%@\', l_en = \'%@\' where question = \'%@\'", [wordObj.queue intValue], [wordObj.due intValue], [wordObj.revCount intValue], [wordObj.lastInterval intValue], [wordObj.eFactor intValue], formattedAnswer, formattedVN, formattedEN, wordObj.question];
     const char *charQuery = [strQuery UTF8String];
     
     sqlite3_prepare_v2(db, charQuery, -1, &dbps, NULL);
@@ -381,7 +395,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
     return count;
 }
 
-- (void)updateDatabaseWithPath:(NSString *)dbPath {
+- (BOOL)updateDatabaseWithPath:(NSString *)dbPath {
     NSURL *storeURL = [NSURL URLWithString:dbPath];
     
     NSData *urlData = [NSData dataWithContentsOfURL:storeURL];
@@ -394,7 +408,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
         [urlData writeToFile:dbPathNew atomically:YES];
         
     } else {
-        return;
+        return NO;
     }
 
     NSString *strQuery = @"SELECT id, question, answers, subcats, status, package, level, queue, due, rev_count, last_ivl, e_factor, l_vn, l_en, gid FROM \"vocabulary\" ORDER BY level";
@@ -419,7 +433,7 @@ static CommonSqlite* sharedCommonSqlite = nil;
     dbrc = sqlite3_open(dbFilePathUTF8, &db);
     
     if (dbrc) {
-        return;
+        return NO;
     }
     sqlite3_stmt *dbps;
     NSString *formattedAnswer = @"";
@@ -487,6 +501,8 @@ static CommonSqlite* sharedCommonSqlite = nil;
     }
     
     sqlite3_close(db);
+    
+    return YES;
 }
 
 - (void)addMoreFieldToTable {

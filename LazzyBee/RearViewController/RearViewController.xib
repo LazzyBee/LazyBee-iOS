@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RearViewController">
@@ -20,16 +20,22 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="2rm-0F-opT">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <animations/>
                     <color key="backgroundColor" red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
                 </imageView>
                 <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rearBanner.png" id="RYZ-BG-LGQ">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <gestureRecognizers/>
+                    <connections>
+                        <outletCollection property="gestureRecognizers" destination="CTJ-1O-UBT" appends="YES" id="yfw-75-807"/>
+                    </connections>
                 </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="20">
                     <rect key="frame" x="0.0" y="110" width="320" height="320"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="22"/>
@@ -39,33 +45,23 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="version" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Lyn-KR-ip0">
                     <rect key="frame" x="8" y="433" width="304" height="21"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
+            <animations/>
             <color key="backgroundColor" white="0.19782162410000001" alpha="1" colorSpace="calibratedWhite"/>
             <gestureRecognizers/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="32" y="4"/>
         </view>
-        <tapGestureRecognizer id="yK1-Gc-wCY">
+        <tapGestureRecognizer id="CTJ-1O-UBT">
             <connections>
-                <action selector="tapOnAccountInfo:" destination="-1" id="Wgd-7c-hJv"/>
-                <outlet property="delegate" destination="-1" id="ui5-CW-FbA"/>
-            </connections>
-        </tapGestureRecognizer>
-        <tapGestureRecognizer id="EXl-MG-WRp">
-            <connections>
-                <action selector="tapOnAccountInfo:" destination="-1" id="CAE-RZ-dsu"/>
-                <outlet property="delegate" destination="-1" id="ZRx-TN-1tA"/>
-            </connections>
-        </tapGestureRecognizer>
-        <tapGestureRecognizer id="c0O-ae-WAd">
-            <connections>
-                <action selector="tapOnAccountInfo:" destination="-1" id="YiB-iV-QVT"/>
-                <outlet property="delegate" destination="-1" id="uJx-4C-JmC"/>
+                <action selector="tapOnHeader:" destination="-1" id="l0H-eH-j5E"/>
+                <outlet property="delegate" destination="-1" id="CFb-SG-07Y"/>
             </connections>
         </tapGestureRecognizer>
     </objects>
