@@ -335,4 +335,8 @@
     [_rearTableView reloadData];
 }
 
+- (IBAction)tapOnHeader:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.lazzybee.com"]];
+}
+
 @end

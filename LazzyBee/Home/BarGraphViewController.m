@@ -142,7 +142,7 @@
 }
 
 - (NSNumber *)valueForBarAtIndex:(NSInteger)index {
-    NSInteger count = [[levelsDictionary objectForKey:[NSString stringWithFormat:@"%ld", (long)index]] count];
+    NSInteger count = [[levelsDictionary objectForKey:[NSString stringWithFormat:@"%ld", (long)index +1]] count];
     count = (int)(count*100/[wordList count]);
     return [NSNumber numberWithInteger:count];
 }
@@ -173,6 +173,6 @@
 }
 
 - (NSString *)valueLabelForBarAtIndex:(NSInteger)index {
-    return [NSString stringWithFormat:@"%ld", [[levelsDictionary objectForKey:[NSString stringWithFormat:@"%ld", (long)index]] count]];
+    return [NSString stringWithFormat:@"%ld", [[levelsDictionary objectForKey:[NSString stringWithFormat:@"%ld", (long)index + 1]] count]];
 }
 @end
